@@ -16,7 +16,8 @@ function handlePOST($urlrouter) {
 		}
 	} else {
 		$user = new User($_SESSION['user_id']);
-		
+		if ($user->id == 0) { 'No user!'; exit; }
+
 		if ($arg1 == 'comment') {		
 			$object = new Comment();
 			$object->save($model); // model has content_id and comment
@@ -26,23 +27,26 @@ function handlePOST($urlrouter) {
 			$object->save($model);
 		}
 		else {
+			/*
 			$tags = $model['tags']; //put tags in local variable b4 unsetting
 			$countries = $model['countries'];
 			unset($model['tags']);
 			unset($model['countries']);
 			unset($model['comments']);
 			unset($model['commentcount']);
-			
+			*/
 			$Object = ucfirst($arg1);
 			$object = new $Object();
 			$object->save($model); //insert the model
-
+			$object->saveTags($model['newtags']);
+			/*
 			if ($object->id > 0 && isset($tags) && isset($countries)) {
 				if (count($model['tags']) > 0 || count($model['countries']) > 0) {				
 					$tag = new Tag();
 					$tag->save($tags, $countries, $object->id); //update tags
 				}
 			}
+			*/
 		}
 
 		if ($object->id > 0) {		

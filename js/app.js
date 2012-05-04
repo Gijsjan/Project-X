@@ -1,17 +1,20 @@
-// Filename: app.js
+// app.js
 define([
-  'jQuery',
-  'Underscore',
-  'Backbone',
-  'routers/router', // Request router.js
-], function($, _, Backbone, Router){
-  var initialize = function(){
-    // Pass in our Router module and call it's initialize function
-    Router.initialize();
-  }
-
-  return {
-    initialize: initialize
-  };
+    'jquery', 
+    'underscore',
+    'backbone',
+    'routers/main',
+    'views/content/listed'
+], function($, _, Backbone, mainRouter, listed) {
+    return {
+        initialize: function() {
+            var l = new listed();
+            console.log(l);
+            console.log(mainRouter);
+console.log(Backbone);
+            Backbone.history.start();
+            // you can use $, _ or Backbone here
+        }
+    }
 });
 

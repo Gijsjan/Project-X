@@ -46,7 +46,8 @@ App.Views.EditObject = Backbone.View.extend({
 		return this;
 	},
 	saveModel: function() {
-		console.log(this.model.get('tags'));
+		_.saveToLocalStorage(this.model.attributes);
+
 		this.model.save({}, {
 			success: function(model, response) {
 				App.ObjectController.show(model.get('type'), model.get('id'));

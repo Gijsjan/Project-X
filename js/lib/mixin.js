@@ -103,5 +103,14 @@ _.mixin({
 			'created': created,
 			'commentcount': commentcount
 		});
+	},
+	saveToLocalStorage: function(attributes) {
+		localStorage.clear();  
+
+		_.each(attributes, function(value, key) {
+			if (typeof value == 'string' || typeof value == 'number') {
+				localStorage[Backbone.history.fragment+'|'+key] = value; 
+			}
+		});
 	}
 });

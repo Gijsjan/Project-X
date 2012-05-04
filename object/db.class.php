@@ -13,7 +13,7 @@ class DB extends PDO {
 		}
 	}
 
-	private function log($params) {
+	public function log($params) {
 		$sql = "INSERT INTO `log` (`error`, `sql`, `params`, `created`) VALUES (:error, :sql, :params, NOW())";
 
 		$this->execute($sql, $params);

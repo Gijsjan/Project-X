@@ -113,7 +113,7 @@ abstract class Object {
 		try {
 			$sth->execute($ia);
 		} catch (PDOException $e) {
-			print_r($e->getMessage()); exit;
+			$this->db->log(array("error" => $e->getMessage(), "sql" => $sql, "params" => serialize($ia)));
 		}
 	}
 
@@ -142,7 +142,7 @@ abstract class Object {
 		try {
 			$sth->execute($ia);
 		} catch (PDOException $e) {
-			print_r($e->getMessage()); exit;
+			$this->db->log(array("error" => $e->getMessage(), "sql" => $sql, "params" => serialize($ia)));
 		}
 	}
 
