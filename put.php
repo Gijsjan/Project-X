@@ -15,8 +15,6 @@ function handlePUT($urlrouter) {
 		$object->saveTags($model['newtags']);
 	} 
 
-	echo ini_get('session.gc_maxlifetime');
-
 	if ($object->id > 0) {
 		header('http/1.1 200 OK');
 		header('Content-type: application/json');
