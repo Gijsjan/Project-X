@@ -1,3 +1,4 @@
+/*
 App.Views.FullContent = App.Views.FullObject.extend({
 	render: function() {
 		App.Views.FullObject.prototype.render.apply(this);
@@ -28,3 +29,4 @@ App.Views.EditContent = App.Views.EditObject.extend({
 		return this;
 	}
 });
+*/

@@ -1,3 +1,4 @@
+/*
 App.ObjectRouter = Backbone.Router.extend({
 	routes: {
 		":object_type/add": "add",
@@ -22,3 +23,4 @@ App.ObjectRouter = Backbone.Router.extend({
 		//App.EventDispatcher.trigger('showContentCollection', {types: content});
 	}
 });
+*/

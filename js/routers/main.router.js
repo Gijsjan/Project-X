@@ -5,7 +5,7 @@ App.MainRouter = Backbone.Router.extend({
 	},
 	home: function() {
 		App.Views.home = new App.Views.ContentList();
-		$('#main').html(App.Views.home.el);
+		$('div#main').html(App.Views.home.el);
 	},
 	unauthorized: function() {
 		App.EventDispatcher.trigger('unauthorized');

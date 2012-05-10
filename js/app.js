@@ -1,20 +1,37 @@
 // app.js
 define([
-    'jquery', 
+    'jquery',
     'underscore',
     'backbone',
+    'views/main/menu',
     'routers/main',
-    'views/content/listed'
-], function($, _, Backbone, mainRouter, listed) {
+    'routers/object'
+], function($, _, Backbone, vMenu, MainRouter, ObjectRouter) {
     return {
         initialize: function() {
-            var l = new listed();
-            console.log(l);
-            console.log(mainRouter);
-console.log(Backbone);
-            Backbone.history.start();
-            // you can use $, _ or Backbone here
+            $('header').html(new vMenu().render().el);
+
+            var objectRouter = new ObjectRouter();
+            var mainRouter = new MainRouter();
+            
+
+            Backbone.View.prototype.navigate = function(loc) {
+                mainRouter.navigate(loc, true);
+            };
+
+            Backbone.history.start({pushState: true});
+
+            $(document).on('click', 'a:not([data-bypass])', function (evt) {
+                var href = $(this).attr('href');
+                var protocol = this.protocol + '//';
+
+                if (href.slice(protocol.length) !== protocol) {
+                    evt.preventDefault();
+                    mainRouter.navigate(href, true);
+                }
+            });
+
         }
-    }
+    };
 });
 

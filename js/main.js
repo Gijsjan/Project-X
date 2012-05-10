@@ -4,7 +4,10 @@ require.config({
         'jquery': 'lib/jquery/jquery172.min',
         'underscore': 'lib/underscore/underscore132amdjs', // AMD support
         'backbone': 'lib/backbone/backbone091amdjs', // AMD support
-        'templates': '../templates'
+        'markdown': 'lib/Markdown.Converter',
+        'domready': 'lib/require/domready',
+        'text': 'lib/require/text'//,
+        //'templates': '../../../templates'
     }
 });
 
@@ -16,5 +19,3 @@ require([
         app.initialize();
     });
 });
-
-

@@ -1,0 +1,9 @@
+<h2 class="title"><%= title %></h2>
+<div class="video_wrapper">
+	<% if (player == 'youtube') { %>
+		<iframe width="560" height="315" src="http://www.youtube.com/embed/<%= code %>" frameborder="0" allowfullscreen></iframe>
+	<% } elseif (player == 'embed') { %>
+		<%= code %>
+	<% } %>
+</div>
+<div class="tags_wrapper"></div>

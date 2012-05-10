@@ -1,14 +1,21 @@
 define([
-    'jquery', 
+    'jquery',
     'underscore',
     'backbone',
-], function($, _, Backbone) {
+    'views/content/list',
+    'views/main/login'
+], function($, _, Backbone, vContentList, vLogin) {
 	return Backbone.Router.extend({
 		routes: {
-			"": "home"
+			"": "home",
+			"login": "login"
 		},
 		home: function() {
-			console.log('home');
+			var home = new vContentList();
+			$('div#main').html(home.el);
+		},
+		login: function() {
+			$('div#main').html(new vLogin().render().el);
 		}
 	});
-}
+});

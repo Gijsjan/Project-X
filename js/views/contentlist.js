@@ -12,9 +12,10 @@ App.Views.ContentList = Backbone.View.extend({
 				self.render();
 			},
 			error: function(collection, response) {
+				console.log('la');
 				console.log(response);
 			}
-		})
+		});
 	},
 	render: function() {
 		this.$el.html('');
@@ -23,8 +24,8 @@ App.Views.ContentList = Backbone.View.extend({
 
 		this.collection.each(function(model) {
 			var t = new App.Views.ListedContent({
-				id: 'object-'+model.get('id'), 
-				className: 'content '+model.get('type'),
+				id: 'object-'+model.get('id'),
+				className: 'content listed '+model.get('type'),
 				model:model
 			});
 			div.append(t.render().el);
