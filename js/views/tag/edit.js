@@ -34,7 +34,7 @@ define([
 			this.$('#edit-tag-list-wrapper').html(this.edit_tag_list.render().el);
 			//this.$('#edit-country-list-wrapper').html(this.edit_country_list.render().el);
 			
-			this.$('#autocomplete_wrapper').html(this.ac_tags.render().el);
+			this.$('#autocomplete-wrapper').html(this.ac_tags.render().el);
 			
 			return this;
 		},

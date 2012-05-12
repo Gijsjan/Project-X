@@ -3,13 +3,8 @@
 <head>
     <title>With Require.js</title>
 
-    <link rel="stylesheet/less" type="text/css" href="/css/main.less">
-	<script src="/js/lib/less.js" type="text/javascript"></script>
+    <link rel="stylesheet" type="text/css" href="/css/main.css">
 	<script data-main="/js/main" src="/js/lib/require/require.js"></script>
-	<script type="text/javascript">
-     less.env = "development";
-     less.watch();
-</script>
 </head>
 <body>
 <div id="wrapper">

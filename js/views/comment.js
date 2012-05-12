@@ -38,7 +38,7 @@ App.Views.ManyComments = Backbone.View.extend({
 				count: i
 			});
 			console.log(c.render().el);
-			self.$('#comments_wrapper').append(c.render().el);
+			self.$('#comments-wrapper').append(c.render().el);
 		});
 		
 		return this;

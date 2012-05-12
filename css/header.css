@@ -1,0 +1,14 @@
+header nav#main {
+  background-color: #333;
+  color: #ccc;
+  padding: 6px 6px 11px 6px;
+  text-align: center;
+}
+header nav#main li {
+  display: inline;
+  list-style: none;
+}
+header nav#main li a {
+  font-size: 0.8em;
+  color: #ccc;
+}

@@ -1,0 +1,30 @@
+.content.edit.document #part1,
+.content.edit.link #part1,
+.content.edit.document #part2,
+.content.edit.link #part2,
+.content.edit.document #part3,
+.content.edit.link #part3 {
+  display: none;
+}
+.content.edit.document .possible_link_title,
+.content.edit.link .possible_link_title {
+  width: 600px;
+}
+.content.edit.document .possible_link_title:hover,
+.content.edit.link .possible_link_title:hover {
+  background-color: #eee;
+}
+.content.listed {
+  clear: left;
+  margin-top: 20px;
+  overflow-y: auto;
+}
+.content.listed .content-icon {
+  float: left;
+  width: 24px;
+}
+.content.listed .content-body {
+  float: left;
+  width: 868px;
+  padding-left: 8px;
+}

@@ -24,7 +24,7 @@ App.Views.EditContent = App.Views.EditObject.extend({
 		App.Views.EditObject.prototype.render.apply(this);
 
 		var editTags = new App.Views.EditTags({model: this.model});
-		this.$('.tags_wrapper').append(editTags.render().el);
+		this.$('.tags-wrapper').append(editTags.render().el);
 		
 		return this;
 	}

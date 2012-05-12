@@ -81,7 +81,7 @@ _.mixin({
 			
 
 
-			var wrapper = $('<div />').addClass('tags_wrapper');
+			var wrapper = $('<div />').addClass('tags-wrapper');
 			wrapper.html(tags.render().el);
 			//wrapper.append(countries.render().el);
 
