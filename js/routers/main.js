@@ -5,12 +5,18 @@
     return Backbone.Router.extend({
       routes: {
         "": "home",
+        'all': 'all',
         "login": "login"
       },
       home: function() {
         var home;
         home = new vContentList();
         return $('div#main').html(home.$el);
+      },
+      all: function() {
+        var all;
+        all = new vContentList();
+        return $('div#main').html(all.$el);
       },
       login: function() {
         return $('div#main').html(new vLogin().render().$el);

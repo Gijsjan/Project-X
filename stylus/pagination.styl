@@ -1,0 +1,23 @@
+#pagination-wrapper
+	nav
+		clear left
+		
+		ul
+			li.pgn-nav-elem
+				list-style none
+				display inline
+				font-size 0.8em
+
+			li.pgn-nav-elem:not(.greyed-out)
+				cursor pointer
+
+			li.pgn-nav-elem:hover:not(.greyed-out)
+				color red
+				text-decoration underline
+
+			li.greyed-out
+				color red
+
+	div#item-wrapper
+		div.page
+			display none

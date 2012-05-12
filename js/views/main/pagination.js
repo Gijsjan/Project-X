@@ -4,13 +4,13 @@
   define(['text!../../../templates/main/pagination'], function(tpl) {
     return Backbone.View.extend({
       currentPage: 0,
-      itemsPerPage: 3,
       totalPages: 0,
+      itemsPerPage: 3,
       totalItems: 0,
       pageDivs: [],
       id: 'pagination-wrapper',
       events: {
-        "click li.pgn-nav-elem": "changePage2"
+        "click li.pgn-nav-elem": "changePage"
       },
       initialize: function() {
         this.totalItems = this.options.totalItems;
@@ -50,7 +50,7 @@
           return this.$('li.next').addClass('greyed-out');
         }
       },
-      changePage2: function(e) {
+      changePage: function(e) {
         var pagenumber, target;
         target = $(e.currentTarget);
         if (!target.hasClass('greyed-out')) {

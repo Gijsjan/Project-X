@@ -8,10 +8,7 @@
     Backbone = require('backbone');
     vEditObject = require('views/object/edit');
     vEditTags = require('views/tag/edit');
-    return Backbone.View.extend({
-      initialize: function() {
-        return vEditObject.prototype.initialize.apply(this);
-      },
+    return vEditObject.extend({
       render: function() {
         var et;
         vEditObject.prototype.render.apply(this);
