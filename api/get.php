@@ -85,7 +85,7 @@ function handleGET($urlrouter) {
 }
 
 function getContentlist($type = '', $tag = '') {
-	$limit = 10;
+	//$limit = 10;
 	$content = array();
 
 	if ($type == 'tag') {
@@ -107,7 +107,7 @@ function getContentlist($type = '', $tag = '') {
 	else {
 		foreach (App::$content as $singular => $c) {
 			$Singular = ucfirst($singular); $obj = new $Singular();
-			$content = array_merge($content, $obj->getMany($limit));
+			$content = array_merge($content, $obj->getMany());
 		}
 	}
 
@@ -116,6 +116,7 @@ function getContentlist($type = '', $tag = '') {
 		return ($a['created'] > $b['created']) ? -1 : 1;
 	});
 
-	return array_slice($content, 0, $limit);
+	//return array_slice($content, 0, $limit);
+	return $content;
 }
 ?>

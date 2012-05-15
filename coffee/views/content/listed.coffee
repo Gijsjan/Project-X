@@ -12,7 +12,7 @@ define (require) ->
 			tpl =  ListedTemplates[@model.get('type')]
 			tplRendered = _.template tpl, @model.toJSON()
 
-			@$('.content-body').html tplRendered
+			@$('.content-main').html tplRendered
 
 			@
 

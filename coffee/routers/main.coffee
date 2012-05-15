@@ -1,7 +1,8 @@
 define [
 	    'views/content/list'
 	    'views/main/login'
-	], (vContentList, vLogin) ->
+	    'views/main/selector'
+	], (vContentList, vLogin, vSelector) ->
 		Backbone.Router.extend
 			routes:
 				"": "home",

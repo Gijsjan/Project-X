@@ -7,6 +7,7 @@ header nav#main {
 header nav#main li {
   display: inline;
   list-style: none;
+  margin-right: 6px;
 }
 header nav#main li a {
   font-size: 0.8em;

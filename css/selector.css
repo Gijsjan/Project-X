@@ -1,0 +1,4 @@
+#selector ul li {
+  clear: left;
+  list-style: none;
+}

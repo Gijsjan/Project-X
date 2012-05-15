@@ -23,8 +23,12 @@
   float: left;
   width: 24px;
 }
-.content.listed .content-body {
+.content.listed .content-main {
   float: left;
   width: 868px;
   padding-left: 8px;
+}
+.content.listed .content-main .content-body {
+  color: #808080;
+  font-size: 0.8em;
 }

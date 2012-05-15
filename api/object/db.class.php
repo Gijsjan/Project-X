@@ -63,16 +63,15 @@ class DB extends PDO {
 			if (array_key_exists('tags', $row)) $row['tags'] = preg_split("~,~", $row['tags'], -1, PREG_SPLIT_NO_EMPTY);
 			if (array_key_exists('countries', $row)) $row['countries'] = preg_split("~,~", $row['countries'], -1, PREG_SPLIT_NO_EMPTY);
 
+			$row['newtags'] = array();
 			if (array_key_exists('tags', $row) && array_key_exists('countries', $row)) {
-				foreach ($tags as $tag) {
-					$arr['newtags'][] = array("slug" => $tag, "type" => 'tag');
+				foreach ($row['tags'] as $tag) {
+					$row['newtags'][] = array("slug" => $tag, "type" => 'tag');
 				}
-				foreach ($countries as $tag) {
-					$arr['newtags'][] = array("slug" => $tag, "type" => 'country');
+				foreach ($row['countries'] as $tag) {
+					$row['newtags'][] = array("slug" => $tag, "type" => 'country');
 				}
 			}
-
-
 
 			$a[] = $row;
 		}

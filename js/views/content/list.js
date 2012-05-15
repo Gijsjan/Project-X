@@ -2,12 +2,13 @@
 (function() {
 
   define(function(require) {
-    var $, Backbone, cContentList, vListedContent, vPagination, _;
+    var $, Backbone, cContentList, vListedContent, vPagination, vSelector, _;
     $ = require('jquery');
     _ = require('underscore');
     Backbone = require('backbone');
     vListedContent = require('views/content/listed');
     vPagination = require('views/main/pagination');
+    vSelector = require('views/main/selector');
     cContentList = require('collections/contentlist/contentlist');
     return Backbone.View.extend({
       id: 'contentlist',
@@ -22,16 +23,24 @@
         if (this.options.country != null) {
           this.colleciton.url = 'api/country' + this.options.country;
         }
-        return this.collection.fetch({
-          success: function(collection, response) {
-            return _this.render();
-          },
-          error: function(collection, response) {
-            if (response.status === 401) {
-              return _this.navigate('login');
+        if (this.collection.length === 0) {
+          return this.collection.fetch({
+            success: function(collection, response) {
+              _this.render();
+              _this.selector = new vSelector({
+                collection: collection,
+                base_collection: _.clone(collection)
+              });
+              _this.selector.render();
+              _this.selector.collection.bind('reset', _this.render, _this);
+            },
+            error: function(collection, response) {
+              if (response.status === 401) {
+                _this.navigate('login');
+              }
             }
-          }
-        });
+          });
+        }
       },
       render: function() {
         var pgn;

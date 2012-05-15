@@ -58,35 +58,6 @@ abstract class Content extends Object {
 		if ($limit) $sql .= ' LIMIT '.$limit;
 
 		return $this->db->fetchArrays($sql);
-/*
-		try {
-			$sth = $this->db->query($sql);
-			$sth->setFetchMode(PDO::FETCH_ASSOC);
-		} catch (PDOException $e) {
-			print_r($e->getMessage());exit;
-		}
-		
-		
-		$a = array();
-		while($arr = $sth->fetch()) {
-			unset($arr['object_id']);
-			if (empty($arr['commentcount'])) $arr['commentcount'] = 0;
-			
-			$arr['newtags'] = array();
-			$tags = preg_split("~,~", $arr['tags'], -1, PREG_SPLIT_NO_EMPTY);
-			$countries = preg_split("~,~", $arr['countries'], -1, PREG_SPLIT_NO_EMPTY);
-			foreach ($tags as $tag) {
-				$arr['newtags'][] = array("slug" => $tag, "type" => 'tag');
-			}
-			foreach ($countries as $tag) {
-				$arr['newtags'][] = array("slug" => $tag, "type" => 'country');
-			}
-			$arr['tags'] = $tags;
-			$arr['countries'] = $countries;
-			$a[] = $arr;
-		}
-		return $a;
-*/
 	}
 
 	public function saveTags($tags = array()) {

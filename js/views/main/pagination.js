@@ -5,16 +5,16 @@
     return Backbone.View.extend({
       currentPage: 0,
       totalPages: 0,
-      itemsPerPage: 3,
+      itemsPerPage: 8,
       totalItems: 0,
-      pageDivs: [],
       id: 'pagination-wrapper',
       events: {
         "click li.pgn-nav-elem": "changePage"
       },
       initialize: function() {
         this.totalItems = this.options.totalItems;
-        return this.totalPages = Math.ceil(this.totalItems / this.itemsPerPage);
+        this.totalPages = Math.ceil(this.totalItems / this.itemsPerPage);
+        return this.pageDivs = [];
       },
       addPage: function() {
         var pageDiv;
@@ -37,24 +37,32 @@
         _.each(this.pageDivs, function(pageDiv) {
           return _this.$('#item-wrapper').append(pageDiv);
         });
-        this.showPage(1);
+        if (this.pageDivs.length > 0) {
+          this.showPage(1);
+        }
         return this;
       },
       renderNavigation: function() {
+        if (this.pageDivs.length < 2) {
+          this.$('nav#pagination').hide();
+        }
         this.$('li.pgn-nav-elem').removeClass('greyed-out');
         this.$('li[data-page-number="' + this.currentPage + '"]').addClass('greyed-out');
         if (this.currentPage === 1) {
           this.$('li.previous').addClass('greyed-out');
         }
         if (this.currentPage === this.totalPages) {
-          return this.$('li.next').addClass('greyed-out');
+          this.$('li.next').addClass('greyed-out');
         }
       },
       changePage: function(e) {
         var pagenumber, target;
         target = $(e.currentTarget);
+        pagenumber = target.attr('data-page-number');
         if (!target.hasClass('greyed-out')) {
-          pagenumber = target.attr('data-page-number');
+          if (_.isString(pagenumber)) {
+            pagenumber = parseInt(pagenumber);
+          }
           if (pagenumber != null) {
             return this.showPage(pagenumber);
           } else if (target.hasClass('previous')) {
@@ -64,9 +72,9 @@
           }
         }
       },
-      showPage: function(pageNumber) {
+      showPage: function(pagenumber) {
         this.pageDivs[this.currentPage - 1].hide();
-        this.currentPage = pageNumber;
+        this.currentPage = pagenumber;
         this.renderNavigation();
         return this.pageDivs[this.currentPage - 1].show();
       }

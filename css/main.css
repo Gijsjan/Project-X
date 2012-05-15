@@ -3,6 +3,7 @@
 @import 'header.css';
 @import 'pagination.css';
 @import 'form.css';
+@import 'selector.css';
 body {
   height: 100%;
   font-family: 'Raleway', Helvetica, sans-serif;
@@ -22,6 +23,11 @@ div#main .infobar {
   font-size: 0.8em;
 }
 div#main .content-header,
+div#sidebar {
+  position: fixed;
+  right: 0px;
+  top: 40px;
+}
 div.tag {
   display: inline;
 }

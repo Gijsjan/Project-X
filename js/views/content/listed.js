@@ -16,7 +16,7 @@
         }));
         tpl = ListedTemplates[this.model.get('type')];
         tplRendered = _.template(tpl, this.model.toJSON());
-        this.$('.content-body').html(tplRendered);
+        this.$('.content-main').html(tplRendered);
         return this;
       }
     });
