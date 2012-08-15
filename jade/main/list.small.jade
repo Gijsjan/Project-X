@@ -1,0 +1,4 @@
+|	<% items.each(function(item) { %>
+li.small-list-item(id!="object-<%= item.get('id') %>", data-id!="<%= item.get('id') %>", data-type!="<%= item.get('type') %>", data-slug!="<%= item.get('slug') %>") 
+	a(href!="/<%= item.get('type') %>/<%= item.get('id') %>") <%= item.get('title') %> 
+|	<%	}); %>

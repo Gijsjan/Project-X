@@ -1,1 +1,4 @@
-<ul><li class="link"><input type="checkbox" name="link" id="link"/><label for="link">links</label></li><li class="event"><input type="checkbox" name="event" id="event"/><label for="event">events	</label></li><li class="document"><input type="checkbox" name="document" id="document"/><label for="document">documents	</label></li><li class="note"><input type="checkbox" name="note" id="note"/><label for="note">notes</label></li><li class="video"><input type="checkbox" name="video" id="video"/><label for="video">videos</label></li></ul>
+<h3><%= title %> </h3><ul class="<%= title %>"><% labels.each(function (label) {
+	var name = label.get('name');
+	var active = label.get('active');
+	var inactive = label.get('inactive'); %><li class="link"><% if (active == 0 && title != 'content') { %><input type="checkbox" name="<%= name %>" id="<%= name %>" disabled="disabled"/><% } else { %><input type="checkbox" name="<%= name %>" id="<%= name %>"/><% } %><label for="<%= name %>"><%= name %> <span class="count">(<%= active %> of <%= inactive %>)</span></label></li><% }) %></ul>

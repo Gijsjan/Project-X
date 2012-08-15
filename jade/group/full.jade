@@ -1,0 +1,7 @@
+.group(id!="object-<%= id %>")
+	.group-title <%= title %>
+	nav.group-menu
+		a.editevent(href!="/<%= type %>/edit/<%= id %>") edit
+		span.delevent delete
+	.group-body
+	.users

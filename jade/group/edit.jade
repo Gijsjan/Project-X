@@ -1,0 +1,12 @@
+h2 Edit <%= type %>
+
+form
+	label(for="title") Title
+	input#title.bind(type="text", name="title", value!="<%= title %>") <%= title %>
+	br
+	label &nbsp;
+	input#slug.bind(type="text", name="slug", value!="<%= slug %>", disabled) <%= slug %>
+	br
+	div.group-child
+
+div#sSubmit Save

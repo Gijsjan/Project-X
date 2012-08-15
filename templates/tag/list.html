@@ -1,3 +1,1 @@
-	<%	tags.each(function(tag) { %>
-			<li class="tag-item"><a href="#<%= tag.get('type') %>/<%= tag.get('slug') %>" class="tag"><%= tag.get('slug') %></a></li> 
-	<% 	}); %>
+<%	tags.each(function(tag) { %><li class="tag-item"><a href="/<%= tag.get('type') %>/<%= tag.get('slug') %>" class="tag"><%= tag.get('slug') %></a><span class="add-tag">+</span></li><% 	}); %>

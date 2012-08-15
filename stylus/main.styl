@@ -2,8 +2,17 @@
 @import 'content.css'
 @import 'header.css'
 @import 'pagination.css'
+@import 'pagination.pages.css'
 @import 'form.css'
+@import 'form.survey.css'
 @import 'selector.css'
+@import 'tag.css'
+@import 'comment.css'
+@import 'popup.css'
+@import 'input/table.css'
+@import 'input/autocomplete.css'
+@import 'input/list.css'
+@import 'input/select.css'
 
 body 
 	height 100%
@@ -20,7 +29,9 @@ h2
 
 div#wrapper 
 	width 900px
-	margin 0 auto	
+	margin 0 auto
+	overflow hidden
+	opacity 1
 
 
 div#main .infobar 
@@ -29,45 +40,18 @@ div#main .infobar
 
 div#main .content-header 
 	
-div#sidebar
+div#selectors
 	position: fixed
 	right: 0px
 	top: 40px
 
-div.tag 
-	display inline
-
-
-div.selected 
-	background-color yellow	
-
-
-div.content div#edit-tags 
-	
-
+.highlight 
+	background-color lightblue
 
 #autocomplete-wrapper 
 	width 200px
 	margin-left 120px
 	background-color #CCC
-
-
-#ac-tag-list 
-	
-
-
-ul#tag-list, ul#countrytag-list 
-	margin 0px 0px 0px 120px
-	padding 0px
-	list-style none
-		
-
-
-ul#tag-list li, ul#countrytag-list li 
-	display inline
-	background-color lightblue
-	margin-right 4px
-
 
 #pagedown 
 	width 400px

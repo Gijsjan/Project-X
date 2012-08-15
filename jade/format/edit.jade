@@ -1,0 +1,133 @@
+h2 Edit format
+
+form.survey
+
+	nav.pages
+
+	div#pages
+
+		div.page(data-pagenumber="1")
+
+			h3.page-title Definition
+
+			label(for="title") 
+				h4 Title
+			input#title.regular.bind(type="text", name="title", value!="<%= title %>")
+
+			label(for="description") 
+				h4 Description
+			textarea#description.regular.bind(name="description") <%= description %>
+
+			label(for="goal") 
+				h4 Goal
+			textarea#goal.regular.bind(name="goal") <%= goal %>
+
+			label(for="objectives") 
+				h4 Objectives
+			.objectives
+
+			label(for="topics") 
+				h4 Topics
+			.topics
+
+			label(for="effects") 
+				h4 Effects
+			.effects
+
+			label(for="unique_selling_points") 
+				h4 Unique selling points
+			textarea#unique_selling_points.regular.bind(name="unique_selling_points") <%= unique_selling_points %>
+
+			label(for="competition") 
+				h4 Competition
+			textarea#competition.regular.bind(name="competition") <%= competition %>
+		
+		div.page(data-pagenumber="2")
+
+			h3.page-title Target group
+
+			label(for="age") 
+				h4 Age
+			.age
+
+			label(for="education") 
+				h4 Education
+			.education
+
+			label(for="living") 
+				h4 Living
+			.living
+
+			label(for="sex") 
+				h4 Sex
+			.sex
+
+			label(for="profession") 
+				h4 Profession
+			.profession
+
+
+		div.page(data-pagenumber="3")
+
+			h3.page-title Approach
+
+			label(for="deliverables")
+				h4 Deliverables
+			.deliverables
+
+			label(for="media")
+				h4 Media
+			.media
+
+			label(for="tone_of_voice") 
+				h4 Tone of voice
+			textarea#tone_of_voice.regular.bind(name="tone_of_voice") <%= tone_of_voice %>
+
+			label(for="producers")
+				h4 Producers
+			.producers
+
+			label(for="partners")
+				h4 Partners
+			.partners
+
+			label(for="participation") 
+				h4 Participation
+			textarea#participation.regular.bind(name="participation") <%= participation %>
+
+			label(for="duration")
+				h4 Duration
+			.duration
+
+		div.page(data-pagenumber="4")
+			h3.page-title Results
+
+			label(for="success_factors") 
+				h4 Success factors
+			textarea#success_factors.regular.bind(name="success_factors") <%= success_factors %>
+
+			label(for="targets")
+				h4 Targets
+			.targets
+
+			label(for="monitoring") 
+				h4 Monitoring
+			textarea#monitoring.regular.bind(name="monitoring") <%= monitoring %>
+
+		div.page(data-pagenumber="5")
+			h3.page-title People and resources
+
+			label(for="capacity")
+				h4 Capacity
+			.capacity
+
+			label(for="costs") 
+				h4 Costs
+			.costs
+
+			label(for="financing") 
+				h4 Financing
+			textarea#financing.regular.bind(name="financing") <%= financing %>
+
+			br
+			div#sSubmit Save

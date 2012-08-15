@@ -1,0 +1,8 @@
+<%
+var headings = false;
+var fixed = false;
+%><table class="input-table"><col width="16px"/><% _(columns).each(function(column) {
+		// Next two rows of code are here to avoid having two columns iterations
+		if (column.heading) headings = true;
+		if (column.input.type == 'options') fixed = column.input.fixed;
+%><col width="<%= column.width %>%"/><% }); %><col width="16px"/><% if (headings) { %><tr class="headings"><th></th><% _(columns).each(function(column) { %><th><%= column.heading %></th><% }); %><th></th></tr><% } %><tr class="totals"><td>&nbsp;</td><% _(columns).each(function(column) { %><td class="total">&nbsp;</td><% }); %><td>&nbsp;</td></tr></table><% if (!fixed) { %><div class="add-row">...add extra row</div><% } %>

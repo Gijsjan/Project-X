@@ -1,36 +1,54 @@
-define [
-		'text!../../../templates/main/selector'
-	], (tpl) ->
-		Backbone.View.extend
-			id: 'selector'
-			filtered: {}
-			events:
-				"change #selector ul li": "onContentSelected"
-			onContentSelected: (e) ->
-				console.log e
-				checkboxes = $('#selector ul li input:checked')
-				coll = []
-				@collection.reset()
+define (require) ->
+	$ = require 'jquery'
+	_ = require 'underscore'
+	Backbone = require 'backbone'
+	tpl = require 'text!templates/main/selector.html'
 
-				_.each checkboxes, (checkbox) =>
-					coll = _.union @base_collection.where({type: checkbox.id}), coll
+	Backbone.View.extend
+		className: 'selector'
+		events:
+			"change ul li input": "onContentSelected"
+		onContentSelected: (e) ->
+			target = $(e.currentTarget)
+			id = target.attr 'id'
+			if target.prop 'checked'
+				@checkboxes.push id
+			else
+				@checkboxes.splice @checkboxes.indexOf(id), 1
+			@trigger 'checkboxChecked'
+		
+		initialize: ->
+			@labelInfo = new Backbone.Collection()
+			@labelInfo.comparator = (model) ->
+				-model.get 'active'
+			@checkboxes = []
+		render: ->
+			@$el.html _.template tpl, 
+				'title': @options.title
+				'labels': @labelInfo.sort()
 
-				@collection.reset coll
+			_.each @checkboxes, (checkbox) =>
+				checkbox = checkbox.replace /(:|\.)/g,'\\$1' # necessary for dots in labels (ie: backbone.js, require.js, etc)
+				@$('input#'+checkbox).prop('checked', true) # set checked to true of the checkboxes that are listed in the @checkboxes array
 
-				tags = {}
-				@base_collection.each (model) ->
-					model.get('newtags').each (tag) ->
-						t = tag.get('slug')
-						if _.has(tags, t) 
-							tags[t] = tags[t] + 1
-						else 
-							tags[t] = 1
-				return
-			initialize: ->
-				@base_collection = @options.base_collection
-				@collection.comparator = (model) ->
-					m = parseInt model.get('created').replace(/[- :]/g, "") # remove -, space and : from datetime string and convert to number (is conversion necessary?)
-					return -m # return negated number
-			render: ->
-				@$el.html _.template tpl
-				$('#sidebar').html(@$el);
+			@
+		updateLabelInfo: (name, active) ->
+			index = @labelInfo.pluck('name').indexOf(name)
+
+			if index isnt -1
+				model = @labelInfo.at(index)
+
+				if active	
+					active_count = model.get('active')
+					model.set('active', active_count + 1)
+				
+				inactive_count = model.get('inactive')
+				model.set('inactive', inactive_count + 1)
+			else
+				model = 
+					name: name
+					inactive: 1
+
+				model.active = if active then 1 else 0
+
+				@labelInfo.add model

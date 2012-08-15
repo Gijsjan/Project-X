@@ -1,0 +1,72 @@
+table.input-table
+	width 720px
+	border-collapse collapse
+	border-style hidden
+	border-spacing 0
+	font-size 0.8em
+	table-layout fixed
+
+	tr
+		border-bottom 1px dotted lightblue
+
+		th, td
+			border-right 1px dotted lightblue
+
+		th
+			text-align left
+			padding 6px 1px 4px 6px
+
+		td
+			vertical-align top
+			padding 8px 1px 8px 1px
+
+			textarea
+				height 24px
+				resize none
+				margin 0
+				width 99%
+				border 0
+				overflow hidden
+
+			input
+				height 24px
+				margin 0
+				width 99%
+				border 0
+
+		td:first-child, td:last-child
+			color grey
+			text-align center
+
+		td.input, td.total
+			padding-left 6px
+
+		td.input:hover
+			cursor text
+
+		td.remove
+			cursor pointer
+
+		td.error
+			background-color pink
+			border 1px solid red
+
+		td.incomplete
+			background-color orange
+			border 1px solid red
+
+		td.complete
+			background-color #D4F2D4
+			border 1px solid lightgreen
+
+	tr:last-child
+		border-bottom 0
+
+	tr.totals
+		display: none;
+
+.add-row
+	margin-left 18px
+	font-size 0.8em
+	color grey
+	cursor pointer

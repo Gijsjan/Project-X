@@ -1,0 +1,5 @@
+li.pagination.previous.greyed-out <<
+|	<% _.times(totalPages, function(index) { %>
+li.pagination(data-pagenumber!="<%= index + 1 %>") <%= index + 1 %>: <%= pageTitles[index] %>
+|	<% }); %>
+li.pagination.next >>

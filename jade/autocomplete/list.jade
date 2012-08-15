@@ -1,0 +1,4 @@
+|	<% selected.each(function(sel) { %>
+li.selected-item <%= sel.get('title') %> 
+	span.del(data-id!="<%= sel.get('id') %>") x 
+|	<% 	}); %>

@@ -1,0 +1,9 @@
+h3 content
+ul
+	|	<% content.each(function(c) { 
+	|		type = c.get('type'); %>
+	li.link
+		input(type='checkbox', name!='<%= type %>', id!='<%= type %>') 
+		label(for!='<%= type %>') <%= type %>
+			span.count (<%= c.get('active') %> of <%= c.get('inactive') %>)
+	|	<% }); %>

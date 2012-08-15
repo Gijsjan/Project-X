@@ -1,3 +1,9 @@
-div.content-icon
+.content-icon
 	img(src!="/img/<%= type %>.png")
-div.content-main
+.content-main
+	.content-title
+		h2
+			a(href!="<%= type %>/<%= id %>") <%= title %>
+	span <%= commentcount %>
+	.content-body
+.tags-wrapper

@@ -1,0 +1,1 @@
+<h3>tags</h3><ul>	<% _.each(Object.keys(tags), function(tag) { %><li class="link"><input type="checkbox" name="<%= tag %>" id="<%= tag %>"/><label for="<%= tag %>"><%= tag %> <span class="count">(<%= tags[tag]['active'] %> of <%= tags[tag]['inactive'] %>)</span></label></li>	<% }); %></ul>

@@ -1,0 +1,10 @@
+h2 Commenting by <%= comments.at(0).get('created_by') %>
+|	<% comments.each(function (comment, i) { %>
+.comment(id!="object-<%= comment.get('id') %>")
+	.comment-info
+		a(href!="/comment/<%= comment.get('id') %>") <%= comment.get('created') %>
+	.comment-body <%= comment.get('comment') %>
+	.content-info
+		span in: 
+			a(href!="<%= comment.get('content_type') %>/<%= comment.get('content_id') %>") <%= comment.get('content_title') %>
+|	<% }); %>

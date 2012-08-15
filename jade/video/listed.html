@@ -1,9 +1,0 @@
-.content-title
-	h2
-		a(href!="video/<%= id %>") <%= title %>
-.content-body
-	<% if (player == 'youtube') { %>
-		<iframe width="560" height="315" src="http://www.youtube.com/embed/<%= code %>" frameborder="0" allowfullscreen></iframe>
-	<% } elseif (player == 'embed') { %>
-		<%= code %>
-	<% } %>

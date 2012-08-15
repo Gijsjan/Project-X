@@ -1,0 +1,14 @@
+h2 Edit <%= type %>
+
+form
+	label(for="email") E-mail
+	input#email.bind(type="text", name="email", value!="<%= email %>") <%= email %>
+	br
+	label(for="username") Username
+	input#username.bind(type="text", name="username", value!="<%= username %>", disabled) <%= username %>
+	br
+	label(for="password") Password
+	input#password.bind(type="password", name="password")
+	br
+
+div#sSubmit Save

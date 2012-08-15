@@ -1,0 +1,8 @@
+h3 tags
+ul
+	|	<% _.each(Object.keys(tags), function(tag) { %>
+	li.link
+		input(type='checkbox', name!='<%= tag %>', id!='<%= tag %>') 
+		label(for!='<%= tag %>') <%= tag %> 
+			span.count (<%= tags[tag]['active'] %> of <%= tags[tag]['inactive'] %>)
+	|	<% }); %>

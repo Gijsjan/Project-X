@@ -1,69 +1,67 @@
-define [
-	    'text!../../../templates/main/pagination'
-	], (tpl) ->
-		Backbone.View.extend
-			currentPage: 0
-			totalPages: 0
-			itemsPerPage: 8
-			totalItems: 0
-			id: 'pagination-wrapper'
-			events:
-				"click li.pgn-nav-elem" : "changePage"
-			initialize: ->
-				@totalItems = @options.totalItems
-				@totalPages = Math.ceil @totalItems / @itemsPerPage
-				@pageDivs = []
-			addPage: ->
-				@currentPage++
+define (require) ->
+	_ = require 'underscore'
+	tpl = require 'text!templates/main/pagination.html'
 
-				pageDiv = $('<div />').attr 'class', 'page index-'+@currentPage
+	Backbone.View.extend
 
-				@pageDivs[@currentPage - 1] = pageDiv
-			addItem: (index, itemDiv) ->
-				if index % @itemsPerPage is 0
-					@addPage()
-				@pageDivs[@currentPage - 1].append itemDiv
-			render: ->
-				@currentPage = 1
+		totalItems: 0
 
-				@$el.html _.template tpl, totalPages: @totalPages
+		id: 'pagination-wrapper'
 
-				_.each @pageDivs, (pageDiv) =>
-					@$('#item-wrapper').append pageDiv
+		events:
+			"click li.pgn-nav-elem" : "changePage"
+			# keyup is bound to the document
 
-				@showPage(1) if @pageDivs.length > 0
+		initialize: ->
+			@totalPages = 0
+			@itemsPerPage = 4
+			@reset()
 
-				@
-			renderNavigation: ->
-				if @pageDivs.length < 2
-					@$('nav#pagination').hide()
+			$(document).on 'keyup', (e) =>
+				if e.keyCode is 37 # left
+					@currentPage = if @currentPage > 1 then @currentPage - 1 else @currentPage = @totalPages	
+				else if e.keyCode is 39 # right
+					@currentPage = if @currentPage < @totalPages then @currentPage + 1 else @currentPage = 1
+					
+				@trigger 'changePage'				
 
-				@$('li.pgn-nav-elem').removeClass 'greyed-out'
+		# reset is called from vListControl.render()
+		reset: ->
+			@currentPage = 1 # on load or user input: start at page one
+			@totalItems = 0 # set totalItems to zero; totalItems has to be recounted on load or user input
 
-				@$('li[data-page-number="'+@currentPage+'"]').addClass 'greyed-out'
+		render: ->				
+			@totalPages = Math.ceil @totalItems / @itemsPerPage
+			
+			@$el.html _.template tpl, totalPages: @totalPages
 
-				if @currentPage is 1 
-					@$('li.previous').addClass 'greyed-out'
-				if @currentPage is @totalPages
-					@$('li.next').addClass 'greyed-out'
+			@renderNavigation()
 
-				return
-			changePage: (e) ->
-				target = $(e.currentTarget)
-				pagenumber = target.attr 'data-page-number'
+			@
 
-				if !target.hasClass('greyed-out')
-					if _.isString(pagenumber) # pagenumber is "2" or undefined
-						pagenumber = parseInt pagenumber # if pagenumber is "2" -> parseInt -> 2
+		renderNavigation: ->
+			@$('li.pgn-nav-elem').removeClass 'greyed-out'
 
-					if pagenumber?
-						@showPage(pagenumber)
-					else if target.hasClass 'previous'
-						@showPage @currentPage - 1
-					else if target.hasClass 'next'
-						@showPage @currentPage + 1
-			showPage: (pagenumber) ->
-				@pageDivs[@currentPage - 1].hide()
-				@currentPage = pagenumber
-				@renderNavigation()
-				@pageDivs[@currentPage - 1].show()
+			@$('li[data-page-number="'+@currentPage+'"]').addClass 'greyed-out'
+
+			if @currentPage is 1 
+				@$('li.previous').addClass 'greyed-out'
+			if @currentPage is @totalPages
+				@$('li.next').addClass 'greyed-out'
+
+		changePage: (e) ->
+			target = $(e.currentTarget)
+			pagenumber = target.attr 'data-page-number'
+
+			if !target.hasClass('greyed-out')
+				if _.isString(pagenumber) # pagenumber is "2" or undefined
+					pagenumber = parseInt pagenumber # if pagenumber is "2" -> parseInt -> 2
+
+				if pagenumber?
+					@currentPage = pagenumber
+				else if target.hasClass 'previous'
+					@currentPage = @currentPage - 1
+				else if target.hasClass 'next'
+					@currentPage = @currentPage + 1
+
+			@trigger 'changePage'

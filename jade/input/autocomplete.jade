@@ -1,0 +1,9 @@
+div.input
+	input.ac(type="text")
+	span.select-from-list(style="display: none") Or select from list
+	.results
+
+div.result
+	span(data-key!="<%= key %>") <%= value.value %>
+	div.remove(style="float: right; display: none") x
+

@@ -2,27 +2,59 @@ define (require) ->
     $ = require 'jquery'
     _ = require 'underscore'
     Backbone = require 'backbone'
+    ViewManager = require 'viewmanager'
     vMenu = require 'views/main/menu'
+    UserRouter = require 'routers/user'
+    GroupRouter = require 'routers/group'
+    ContentRouter = require 'routers/content'
     MainRouter = require 'routers/main'
-    ObjectRouter = require 'routers/object'
 
     initialize: ->
         $('header').html new vMenu().render().$el
 
-        objectRouter = new ObjectRouter()
-        mainRouter = new MainRouter()
+        
 
-        Backbone.View.prototype.navigate = (loc) ->
-            mainRouter.navigate loc, true
+        globalEvents = _.extend {}, Backbone.Events
 
+        Backbone.View::globalEvents = globalEvents
+        Backbone.View::screenwidth = $(document).width()
+        Backbone.View::screenheight = $(document).height()
+        Backbone.View::navigate = (loc) -> mainRouter.navigate loc, 'trigger': true # Set a generic navigate function for all views
+
+        Backbone.Router::globalEvents = globalEvents
+        #Backbone.Router::currentView = currentView
+
+        viewManager = new ViewManager(globalEvents)
+
+        # Initiate the Routers
+        contentRouter = new ContentRouter()
+        userRouter = new UserRouter()
+        groupRouter = new GroupRouter()
+        mainRouter = new MainRouter() # define mainRouter after objectRouter so mainRouter's routes are used first
+
+        ### MOVE TO VIEWMANAGER ###
+        # Set the onhashchange to detect changes by the user in the url hash
+        currentView = new Backbone.View() # The currentView is populated from the Routers
+        window.onhashchange = (e) -> currentView.trigger 'hashchange', 'hash': e.currentTarget.location.hash.substr(1)
+
+        # Enable pushState    
         Backbone.history.start pushState: true
 
-        $(document).on 'click', 'a:not([data-bypass])', (evt) ->
+        $(document).on 'click', 'a:not([data-bypass])', (e) ->
+            mainRouter.lastRoute = Backbone.history.fragment # store the previous route in the mainRouter (property is also available in objectRouter)
             href = $(@).attr 'href'
-            protocol = @protocol + '//'
 
-            if href.slice protocol.length isnt protocol
-                evt.preventDefault()
-                mainRouter.navigate href, true
+            e.preventDefault()
+            mainRouter.navigate href, true
 
-        return
+        div = $('<div />').html('viewManager').on 'click', -> viewManager.viewsToLog()
+        $('#webdev').append div
+
+        div = $('<div />').html('curView').on 'click', -> viewManager.currentViewToLog()
+        $('#webdev').append div
+        
+        div = $('<div />').html('curView -> model -> attrs').on 'click', -> console.log viewManager.currentView.model.attributes
+        $('#webdev').append div
+
+        div = $('<div />').html('globalEvents').on 'click', -> console.log globalEvents
+        $('#webdev').append div
