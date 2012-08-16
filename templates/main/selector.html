@@ -1,4 +1,0 @@
-<h3><%= title %> </h3><ul class="<%= title %>"><% labels.each(function (label) {
-	var name = label.get('name');
-	var active = label.get('active');
-	var inactive = label.get('inactive'); %><li class="link"><% if (active == 0 && title != 'content') { %><input type="checkbox" name="<%= name %>" id="<%= name %>" disabled="disabled"/><% } else { %><input type="checkbox" name="<%= name %>" id="<%= name %>"/><% } %><label for="<%= name %>"><%= name %> <span class="count">(<%= active %> of <%= inactive %>)</span></label></li><% }) %></ul>

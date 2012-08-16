@@ -1,1 +1,0 @@
-	<% items.each(function(item) { %><li id="object-<%= item.get('id') %>" data-id="<%= item.get('id') %>" data-type="<%= item.get('type') %>" data-slug="<%= item.get('slug') %>" class="small-list-item"> <a href="/<%= item.get('type') %>/<%= item.get('id') %>"><%= item.get('title') %> </a></li>	<%	}); %>
