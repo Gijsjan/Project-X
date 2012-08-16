@@ -3,7 +3,7 @@ define (require) ->
 	_ = require 'underscore'
 	Backbone = require 'backbone'
 	cComment = require 'collections/object/comment'
-	tpl = require 'text!templates/comment/list.user.html'
+	tpl = require 'text!html/comment/list.user.html'
 
 	Backbone.View.extend
 

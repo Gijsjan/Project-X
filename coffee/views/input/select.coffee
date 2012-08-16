@@ -6,7 +6,7 @@ define (require) ->
 	Backbone = require 'backbone'
 	BaseView = require 'views/base'
 	hlpr = require 'helper'
-	tpl = require 'text!templates/input/select.html'
+	tpl = require 'text!html/input/select.html'
 
 	class vInputSelect extends BaseView
 

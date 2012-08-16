@@ -1,17 +1,17 @@
 define (require) ->
-	tplUser = require 'text!templates/user/listed.html'
+	tplUser = require 'text!html/user/listed.html'
 	
-	tplEvent = require 'text!templates/event/listed.html'
-	tplLink = require 'text!templates/link/listed.html'
-	tplVideo = require 'text!templates/video/listed.html'
-	tplDocument = require 'text!templates/document/listed.html'
-	tplNote = require 'text!templates/note/listed.html'
-	tplFormat = require 'text!templates/format/listed.html'
+	tplEvent = require 'text!html/event/listed.html'
+	tplLink = require 'text!html/link/listed.html'
+	tplVideo = require 'text!html/video/listed.html'
+	tplDocument = require 'text!html/document/listed.html'
+	tplNote = require 'text!html/note/listed.html'
+	tplFormat = require 'text!html/format/listed.html'
 
 
-	tplDepartement = require 'text!templates/departement/listed.html'
-	tplOrganisation = require 'text!templates/organisation/listed.html'
-	tplProject = require 'text!templates/project/listed.html'
+	tplDepartement = require 'text!html/departement/listed.html'
+	tplOrganisation = require 'text!html/organisation/listed.html'
+	tplProject = require 'text!html/project/listed.html'
 
 	'object/user': tplUser
 

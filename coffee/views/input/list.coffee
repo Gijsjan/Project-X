@@ -6,7 +6,7 @@ define (require) ->
 	Backbone = require 'backbone'
 	BaseView = require 'views/base'
 	cResult = require 'collections/ac.result'
-	tpl = require 'text!templates/input/list.html'
+	tpl = require 'text!html/input/list.html'
 	hlpr = require 'helper'
 
 	class vInputList extends BaseView

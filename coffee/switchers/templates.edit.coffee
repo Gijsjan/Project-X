@@ -1,20 +1,20 @@
 define (require) ->
 	# OBJECTS
-	tplComment = require 'text!templates/comment/edit.html'
-	tplUser = require 'text!templates/user/edit.html'
+	tplComment = require 'text!html/comment/edit.html'
+	tplUser = require 'text!html/user/edit.html'
 
 	# CONTENT
-	tplEvent = require 'text!templates/event/edit.html'
-	tplLink = require 'text!templates/link/edit.html'
-	tplVideo = require 'text!templates/video/edit.html'
-	tplDocument = require 'text!templates/document/edit.html'
-	tplNote = require 'text!templates/note/edit.html'
-	tplFormat = require 'text!templates/format/edit.html'
+	tplEvent = require 'text!html/event/edit.html'
+	tplLink = require 'text!html/link/edit.html'
+	tplVideo = require 'text!html/video/edit.html'
+	tplDocument = require 'text!html/document/edit.html'
+	tplNote = require 'text!html/note/edit.html'
+	tplFormat = require 'text!html/format/edit.html'
 
 	# GROUPS
-	tplDepartement = require 'text!templates/departement/edit.html'
-	tplOrganisation = require 'text!templates/organisation/edit.html'
-	tplProject = require 'text!templates/project/edit.html'
+	tplDepartement = require 'text!html/departement/edit.html'
+	tplOrganisation = require 'text!html/organisation/edit.html'
+	tplProject = require 'text!html/project/edit.html'
 
 	'object/comment': tplComment
 	'object/user': tplUser

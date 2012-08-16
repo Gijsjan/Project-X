@@ -10,7 +10,7 @@ define (require) ->
 	mInputTableRow = require 'models/input/tablerow'
 	vInputAutocomplete = require 'views/input/autocomplete'
 	vInputSelect = require 'views/input/select'
-	tpl = require 'text!templates/input/table.html'
+	tpl = require 'text!html/input/table.html'
 	hlpr = require 'helper'
 
 	class vInputTable extends BaseView

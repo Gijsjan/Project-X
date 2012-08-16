@@ -5,7 +5,7 @@
 define (require) ->
 	vEditObject = require 'views/object/edit'
 	mComment = require 'models/object/comment'
-	tpl = require 'text!templates/comment/edit.html'
+	tpl = require 'text!html/comment/edit.html'
 
 	vEditObject.extend
 

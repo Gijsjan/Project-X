@@ -1,7 +1,7 @@
 define (require) ->
 	_ = require 'underscore'
 	vTagList = require 'views/tag/list'
-	tpl = require 'text!templates/content/listed.html'
+	tpl = require 'text!html/content/listed.html'
 
 	Backbone.View.extend
 		render: ->

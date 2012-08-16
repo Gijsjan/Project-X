@@ -9,8 +9,7 @@ define (require) ->
 			"": "home"
 			'all': 'home'
 			'content': 'home'
-			'object/:id': 'object' 
-			'content/:slug': 'contentList'
+			'object/:id': 'object'
 			'tag/:slug': 'tagList'
 			'404': 'notfound'
 			'login': 'login'

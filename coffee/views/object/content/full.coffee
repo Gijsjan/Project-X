@@ -5,7 +5,7 @@ define (require) ->
 	vEditComment = require 'views/object/comment/edit'
 	vCommentList = require 'views/object/comment/list.content'
 	mComment = require 'models/object/comment'
-	tpl = require 'text!templates/content/full.html'
+	tpl = require 'text!html/content/full.html'
 
 	vFullObject.extend
 

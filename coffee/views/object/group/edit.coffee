@@ -7,7 +7,7 @@ define (require) ->
 	vPopup = require 'views/main/popup'
 	mUser = require 'models/object/user'
 	hlpr = require 'helper'
-	tpl = require 'text!templates/group/edit.html'
+	tpl = require 'text!html/group/edit.html'
 
 	class vEditGroup extends vEditObject
 	

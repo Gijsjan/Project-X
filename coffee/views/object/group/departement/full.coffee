@@ -1,7 +1,7 @@
 define (require) ->
 	vFullGroup = require 'views/object/group/full'
 	vSmallList = require 'views/main/list.small'
-	tpl = require 'text!templates/departement/full.html'
+	tpl = require 'text!html/departement/full.html'
 	
 	vFullGroup.extend
 

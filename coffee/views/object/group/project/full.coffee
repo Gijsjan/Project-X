@@ -1,6 +1,6 @@
 define (require) ->
 	vFullGroup = require 'views/object/group/full'
-	tpl = require 'text!templates/project/full.html'
+	tpl = require 'text!html/project/full.html'
 	
 	vFullGroup.extend
 

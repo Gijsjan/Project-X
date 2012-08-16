@@ -1,7 +1,7 @@
 define (require) ->
 	_ = require 'underscore'
 	Backbone = require 'backbone'
-	tpl = require 'text!templates/autocomplete/list.html'
+	tpl = require 'text!html/autocomplete/list.html'
 
 	Backbone.View.extend
 

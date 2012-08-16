@@ -1,7 +1,7 @@
 define (require) ->
 	_ = require 'underscore'
 	vFullObject = require 'views/object/full'
-	tpl = require 'text!templates/comment/full.html'
+	tpl = require 'text!html/comment/full.html'
 
 	vFullObject.extend
 	

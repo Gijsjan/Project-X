@@ -1,7 +1,7 @@
 define (require) ->
 	_ = require 'underscore'
 	vFullContent = require 'views/object/content/full'
-	tpl = require 'text!templates/document/full.html'
+	tpl = require 'text!html/document/full.html'
 
 	vFullContent.extend
 		

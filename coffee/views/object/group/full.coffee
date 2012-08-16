@@ -2,7 +2,7 @@ define (require) ->
 	_ = require 'underscore'
 	vFullObject = require 'views/object/full'
 	vSmallList = require 'views/main/list.small'
-	tpl = require 'text!templates/group/full.html'
+	tpl = require 'text!html/group/full.html'
 
 	vFullObject.extend
 	

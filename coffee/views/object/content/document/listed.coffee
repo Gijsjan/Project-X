@@ -1,7 +1,7 @@
 define (require) ->
 	_ = require 'underscore'
 	vListedContent = require 'views/object/content/listed'
-	tpl = require 'text!templates/document/listed.html'
+	tpl = require 'text!html/document/listed.html'
 
 	vListedContent.extend
 		render: ->

@@ -2,7 +2,7 @@ define (require) ->
 	_ = require 'underscore'
 	Markdown = require 'markdown'
 	vFullContent = require 'views/object/content/full'
-	tpl = require 'text!templates/note/full.html'
+	tpl = require 'text!html/note/full.html'
 
 	vFullContent.extend
 		render: ->

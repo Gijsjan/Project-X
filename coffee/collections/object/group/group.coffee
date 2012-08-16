@@ -1,6 +1,6 @@
 define (require) ->
 	cObject = require 'collections/object/object'
-	mGroup = require 'models/group'
+	mGroup = require 'models/object/group/group'
 
 	cObject.extend
 		

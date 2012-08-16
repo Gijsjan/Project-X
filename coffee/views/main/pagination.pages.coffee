@@ -1,6 +1,6 @@
 define (require) ->
 	_ = require 'underscore'
-	tpl = require 'text!templates/main/pagination.pages.html'
+	tpl = require 'text!html/main/pagination.pages.html'
 
 	class PagesPagination extends Backbone.View
 

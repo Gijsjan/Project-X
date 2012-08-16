@@ -1,6 +1,6 @@
 define (require) ->
 	Backbone = require 'backbone'
-	tpl = require 'text!templates/main/list.small.html'
+	tpl = require 'text!html/main/list.small.html'
 	
 	Backbone.View.extend
 

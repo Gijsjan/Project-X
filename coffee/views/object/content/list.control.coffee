@@ -5,7 +5,7 @@ define (require) ->
 	vPagination = require 'views/main/pagination'
 	vSelector = require 'views/main/selector'
 	vList = require 'views/object/content/list'
-	cContentList = require 'collections/content/content'
+	cContentList = require 'collections/object/content/content'
 
 	Backbone.View.extend
 		

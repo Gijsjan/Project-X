@@ -2,7 +2,7 @@ define (require) ->
 	$ = require 'jquery'
 	_ = require 'underscore'
 	Backbone = require 'backbone'
-	tpl = require 'text!templates/main/selector.html'
+	tpl = require 'text!html/main/selector.html'
 
 	Backbone.View.extend
 		className: 'selector'

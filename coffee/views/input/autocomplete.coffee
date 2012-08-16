@@ -10,7 +10,7 @@ define (require) ->
 	vInputList = require 'views/input/list'
 	cResult = require 'collections/ac.result'
 	hlpr = require 'helper'
-	tpl = require 'text!templates/input/autocomplete.html'
+	tpl = require 'text!html/input/autocomplete.html'
 
 	class vInputAutocomplete extends BaseView
 

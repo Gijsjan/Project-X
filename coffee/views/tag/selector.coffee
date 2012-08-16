@@ -1,6 +1,6 @@
 define (require) ->
 	_ = require 'underscore'
-	tpl = require 'text!templates/tag/selector.html'
+	tpl = require 'text!html/tag/selector.html'
 
 	Backbone.View.extend
 		id: 'tag-selector'

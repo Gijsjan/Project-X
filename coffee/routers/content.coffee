@@ -12,8 +12,8 @@ define (require) ->
 		routes:
 			"content/:object_type/add": "edit"
 			"content/:object_type/edit/:id": "edit"
-			"content/:object_type/list": "list"
 			"content/:object_type/:id": "show"
+			"content/:object_type": "list" # DOESNT WORK WITH TRAILING SLASH?
 
 			"group/:object_type/add": "edit"
 			"group/:object_type/edit/:id": "edit"
@@ -62,6 +62,7 @@ define (require) ->
 				'currentView': ev
 
 		list: (object_types) ->
+			console.log 'ContentRouter -> list()'
 			v = new vContentList 
 				'collection': new Collections[object_types]()
 			

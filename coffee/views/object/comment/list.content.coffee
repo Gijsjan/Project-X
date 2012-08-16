@@ -2,7 +2,7 @@ define (require) ->
 	$ = require 'jquery'
 	_ = require 'underscore'
 	Backbone = require 'backbone'
-	tpl = require 'text!templates/comment/list.content.html'
+	tpl = require 'text!html/comment/list.content.html'
 
 	Backbone.View.extend
 

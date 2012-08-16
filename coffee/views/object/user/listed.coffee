@@ -1,6 +1,6 @@
 define (require) ->
 	_ = require 'underscore'
-	tpl = require 'text!templates/user/listed.html'
+	tpl = require 'text!html/user/listed.html'
 
 	Backbone.View.extend
 	

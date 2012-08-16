@@ -2,7 +2,7 @@ define (require) ->
 	$ = require 'jquery'
 	_ = require 'underscore'
 	Backbone = require 'backbone'
-	tpl = require 'text!templates/tag/list.html' #UNUSED?
+	tpl = require 'text!html/tag/list.html' #UNUSED?
 
 	Backbone.View.extend
 		id: 'ac-tag-list'

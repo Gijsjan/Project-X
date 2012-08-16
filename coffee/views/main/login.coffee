@@ -2,7 +2,7 @@ define (require) ->
 	$ = require 'jquery'
 	_ = require 'underscore'
 	Backbone = require 'backbone'
-	tplLogin = require 'text!templates/main/login.html'
+	tplLogin = require 'text!html/main/login.html'
 
 	Backbone.View.extend
 		id: 'login-form'

@@ -4,7 +4,7 @@ define (require) ->
 	Backbone = require 'backbone'
 	vEditTagList = require 'views/tag/editlist'
 	vAutocompleteTags = require 'views/tag/autocomplete'
-	tplEditTags = require 'text!templates/tag/edit.html'
+	tplEditTags = require 'text!html/tag/edit.html'
 
 	Backbone.View.extend
 		id: 'edit-tags'
