@@ -54,7 +54,7 @@ define (require) ->
 
 			ev = new EditViews[object_type] data
 			ev.on 'done', (model) ->
-				console.log 'ContentRouter.edit() ' + object_type + ' || EditView || saved!'
+				# console.log 'ContentRouter.edit() ' + object_type + ' || EditView || saved!'
 				@navigate model.get('type') + '/' + model.get('id'), true
 
 			@globalEvents.trigger 'showView',

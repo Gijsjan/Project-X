@@ -1,7 +1,7 @@
-###
-TRIGGERS:
-	- 'data changed'
-###
+# @trigger 'data changed'
+# 		@param 'attr' @tablekey
+#		@param 'data' @table2object()
+#
 define (require) ->
 	_ = require 'underscore'
 	Backbone = require 'backbone'
@@ -25,10 +25,10 @@ define (require) ->
 			'change textarea': 'onChangeInput'
 
 		addRow: (e) ->
-			@rows.push new mInputTableRow
+			@tablevalue.push new mInputTableRow
 			###
 			inputTR = $('<tr />').addClass('input')
-			inputTR.append $('<td />').addClass('index').html(@rows.length + 1)
+			inputTR.append $('<td />').addClass('index').html(@tablevalue.length + 1)
 
 			for column, index in @columns
 				td = $('<td />').addClass('input')
@@ -60,7 +60,7 @@ define (require) ->
 
 		onRemove: (e) ->
 			cid = e.currentTarget.dataset.cid
-			@rows.remove @rows.getByCid(cid)
+			@tablevalue.remove @tablevalue.getByCid(cid) # PUT removeByCid IN BACKBONE.COLLECTION?
 
 			###
 			if @$('tr.input').length > 1 and confirm('Remove row?')
@@ -90,18 +90,20 @@ define (require) ->
 		### /EVENTS ###
 
 		initialize: ->
-			@attribute = @options.attribute
+			@tablekey = @options.tablekey
 			@columns = @options.columns
 			@addrows = @options.addrows
 
-			@rows = if @options.rows? then @options.rows else new cInputTableRows
-			@rows.on 'remove', (model, collection, options) =>
+			@tablevalue = if @options.tablevalue? then @options.tablevalue else new cInputTableRows
+			@tablevalue.on 'remove', (model, collection, options) =>
 				@$('tr[data-cid='+model.cid+']').remove()
 				@render()
-			@rows.on 'add', (model, collection, options) =>
+			@tablevalue.on 'add', (model, collection, options) =>
 				@render()
+			@tablevalue.on 'change', (model, options) =>
+				@updateModel()
 				
-			@rowlength = if @rows.length > 0 then @rows.length else 3
+			@rowlength = if @tablevalue.length > 0 then @tablevalue.length else 3
 			
 			super
 
@@ -114,21 +116,21 @@ define (require) ->
 
 			@$el.html html
 
-			# If the collection @rows is empty (ie: the models @attribute is empty) set @rows to default
-			# If a column.input.type is set to 'options' (ie: a fixed list), use the length of column.input.options as @rows size
-			# The empty @rows collection is filled with 'size' numbers of mInputTableRow's
-			if @rows.length is 0
+			# If the collection @tablevalue is empty (ie: the models @tablekey is empty) set @tablevalue to default
+			# If a column.input.type is set to 'options' (ie: a fixed list), use the length of column.input.options as @tablevalue size
+			# The empty @tablevalue collection is filled with 'size' numbers of mInputTableRow's
+			if @tablevalue.length is 0
 				size = @rowlength;
 				for column, index in @columns
 					size = column.input.options.length if column.input.type is 'options'
 				itrs = (new mInputTableRow for i in [1..size])
 	
-				@rows.reset itrs
+				@tablevalue.reset itrs
 			
-			@rows.each (row, index) => 
+			@tablevalue.each (row, index) =>
 				@renderRow(row, index)
 
-			# After rendering the rows, render the columns (ie: options, constrains and relations)
+			# After rendering the tablevalue, render the columns (ie: options, constrains and relations)
 			@renderColumns()
 	
 			@
@@ -138,7 +140,9 @@ define (require) ->
 		# @param rowindex = int || count of the row, starting at 0
 		renderRow: (row, rowindex) ->
 			inputTR = $('<tr />').addClass('input').attr('data-cid', row.cid)
-			inputTR.append $('<td />').addClass('index').html(rowindex + 1)
+
+			indexTD = if @addrows then $('<td />').addClass('index').html(rowindex + 1) else $('<td />').html('&nbsp;')
+			inputTR.append indexTD
 
 			for column, columnindex in @columns
 				td = $('<td />').addClass('input')
@@ -146,7 +150,6 @@ define (require) ->
 				inputTR.append td
 
 			removeTD = if @addrows then $('<td />').attr('data-cid', row.cid).addClass('remove').html('x') else $('<td />').html('&nbsp;')
-
 			inputTR.append removeTD
 
 			@$('tr.totals').before inputTR
@@ -156,7 +159,7 @@ define (require) ->
 				tds = @$ 'tr.input td:nth-child('+(columnindex+2)+')' # Column + 2 cuz array starts at 0 and first column is row count
 
 				for td, rowindex in tds
-					row = @rows.at(rowindex)
+					row = @tablevalue.at(rowindex)
 
 					if column.input.type is 'options'
 						value = if row.get(column.key)? then row.get(column.key) else column.input.options[rowindex]
@@ -206,7 +209,7 @@ define (require) ->
 
 				when 'autocomplete'
 					iac = new vInputAutocomplete
-						'view': column.input.view # departements
+						'dbview': column.input.dbview # departements
 						'key': column.key # departement_id
 						'row': row # model with all the data for this row, is used to set the new value
 					iac.on 'option selected', @updateModel, @
@@ -221,12 +224,12 @@ define (require) ->
 					td.html inputselect.render().$el
 
 		###
-		renderInputs: (column, columnindex, rows) ->
+		renderInputs: (column, columnindex, tablevalue) ->
 			tds = @$ 'tr.input td:nth-child('+(columnindex+2)+')' # Column + 2 cuz array starts at 0 and first column is row count
 
 			for td, rowindex in tds
 
-				row = if rows.at(rowindex)? then rows.at(rowindex) else new mInputTableRow()
+				row = if tablevalue.at(rowindex)? then tablevalue.at(rowindex) else new mInputTableRow()
 
 				switch column.input.type
 
@@ -288,16 +291,17 @@ define (require) ->
 			td.html amount + '%'
 
 		updateModel: ->
-			@trigger 'data changed', 
-				'attr': @attribute
-				'data': @table2object()
+			@trigger 'valuechanged', @tablekey, @tablevalue.map (model) -> model.attributes
+				# 'attr': @tablekey
+				# 'data': @table2object()
 
 		# Convert the <table> to a JS object
+		# For the value looks first at tablekey data-value="value", then <input value="value" /> then <td>value</td>
 		table2object: ->
 			array = []
 
-			rows = @$('tr.input')
-			_(rows).each (row) =>
+			tablevalue = @$('tr.input')
+			_(tablevalue).each (row) =>
 				inputs = $(row).find('[data-key]')
 				tmp = {}
 				tr_values = ''

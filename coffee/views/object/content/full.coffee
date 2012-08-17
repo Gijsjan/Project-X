@@ -16,7 +16,7 @@ define (require) ->
 			tags = new vTagList
 				'tags': @model.get 'newtags'
 			@$('.tags-wrapper').html tags.render().$el
-
+			###
 			ec = new vEditComment
 			#	'object_type': 'comment'
 				'className': 'object edit comment'
@@ -28,5 +28,5 @@ define (require) ->
 			comments = new vCommentList
 				'collection': @model.get 'comments'
 			@$('.comments-wrapper').append comments.render().$el
-
+			###
 			@

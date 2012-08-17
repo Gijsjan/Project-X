@@ -5,9 +5,9 @@ define (require) ->
 	class BaseView extends Backbone.View
 
 		initialize: ->
-			# console.log 'registering'
+			# console.log 'BaseView -> registering'
 			@globalEvents.trigger 'registerView', @
 
 		unregister: ->
-			# console.log 'unregistering'
+			# console.log 'BaseView -> unregistering'
 			@globalEvents.trigger 'unregisterView', @

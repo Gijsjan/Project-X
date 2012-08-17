@@ -30,7 +30,7 @@ define (require) ->
 
 			'click .ac-option': 'onClickOption'
 
-			"click div.remove": "removeResult"
+			"click div.remove": "removeSelectedOption"
 			"click span.select-from-list": "selectFromList"
 
 		onKeyup: (e) ->	
@@ -47,7 +47,7 @@ define (require) ->
 							@resultlist.reset @fetchedJSON[value].models
 						else
 							hlpr.delayWithReset 300, =>
-								@resultlist.url = '/api/ac/'+@view+'/'+value
+								@resultlist.url = '/api/ac/'+@dbview+'/'+value
 								@resultlist.fetch
 									success: (collection, response) =>
 										@fetchedJSON[value] = hlpr.deepCopy collection
@@ -72,8 +72,9 @@ define (require) ->
 		onClickOption: (e) ->
 			@selectOption @resultlist.highlighted
 
-		removeResult: ->
+		removeSelectedOption: ->
 			@value = {}
+			@row.set @key, @value
 			@render()
 			@$('input').focus()
 
@@ -81,7 +82,7 @@ define (require) ->
 			@$('span.select-from-list').hide()
 
 			il = new vInputList
-				'view': @view
+				'view': @dbview
 
 			il.on 'done', (model) => @selectOption model
 
@@ -93,17 +94,18 @@ define (require) ->
 		### /EVENTS ###
 
 		initialize: ->
-			@view = @options.view # The couchdb view to get the resultlist, ie 'group/departements', 'object/countries'
+			@dbview = @options.dbview # The couchdb view to get the resultlist, ie 'group/departements', 'object/countries'
 			@key = @options.key
 			@row = @options.row 
 
 			# The value of an autocomplete is an object with the attributes _id, key and value
-			@value = if @row.get(@key)? then @row.get(@key) else {}
+			# The model returned from the list (selectFromList) is the same object
+			@value = if @row? and @row.get(@key)? then @row.get(@key) else {}
 
 			@fetchedJSON = {}
 
 			@resultlist = new cResult # Collection with the last result
-				'view': @view
+				'view': @dbview
 			@resultlist.on 'reset', @renderResultList, @
 			@resultlist.on 'model highlighted', (id) =>
 				@$('.highlight').removeClass 'highlight'

@@ -1,6 +1,5 @@
 input.ac(type="text")
 .list-results
-	|<% console.log(collection); 
-	|collection.each(function (model) { %>
+	|<% collection.each(function (model) { %>
 	div.ac-option(id!="ac-option-<%= model.get('id') %>", data-id!="<%= model.get('id') %>") <%= model.get('value') %>
 	|<% }); %> 

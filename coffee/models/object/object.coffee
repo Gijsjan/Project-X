@@ -13,19 +13,34 @@ define (require) ->
 			'updated': ''
 
 		'show': true
-		
-		initialize: ->
-			#@on 'change', @saveToLocalStorage, @
 
 		parse: (response) ->
 			# console.log 'parsing mObject'
-
-			@set '_rev', response.rev if response.rev?
-
+			response._rev = response.rev if response.rev?
+			delete response.rev
 			response.id = response._id if response._id?
+
+			@modelManager.register(@)
 
 			response
 
+		validate: (attrs) ->
+			response = {}
+			response.validationerrors = {}
+
+			for own key, value of @validation
+				if value.required and $.trim(attrs[key]) is ''
+					response.validationerrors[key] = value.message
+			
+			if _.isEmpty response.validationerrors
+				return undefined
+			else
+				return response
+		
+		# initialize: ->
+			#@on 'change', @saveToLocalStorage, @
+
+		###
 		saveToLocalStorage: (model, options) ->
 			Models = require 'switchers/models'
 
@@ -44,16 +59,4 @@ define (require) ->
 				data = 'updated': hlpr.date2datetime(new Date())
 				model.set data, 'silent': true
 				localStorage[Backbone.history.fragment] = JSON.stringify model
-
-		validate: (attrs) ->
-			response = {}
-			response.validationerrors = {}
-
-			for own key, value of @validation
-				if value.required and $.trim(attrs[key]) is ''
-					response.validationerrors[key] = value.message
-			
-			if _.isEmpty response.validationerrors
-				return undefined
-			else
-				return response
+		###

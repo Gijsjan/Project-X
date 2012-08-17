@@ -19,7 +19,7 @@ define (require) ->
 			$('div#main').html html # the view is rendered after the model is fetched from the server in the views initialize function
 
 		register: (view) ->
-			#console.log 'ViewManager => registering '+view.cid
+			# console.log 'ViewManager => registering '+view.cid
 			model = new Backbone.Model
 				id: view.cid
 				class: view.constructor 

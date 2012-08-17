@@ -9,7 +9,7 @@ define (require) ->
 		'urlRoot': '/db/projectx/'
 
 		defaults: _.extend({}, mObject.prototype.defaults,
-			'_show': true
+			'show': true
 			'newtags': []
 			'comments': []
 			'commentcount': 0)

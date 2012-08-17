@@ -28,7 +28,7 @@ define (require) ->
 				if i < @collection.length
 					model = @collection.at(i)
 
-					if model.get '_show'
+					if model.get 'show'
 						t = new sListedViews[model.get 'type']
 							id: 'object-'+model.get 'id'
 							className: 'content listed '+model.get 'type'

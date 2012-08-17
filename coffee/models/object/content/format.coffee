@@ -2,6 +2,7 @@ define (require) ->
 	_ = require 'underscore'
 	mContent = require 'models/object/content/content'
 	cInputTableRows = require 'collections/input/tablerow'
+	hlpr = require 'helper'
 
 	class mFormat extends mContent
 
@@ -38,6 +39,8 @@ define (require) ->
 			_.extend {}, mContent::defaults, data
 
 		set: (attrs, options) ->
+			# console.log 'mFormat.set()'
+
 			# If model.set('attr', 'options') is used instead of model.set({attr: options}) attrs is a string
 			# For the loop to work, attrs has to be an object
 			if _.isString(attrs)
@@ -49,9 +52,16 @@ define (require) ->
 				if (@xdata.hasOwnProperty(attr)) and not (attrs[attr] instanceof cInputTableRows)
 					attrs[attr] = new cInputTableRows value
 
-			###
-			for own attr, value of @xdata
-				if attrs[attr]? and not (attrs[attr] instanceof cInputTableRow)
-					attrs[attr] = new cInputTableRow attrs[attr]
-			###
 			super
+
+		sync: (method, model, options) ->
+			# console.log 'mFormat.sync()'
+
+			# console.log method
+			# console.log hlpr.deepCopy model
+			# console.log options
+			m = @modelManager.models.get(@id)
+			if method is 'read' and m?
+				options.success(m)
+			else
+				Backbone.sync(method, model, options)

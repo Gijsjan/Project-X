@@ -8,6 +8,7 @@ define (require) ->
 			'/db/projectx/_design/'+view[0]+'/_view/'+view[1]
 
 		initialize: (options) ->
+			# console.log @
 			@view = options.view
 
 			@on 'reset', ->

@@ -2,19 +2,27 @@ define (require) ->
     $ = require 'jquery'
     _ = require 'underscore'
     Backbone = require 'backbone'
+    ModelManager = require 'modelmanager'
     ViewManager = require 'viewmanager'
     vMenu = require 'views/main/menu'
     UserRouter = require 'routers/user'
     GroupRouter = require 'routers/group'
     ContentRouter = require 'routers/content'
     MainRouter = require 'routers/main'
+    hlpr = require 'helper'
 
     initialize: ->
+        localStorage.clear()
+        
         $('header').html new vMenu().render().$el
 
-        
-
         globalEvents = _.extend {}, Backbone.Events
+
+        modelManager = new ModelManager(globalEvents)
+        viewManager = new ViewManager(globalEvents)
+        
+        Backbone.Model::modelManager = modelManager
+        Backbone.Model::globalEvents = globalEvents
 
         Backbone.View::globalEvents = globalEvents
         Backbone.View::screenwidth = $(document).width()
@@ -24,7 +32,6 @@ define (require) ->
         Backbone.Router::globalEvents = globalEvents
         #Backbone.Router::currentView = currentView
 
-        viewManager = new ViewManager(globalEvents)
 
         # Initiate the Routers
         contentRouter = new ContentRouter()
@@ -50,10 +57,13 @@ define (require) ->
         div = $('<div />').html('viewManager').on 'click', -> viewManager.viewsToLog()
         $('#webdev').append div
 
+        div = $('<div />').html('modelManager').on 'click', -> console.log hlpr.deepCopy(modelManager.models)
+        $('#webdev').append div
+
         div = $('<div />').html('curView').on 'click', -> viewManager.currentViewToLog()
         $('#webdev').append div
         
-        div = $('<div />').html('curView -> model -> attrs').on 'click', -> console.log viewManager.currentView.model.attributes
+        div = $('<div />').html('curView -> model -> attrs').on 'click', -> console.log hlpr.deepCopy(viewManager.currentView.model.attributes)
         $('#webdev').append div
 
         div = $('<div />').html('globalEvents').on 'click', -> console.log globalEvents
