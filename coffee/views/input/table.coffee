@@ -1,100 +1,94 @@
-# @trigger 'data changed'
+# @trigger 'valuechanged'
 # 		@param 'attr' @tablekey
 #		@param 'data' @table2object()
 #
 define (require) ->
-	_ = require 'underscore'
-	Backbone = require 'backbone'
+	# _ = require 'underscore'
+	# Backbone = require 'backbone'
+	jqueryui = require 'jqueryui'
 	BaseView = require 'views/base'
-	cInputTableRows = require 'collections/input/tablerow'
+	cInputTableRow = require 'collections/input/tablerow'
 	mInputTableRow = require 'models/input/tablerow'
-	vInputAutocomplete = require 'views/input/autocomplete'
+	# vInputAutocomplete = require 'views/input/autocomplete'
+	vInputTypeahead = require 'views/input/typeahead'
+	vInputTextarea = require 'views/input/textarea'
 	vInputSelect = require 'views/input/select'
-	tpl = require 'text!html/input/table.html'
+	vWarning = require 'views/main/warning'
+	# tpl = require 'text!html/input/table.html'
 	hlpr = require 'helper'
 
 	class vInputTable extends BaseView
+
+		className: 'input'
 
 		### EVENTS ###
 
 		events:
 			'click .add-row': 'addRow'
-			'click td.input': 'onClickInputTD'
-			'click td.remove': 'onRemove'
-			'change input': 'onChangeInput'
-			'change textarea': 'onChangeInput'
+			'change input[data-key]': 'onChangeInput'
+			'hover .row:not(.headings)': 'hoverRow'
+			'click .removerow': 'removeRow'
+			# 'click td.input': 'onClickInputTD'
+			# 'click td.remove': 'onRemove'
+			# 'change td[data-input=text] > input': 'onChangeInput' # use td[data-input=text] cuz input is used for select and ac and we don't want a double listener
+			# 'change textarea': 'onChangeInput'
+
+		# OPTIMALISATION: HOVER WORKS ALSO ON TABLES WITHOUT MOVABLE ROWS
+		hoverRow: (e) ->
+			switch e.type
+				when 'mouseenter'
+					$(e.currentTarget).find('.rownumber').animate opacity:1, duration: 'fast'
+					$(e.currentTarget).find('.removerow').animate opacity:1, duration: 'fast'
+				when 'mouseleave'
+					# add a delay to make sure the mouseenter animation is over
+					hlpr.delay 500, -> $(e.currentTarget).find('.rownumber').animate opacity:0, duration: 'fast'
+					hlpr.delay 500, -> $(e.currentTarget).find('.removerow').animate opacity:0, duration: 'fast'
 
 		addRow: (e) ->
-			@tablevalue.push new mInputTableRow
-			###
-			inputTR = $('<tr />').addClass('input')
-			inputTR.append $('<td />').addClass('index').html(@tablevalue.length + 1)
-
+			attrs = {}
 			for column, index in @columns
-				td = $('<td />').addClass('input')
-				column.input.type = 'text' if column.input.type is 'options'
-				@renderInput column, td, new mInputTableRow
-				inputTR.append td
+				attrs[column.key] = ''
+			@tablevalue.push new mInputTableRow(attrs) # add model to end of collection
 
-			inputTR.append $('<td />')
+		removeRow: (e) ->
+			# console.log 'vInputTable.removeRow()'
+			rowdiv = $(e.currentTarget).parents('div.row:first') # set rowdiv before the warning, otherwise whole page is removed, don't ask me why
+			cid = rowdiv.attr('data-cid')
+			
+			v = new vWarning()
+			v.on 'ok', =>
+				rowdiv.fadeOut =>
+					@tablevalue.removeByCid(cid)
 
-			@$('table').append inputTR
-			###
-
-			###
-			@$('td.remove').html 'x' if @$('tr.input').length is 1
-
-			tr = @$('tr.input').last().clone()
-			oldrownumber = @$('tr.input').last().find('td.index').html()
-			tr.find('td.index').html parseInt(oldrownumber) + 1 # set the new row number
-			_(tr.find ':input').each (te) -> 
-				te.removeAttribute 'style' # Remove style="" from every textarea to reset the height
-				te.removeAttribute 'data-value' # Remove style="" from every textarea to reset the height
-				$(te).val ''
-			@$('table').append tr # append new <tr> to <table>
-			###
-
-		# Sometimes the <td> is bigger than the <textarea>, set focus to the textarea when the user clicks inside the <td>
-		onClickInputTD: (e) ->
-			$(e.currentTarget).find(':input').focus()
-
-		onRemove: (e) ->
-			cid = e.currentTarget.dataset.cid
-			@tablevalue.remove @tablevalue.getByCid(cid) # PUT removeByCid IN BACKBONE.COLLECTION?
-
-			###
-			if @$('tr.input').length > 1 and confirm('Remove row?')
-				$(e.currentTarget).parent().remove() # Remove <tr>
-				@updateModel() # Renew the model
-
-				# Set new row numbers for each <td class="index">
-				_(@$('td.index')).each (td, index) ->
-					$(td).html index + 1
-				
-				@$('td.remove').html '&nbsp;' if @$('tr.input').length is 1
-			###	
 		# Update the model when <textarea> changes
 		onChangeInput: (e) ->
+			# console.log 'vInputTable.onChangeInput()'
+			cid = $(e.currentTarget).parents('div.row:first').attr('data-cid')
+			key = e.currentTarget.dataset.key
+			value = $(e.currentTarget).val()
+
 			if e.currentTarget.dataset.constrain? and e.currentTarget.dataset.constrain is 'percentage'
-				amount = $(e.currentTarget).val()
-				$(e.currentTarget).val hlpr.toPercentage(amount)
+				$(e.currentTarget).val hlpr.toPercentage(value)
 
 			if e.currentTarget.dataset.relation? and e.currentTarget.dataset.relation is 'sum'
-				inputs = @$('input[data-key="'+e.currentTarget.dataset.key+'"]')
+				inputs = @$('input[data-key="'+key+'"]')
 
-				totaltd = $('td[data-key="'+e.currentTarget.dataset.key+'"]')
+				totaltd = $('td[data-key="'+key+'"]')
 				@renderTotalPercentage totaltd, hlpr.getSumFromInputs(inputs)
 
-			@updateModel()
+			@tablevalue.getByCid(cid).set(key, value)
+
 
 		### /EVENTS ###
 
 		initialize: ->
 			@tablekey = @options.tablekey
+			@tablevalue = @options.tablevalue
+
+			@tabletitle = @options.title
 			@columns = @options.columns
 			@addrows = @options.addrows
 
-			@tablevalue = if @options.tablevalue? then @options.tablevalue else new cInputTableRows
 			@tablevalue.on 'remove', (model, collection, options) =>
 				@$('tr[data-cid='+model.cid+']').remove()
 				@render()
@@ -102,68 +96,146 @@ define (require) ->
 				@render()
 			@tablevalue.on 'change', (model, options) =>
 				@updateModel()
-				
+			
 			@rowlength = if @tablevalue.length > 0 then @tablevalue.length else 3
 			
 			super
 
+		renderTitle: ->
+			navul = $('<ul />').addClass('nav nav-pills')
+			navli = $('<li />')
+			nava = $('<a />').html(@tabletitle)
+
+			if @addrows			
+				nava.addClass('dropdown-toggle').attr('data-toggle', 'dropdown')
+				navb = $('<b />').addClass('caret')
+				nava.append navb
+				
+				
+				ddli = $('<li />')
+				dda = $('<a />').addClass('add-row').html('Add row')
+				ddli.html dda
+
+				ddul = $('<ul />').addClass('dropdown-menu')
+				ddul.html ddli
+
+				navli.addClass('dropdown')
+				navli.append(ddul)
+
+			navli.prepend(nava)
+			navul.html navli
+
+			navul
+
 		render: ->
 			# Render the table, the cols, tr.headings, tr.totals and div.add-row
-			html = _.template tpl,
-				'rowlength': @rowlength
-				'columns': @columns
-				'headings': @headings
+			# html = _.template tpl,
+			# 	'rowlength': @rowlength
+			# 	'columns': @columns
+			# 	'addrows': @addrows
+			@$el.html ''
 
-			@$el.html html
+			@$el.html @renderTitle()
+
+			@$el.append @renderHeadings() if @columns[0].heading
 
 			# If the collection @tablevalue is empty (ie: the models @tablekey is empty) set @tablevalue to default
 			# If a column.input.type is set to 'options' (ie: a fixed list), use the length of column.input.options as @tablevalue size
 			# The empty @tablevalue collection is filled with 'size' numbers of mInputTableRow's
 			if @tablevalue.length is 0
 				size = @rowlength;
+				rowoptionskey = '' # string for column.key if column.input.type is rowoptions
+				rowoptions = [] # array for column.input.options if column.input.type is rowoptions
+				attrs = {} # the attributes to load in the mInputTableRow model
+				itrs = [] # mInputTableRowS
+
 				for column, index in @columns
-					size = column.input.options.length if column.input.type is 'options'
-				itrs = (new mInputTableRow for i in [1..size])
-	
+					if column.input.type is 'rowoptions' # of the column type is rowoptions, then size and data changes
+						rowoptionskey = column.key
+						rowoptions = column.input.options
+						size = rowoptions.length # override size if column.input.type is rowoptions
+					attrs[column.key] = '' # set the attributes for the mInputTableRow
+
+				# itrs = (new mInputTableRow attrs for i in [1..size])
+				
+				for i in [0..(size-1)]
+					attrs[rowoptionskey] = rowoptions[i] if rowoptionskey isnt '' # add the rowoptions to the rows if the rowoptionskey is set
+					itrs.push(new mInputTableRow attrs)
+
 				@tablevalue.reset itrs
+
 			
 			@tablevalue.each (row, index) =>
-				@renderRow(row, index)
+				@$el.append @renderRow(row, index)
 
 			# After rendering the tablevalue, render the columns (ie: options, constrains and relations)
 			@renderColumns()
+
+			# @el.html table
+
+			@$el.sortable 'handle': '.rownumber'
 	
 			@
+
+		renderHeadings: ->
+			rowdiv = $('<div />').addClass('headings row')
+			rowdiv.append $('<div />').addClass('span1 half').html('&nbsp;')
+			for column, index in @columns
+				cell = $('<div />').addClass('heading').addClass('span'+column.span).html column.heading
+				rowdiv.append cell
+			rowdiv.append $('<div />').addClass('span1 half').html('&nbsp;')
+			rowdiv
 
 		# Each row is programmatically created and put before the tr.totals (the last row).
 		# @param row = mInputTableRow || holds the row data (attributes: {'role': 'value', 'departement': {}, 'hours': 'value'})
 		# @param rowindex = int || count of the row, starting at 0
 		renderRow: (row, rowindex) ->
-			inputTR = $('<tr />').addClass('input').attr('data-cid', row.cid)
+			rowdiv = $('<div />').addClass('row').attr('data-cid', row.cid)
 
-			indexTD = if @addrows then $('<td />').addClass('index').html(rowindex + 1) else $('<td />').html('&nbsp;')
+			rownumber = if @addrows then $('<span />').addClass('badge').html(rowindex + 1) else '&nbsp;'
+			rowdiv.append $('<div />').addClass('span1 half rownumber hidden').html(rownumber)
+			
+			for column, columnindex in @columns
+				cell = $('<div />').addClass('cell span'+column.span)
+				@renderInput column, cell, row if column.input.type isnt 'options'
+				rowdiv.append cell
+
+			i = $('<i />').addClass('icon-trash')
+			removerow = if @addrows then $('<a />').addClass('btn btn-small').html(i) else '&nbsp;'
+			rowdiv.append $('<div />').addClass('span1 half removerow hidden').html(removerow)
+
+			rowdiv
+
+			###
+			inputTR = $('<tr />').attr('data-cid', row.cid)
+
+			indexTD = if @addrows then $('<td />').html(rowindex + 1) else $('<td />').html('&nbsp;')
 			inputTR.append indexTD
 
 			for column, columnindex in @columns
-				td = $('<td />').addClass('input')
+				td = $('<td />')
 				@renderInput column, td, row if column.input.type isnt 'options'
 				inputTR.append td
 
-			removeTD = if @addrows then $('<td />').attr('data-cid', row.cid).addClass('remove').html('x') else $('<td />').html('&nbsp;')
+			removeTD = if @addrows then $('<td />').attr('data-cid', row.cid).html('x') else $('<td />').html('&nbsp;')
 			inputTR.append removeTD
 
 			@$('tr.totals').before inputTR
-
+			###
 		renderColumns: ->
-			for column, columnindex in @columns
-				tds = @$ 'tr.input td:nth-child('+(columnindex+2)+')' # Column + 2 cuz array starts at 0 and first column is row count
 
-				for td, rowindex in tds
+			for column, columnindex in @columns
+				controlsrows = @$('.row:not(.headings)') # Column + 2 cuz array starts at 0 and first column is row count
+				cells = _.map(controlsrows, (rw) -> $(rw).find('.cell').eq(columnindex))
+
+				for cell, rowindex in cells
 					row = @tablevalue.at(rowindex)
 
-					if column.input.type is 'options'
-						value = if row.get(column.key)? then row.get(column.key) else column.input.options[rowindex]
-						$(td).attr('data-key', column.key).html value 
+					if column.input.type is 'rowoptions'
+						if column.input.options[rowindex]?
+							$(cell).attr('data-key', column.key).html column.input.options[rowindex]
+						else
+							$(cell).html $('<input />').addClass('span'+column.span).attr('type', 'text').attr('data-key', column.key)
 
 					if column.input.constrain?
 
@@ -171,115 +243,81 @@ define (require) ->
 
 							when 'percentage'
 								amount = row.get(column.key)
-								$(td).find(':input').val hlpr.toPercentage(amount)
+								$(cell).find(':input').val hlpr.toPercentage(amount)
 
-				if column.relation?
+				# if column.relation?
 
-					switch column.relation.type
+				# 	switch column.relation.type
 
-						when 'sum'
-							input = @$ 'tr.totals td:nth-child('+(columnindex+2)+')'
-							input.attr 'data-key', column.key
-							input.attr 'data-relation', column.relation.type
-							@$('tr.totals').show()
+				# 		when 'sum'
+				# 			input = @$ 'tr.totals cell:nth-child('+(columnindex+2)+')'
+				# 			input.attr 'data-key', column.key
+				# 			input.attr 'data-relation', column.relation.type
+				# 			@$('tr.totals').show()
 							
-							sum = hlpr.getSumFromInputs tds.find(':input')
-							totaltd = @$('td.total[data-key="'+column.key+'"]')
-							@renderTotalPercentage totaltd, sum
+				# 			sum = hlpr.getSumFromInputs cells.find(':input')
+				# 			totalcell = @$('cell.total[data-key="'+column.key+'"]')
+				# 			@renderTotalPercentage totalcell, sum
 
 		# Renders the input element (text, textarea, autocomplete, select)
 		# @param column = {} || holds the column information (width, input.type, etc)
-		# @param td = $('<td />') || the <td> wrapped in Jquery
+		# @param cell = $('<div />') || a div with class=span3
 		# @param row = mInputTableRow
-		renderInput: (column, td, row) ->
+		renderInput: (column, cell, row) ->
 			value = row.get(column.key)
+
+			cell.attr('data-input', column.input.type)
 			
 			switch column.input.type
 
 				when 'text'
-					input = $('<input />').attr('data-key', column.key).val(value)
+					input = $('<input />').addClass('span'+column.span).attr('type', 'text').attr('data-key', column.key).val(value).attr('data-cid', row.cid)
 
 					input.attr('data-constrain', column.input.constrain) if column.input.constrain?
 					input.attr('data-relation', column.relation.type) if column.relation?
 
-					td.html input
+					div = $('<div />').html(input)
+					
+					if column.input.prepend? or column.input.append?
+						if column.input.prepend?
+							div.addClass('input-prepend')
+							div.prepend $('<span />').addClass('add-on').html(column.input.prepend)
+						if column.input.append?
+							div.addClass('input-append')
+							div.append $('<span />').addClass('add-on').html(column.input.append)
+
+					cell.html div
 
 				when 'textarea'
-					td.html $('<textarea />').attr('data-key', column.key).val(value)
+					view = new vInputTextarea
+						'key': column.key
+						'model': row
+					renderedView = view.render().$el.addClass('span'+column.span)
+					cell.html renderedView
 
-				when 'autocomplete'
-					iac = new vInputAutocomplete
-						'dbview': column.input.dbview # departements
-						'key': column.key # departement_id
+				# when 'autocomplete'
+				# 	iac = new vInputAutocomplete
+				# 		'dbview': column.input.dbview # departements
+				# 		'key': column.key # departement_id
+				# 		'row': row # model with all the data for this row, is used to set the new value
+				# 	# iac.on 'option_selected', @updateModel, @
+				# 	cell.html iac.render().$el
+
+				when 'typeahead'
+					view = new vInputTypeahead
 						'row': row # model with all the data for this row, is used to set the new value
-					iac.on 'option selected', @updateModel, @
-					td.html iac.render().$el
+						'column': column
+					# iac.on 'option_selected', @updateModel, @
+					renderedView = view.render().$el
+					cell.html renderedView
 
 				when 'select'
-					inputselect = new vInputSelect
-						'options': column.input.options
-						'key': column.key
+					view = new vInputSelect
 						'row': row
-					inputselect.on 'option selected', @updateModel, @
-					td.html inputselect.render().$el
-
-		###
-		renderInputs: (column, columnindex, tablevalue) ->
-			tds = @$ 'tr.input td:nth-child('+(columnindex+2)+')' # Column + 2 cuz array starts at 0 and first column is row count
-
-			for td, rowindex in tds
-
-				row = if tablevalue.at(rowindex)? then tablevalue.at(rowindex) else new mInputTableRow()
-
-				switch column.input.type
-
-					when 'text'
-						input = $('<input />').attr('data-key', column.key).val(row.get(column.key))
-
-						input.attr('data-constrain', column.input.constrain) if column.input.constrain?
-						input.attr('data-relation', column.input.relation) if column.input.relation?
-
-						$(td).html input
-
-					when 'textarea'
-						$(td).html $('<textarea />').attr('data-key', column.key).val(row.get(column.key))
-
-					when 'autocomplete'
-						iac = new vInputAutocomplete
-							'view': column.input.view # departements
-							'key': column.key # departement_id
-							'row': row # model with all the data for this row, is used to set the new value
-						iac.on 'option selected', @updateModel, @
-						$(td).html iac.render().$el
-
-					when 'select'
-						inputselect = new vInputSelect
-							'options': column.input.options
-							'key': column.key
-							'row': row
-						inputselect.on 'option selected', @updateModel, @
-						$(td).html inputselect.render().$el
-
-					when 'options'
-						$(td).attr('data-key', column.key).html column.input.options[rowindex]
-
-				if column.input.constrain?
-
-					switch column.input.constrain
-
-						when 'percentage'
-							amount = row.get(column.key)
-							$(td).find(':input').val hlpr.toPercentage(amount)
-
-			if column.relation?
-
-				switch column.relation.type
-
-					when 'sum'
-						sum = hlpr.getSumFromInputs tds.find(':input')
-						totaltd = @$('td.total[data-key="'+column.key+'"]')
-						@renderTotalPercentage totaltd, sum
-		###
+						'column': column
+					# inputselect.on 'option selected', @updateModel, @
+					renderedView = view.render().$el
+					cell.html renderedView
 
 		renderTotalPercentage: (td, amount) ->
 			td.removeClass 'error'
@@ -291,32 +329,6 @@ define (require) ->
 			td.html amount + '%'
 
 		updateModel: ->
+			console.log 'vInputTable.updateModel()'
+			console.log @tablevalue.map((model) -> model.attributes)
 			@trigger 'valuechanged', @tablekey, @tablevalue.map (model) -> model.attributes
-				# 'attr': @tablekey
-				# 'data': @table2object()
-
-		# Convert the <table> to a JS object
-		# For the value looks first at tablekey data-value="value", then <input value="value" /> then <td>value</td>
-		table2object: ->
-			array = []
-
-			tablevalue = @$('tr.input')
-			_(tablevalue).each (row) =>
-				inputs = $(row).find('[data-key]')
-				tmp = {}
-				tr_values = ''
-
-				_(inputs).each (input, index) =>
-					key = $(input).attr 'data-key'
-					value = $(input).attr 'data-value'
-
-					if not value?
-						value = if $(input).is(':input') then $(input).val() else $(input).html()
-
-					tr_values = tr_values + value
-
-					tmp[key] = value
-
-				array.push tmp if tr_values isnt '' # If the combined values of the row is empty then don't add to array 
-
-			array

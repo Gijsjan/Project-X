@@ -1,0 +1,47 @@
+body
+	margin-top 48px
+
+button.btn-narrow
+	padding 4px 7px
+
+textarea
+	resize none
+
+ul.dropdown-menu li
+	cursor pointer
+
+input.span1.select
+	width 22px // 48px - 24px (normal span1 width minus .btn-narrow width)
+
+// input.span2.select
+// 	width 102px // 126px - 24px (normal span2 width minus .btn-narrow width)
+
+div[data-input=typeahead] input.span2, div[data-input=select] input.span2
+	width 102px // 126px - 24px (normal span2 width minus .btn-narrow width)
+
+div[data-input=typeahead] input.span4, div[data-input=select] input.span4
+	width 262px // 286px - 24px (normal span2 width minus .btn-narrow width)
+
+.nav li a:hover
+	cursor pointer
+
+.rownumber
+	cursor move
+
+// input with prepend and append is too wide (126px) for div.span2
+.input-prepend.input-append > input.span2
+	width 75px
+
+.span1.half
+	width 30px
+
+.hidden
+	opacity 0
+
+.alert-block
+	position fixed
+	box-shadow 5px 5px 8px #CCC
+	z-index 2000
+
+#selectedlocations
+	padding 8px 15px

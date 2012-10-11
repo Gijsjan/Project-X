@@ -24,6 +24,7 @@ define (require) ->
 		initialize: ->
 			@model.fetch
 				success: (model, response) =>
+					@modelManager.register model
 					@render()
 				error: (model, response) =>
 					if response.status is 401

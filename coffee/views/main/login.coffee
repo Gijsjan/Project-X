@@ -5,20 +5,53 @@ define (require) ->
 	tplLogin = require 'text!html/main/login.html'
 
 	Backbone.View.extend
-		id: 'login-form'
+
 		events:
-			"click #form-submit": "submitForm"
-			"keyup input#password": "checkInputKey"
-		checkInputKey: (e) ->
+			"click button.btn-primary": "submitForm"
+			"keyup input#password": "onKeyup"
+		
+		onKeyup: (e) ->
 			if e.keyCode is 13
 				@submitForm()
+				@$('.modal').modal('hide')
+		
 		submitForm: ->
-			$.post	'/api/login',
-					username: $('#username').val()
-					password: $('#password').val(),
-					(data) =>
-						href = if @options.href then @options.href else '' #
-						@navigate(href);
+			if @validate()
+				$.ajax
+					type: 'POST'
+					dataType: 'json'
+					url: '/db/_session'
+					data:
+						'name': $('#username').val()
+						'password': $('#password').val()
+					success: (data) =>
+						@globalEvents.trigger 'loginsuccess' # Fire event to re-render the menu
+						@navigate @routeHistory.pop()
+					error: (data) =>
+						data = $.parseJSON(data.responseText)
+						@$('#login-alert').html(data.reason).show()
+						@$('button.btn-primary').html 'Try again!'
+		
 		render: ->
 			@$el.html _.template(tplLogin)
+
+			@$('.modal').modal
+				'backdrop': 'static'
+
 			@
+
+		validate: ->
+			valid = true
+			@$('#username-alert').css 'visibility', 'hidden'
+			@$('#password-alert').css 'visibility', 'hidden'
+
+			if @$('#username').val() is ''
+				@$('#username-alert').html 'Enter a username'
+				@$('#username-alert').css 'visibility', 'visible'
+				valid = false
+			if @$('#password').val() is ''
+				@$('#password-alert').html 'Enter a password'
+				@$('#password-alert').css 'visibility', 'visible'
+				valid = false
+
+			return valid

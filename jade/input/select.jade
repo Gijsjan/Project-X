@@ -1,8 +1,11 @@
-div.input
-	input.select(	type="text", 
-					data-key!="<%= key %>",
-					value!="<%= value %>"	)
-	.results
-		|<% _(optionlist).each(function(option) { %>
-		div.ac-option(data-value!="<%= option %>") <%= option %>
-		|<% }); %>
+.input-append.control-group
+	input.select(class!="span<%= span %>", type="text", value!="<%= value %>")
+	button.btn.btn-narrow
+		span.caret
+ul.dropdown-menu(role="menu")
+	|<% _.each(selectoptions, function(option) { %>
+	li
+		a(tabindex="-1") <%= option %>
+	|<% }); %>
+
+

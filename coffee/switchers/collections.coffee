@@ -16,12 +16,12 @@ define (require) ->
 
 	'tag': cTag
 	'comment': cComment
-	'event': cEvent
-	'link': cLink
-	'video': cVideo
-	'document': cDocument
-	'note': cNote
-	'format': cFormat
+	'content/event': cEvent
+	'content/link': cLink
+	'content/video': cVideo
+	'content/document': cDocument
+	'content/note': cNote
+	'content/format': cFormat
 	'project': cProject
 	'departement': cDepartement
 	'organisation': cOrganisation

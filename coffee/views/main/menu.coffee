@@ -2,14 +2,24 @@ define (require) ->
 	$ = require 'jquery'
 	_ = require 'underscore'
 	Backbone = require 'backbone'
+	BaseView = require 'views/base'
 	tpl = require 'text!html/main/menu.html'
 
-	Backbone.View.extend
+	class vMenu extends BaseView
 
-		tagName: 'nav'
+		initialize: ->
+			@getUser()
+			
+			@globalEvents.on 'loginsuccess', =>
+				@getUser()
 
-		id: 'main'
+		getUser: ->
+			$.getJSON '/db/_session', (data) =>
+				@username = data.userCtx.name
+				@render()
 
 		render: ->
-			@$el.html _.template tpl
-			@
+			@$el.html _.template tpl,
+				'username': @username
+			
+			$('body').prepend @$el

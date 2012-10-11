@@ -1,4 +1,4 @@
-input.ac(type="text")
+input.ac(type="text", value!="<%= value %>")
 .list-results
 	|<% collection.each(function (model) { %>
 	div.ac-option(id!="ac-option-<%= model.get('id') %>", data-id!="<%= model.get('id') %>") <%= model.get('value') %>

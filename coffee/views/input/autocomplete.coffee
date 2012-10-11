@@ -1,5 +1,5 @@
-# @option.model_type = name of the models (departements, users) to make the call to the api
-# ??? @options.initValue if a value has already been entered (on edit)
+# inputvalue = string = the value from the input
+# @value = object = (selected) option in the format returned by db for autocomplete options {_id: '', key: '', value: ''}
 
 define (require) ->
 	_ = require 'underscore'
@@ -20,163 +20,152 @@ define (require) ->
 
 		events:
 			"keyup input.ac": "onKeyup"
-			"blur input.ac": "closeResultListOnBlur"
-
-			"mouseenter": "onHover"
-			"mouseleave": "onHover"
+			"blur input.ac": "onBlurCloseOptionList"
 
 			'mouseenter .ac-option': 'onHoverOption' 
 			'mouseleave .ac-option': 'onHoverOption'
 
 			'click .ac-option': 'onClickOption'
 
-			"click div.remove": "removeSelectedOption"
-			"click span.select-from-list": "selectFromList"
+			"click span.list": "selectFromList"
 
-		onKeyup: (e) ->	
-			value = e.target.value
+		onKeyup: (e) ->
+			# console.log 'vInputAutocomplete.onKeyup'
+			inputvalue = hlpr.slugify(e.target.value)
 
 			switch e.keyCode
 				when 40 then @onPressArrow('down')
 				when 38 then @onPressArrow('up')
-				when 13 then @onPressEnter(value)
-				when 27 then @closeResultList()
+				when 13 then @checkInputValue(inputvalue)
+				when 27 then @closeOptionList()
 				else
-					if value.length > 2
-						if @fetchedJSON[value]?
-							@resultlist.reset @fetchedJSON[value].models
-						else
-							hlpr.delayWithReset 300, =>
-								@resultlist.url = '/api/ac/'+@dbview+'/'+value
-								@resultlist.fetch
-									success: (collection, response) =>
-										@fetchedJSON[value] = hlpr.deepCopy collection
-									error: (collection, response) =>
-										@navigate 'login' if response.status is 401
+					if inputvalue.length > 2
+						hlpr.delayWithReset 300, =>
+							@alloptions.fetch
+								success: (collection, response) =>
+									@filteredoptions.reset collection.filter((model) -> model.get('key').indexOf(inputvalue) isnt -1)
+								error: (collection, response) =>
+									@navigate 'login' if response.status is 401
 					else
-						@$('div.results').hide()
+						@$('ul.options').hide()
 
-		closeResultListOnBlur: ->
-			hlpr.delay 300, => @closeResultList() # The blur event needs a delay to
+		onBlurCloseOptionList: (e) ->
+			# console.log 'vInputAutocomplete.onBlurCloseOptionList'
+			inputvalue = $(e.currentTarget).val()
+			@checkInputValue inputvalue
 
-		onHover: (e) ->
-			if 		@$('div.input').is(':visible') 	then div = @$('span.select-from-list')
-			else if @$('div.result').is(':visible') then div = @$('div.remove')
-
-			if 		e.type is 'mouseenter' and @$('div.results').is(':hidden')	then div.show()
-			else if e.type is 'mouseleave' 										then div.hide()
+			hlpr.delay 300, => @closeOptionList()
 
 		onHoverOption: (e) ->
-			@resultlist.highlightByID(e.currentTarget.dataset.id)
+			@filteredoptions.highlightByID(e.currentTarget.dataset.id)
 
 		onClickOption: (e) ->
-			@selectOption @resultlist.highlighted
+			option = new Backbone.Model
+				'id': e.currentTarget.dataset.id
+				'key': e.currentTarget.dataset.slug
+				'value': $(e.currentTarget).text()
 
-		removeSelectedOption: ->
-			@value = {}
-			@row.set @key, @value
-			@render()
-			@$('input').focus()
+			@selectOption option
 
 		selectFromList: ->
-			@$('span.select-from-list').hide()
-
-			il = new vInputList
-				'view': @dbview
-
-			il.on 'done', (model) => @selectOption model
-
-			il.on 'rendering finished', =>
-				popup = new vPopup
-					parent: @
-					child: il
+			# console.log 'vInputAutocomplete.selectFromList()'
+			
+			il = new vInputList 'dbview': @dbview, 'key': @key
+			il.on 'done', (option) => @selectOption option # option = {_id: '', key: '', value: ''}
+			popup = new vPopup
+				parent: @
+				child: il
 
 		### /EVENTS ###
 
 		initialize: ->
-			@dbview = @options.dbview # The couchdb view to get the resultlist, ie 'group/departements', 'object/countries'
+			@dbview = @options.dbview # The couchdb view to get the Optionlist, ie 'group/departements', 'object/countries'
 			@key = @options.key
 			@row = @options.row 
 
 			# The value of an autocomplete is an object with the attributes _id, key and value
 			# The model returned from the list (selectFromList) is the same object
-			@value = if @row? and @row.get(@key)? then @row.get(@key) else {}
+			@value = if @row? and @row.get(@key)? then @row.get(@key) else @emptyValue()
 
-			@fetchedJSON = {}
-
-			@resultlist = new cResult # Collection with the last result
+			@alloptions = new cResult # Collection with all possible options
 				'view': @dbview
-			@resultlist.on 'reset', @renderResultList, @
-			@resultlist.on 'model highlighted', (id) =>
+			@filteredoptions = new cResult # Filtered (by user) collection with wanted options 
+			@filteredoptions.on 'reset', @renderOptionList, @
+			@filteredoptions.on 'model highlighted', (id) =>
 				@$('.highlight').removeClass 'highlight'
 				@$('div.ac-option[data-id='+id+']').addClass('highlight')
 
+		# Returns an empty value in the format the db returns its autocomplete values
+		emptyValue: ->
+			_id: ''
+			key: ''
+			value: ''
+
 		render: ->	
 			@$el.html _.template(tpl,
+				'cid': @row.cid
 				'key': @key
 				'value': @value)
-			
-			@$('div.results').css 'position', 'absolute'
-			@$('div.results').css 'background-color', 'pink'
 
-			@$('div.results').hide()
+			@$('ul.options').hide()
 
+			###
 			if _.isEmpty(@value)
 				@$('div.result').hide()
 				@$('div.input').show()
 			else
 				@$('div.result').show()
 				@$('div.input').hide()
+			###
 
 			@
 
-		renderResultList: ->
-			@$('div.results').html ''
-			delete @resultlist.highlighted
+		renderOptionList: ->
+			@$('ul.options').html ''
+			delete @filteredoptions.highlighted
 			
-			@resultlist.each (model) =>
-				@$('div.results').append $('<div />', 
-					'data-id': model.get 'id'
-					'class': 'ac-option'
-					'id': 'ac-option-'+model.get('id')
-					'text': model.get('value'))
+			@filteredoptions.each (option) =>
+				a = $('<a />').attr('tabindex', '-1').attr('href', '#').text option.get('value')
+				@$('ul.options').append($('<li />').append(a))
 
-			@$('div.results').css 'top', @$('input.ac').position().top
-			@$('div.results').css 'left', @$('input.ac').position().left
-			@$('div.results').css 'margin', 8 + @$('input.ac').height() + 'px 0 0 2px'
+			@$('ul.options').css 'top', @$('input.ac').position().top
+			@$('ul.options').css 'left', @$('input.ac').position().left
+			@$('ul.options').css 'margin', 8 + @$('input.ac').height() + 'px 0 0 2px'
 
-			@$('div.results').show()
+			@$('ul.options').show()
 
-		closeResultList: ->
-			$('div.results').hide()
+		closeOptionList: ->
+			@$('ul.options').hide()
 
 		onPressArrow: (direction) ->
-			if @$('div.results').is(':hidden')
-				@renderResultList()
+			if @$('ul.options').is(':hidden')
+				@renderOptionList()
 			else
 				if direction is 'down'
-					@resultlist.highlightNext()
+					@filteredoptions.highlightNext()
 				else if direction is 'up'
-					@resultlist.highlightPrev()
+					@filteredoptions.highlightPrev()
 
-		onPressEnter: (value) ->
-			value = hlpr.slugify value
+		# Checks if the value in the input.ac represents a model in @filteredoptions
+		# If a model is found, select this option
+		checkInputValue: (inputvalue) ->
+			return @selectOption @filteredoptions.highlighted if @filteredoptions.highlighted? # don't perform function if an option is highlighted
+			return @setRow @emptyValue() if inputvalue is '' # don't perform function if inputvalue is empty
 
-			if @resultlist.highlighted? and @resultlist.highlighted.isNew() # Is a model from the result list selected (isNew() is false) or has the user entered the full name in the input (isNew() is true)?
-				@resultlist.highlighted = @resultlist.find (model) ->
-					model.get('slug') is value
+			inputvalue = hlpr.slugify inputvalue
 
-			if @resultlist.highlighted?
-				@selectOption @resultlist.highlighted
+			@filteredoptions.highlighted = @filteredoptions.find (model) ->
+				model.get('key') is inputvalue
 
-		selectOption: (model) ->
-			@closeResultList()
+			if @filteredoptions.highlighted?
+				@selectOption @filteredoptions.highlighted
 
-			@$('div.result span').html model.get 'value'
-			@$('div.result span').attr 'data-value', JSON.stringify(model)
+		selectOption: (option) ->
+			@closeOptionList()
 
-			@$('div.result').show()
+			@$('input.ac').val(option.get('value'))
 
-			@$('div.input').hide()
+			@setRow option.toJSON()
 
-			@row.set @key, model.toJSON()
+		setRow: (value) ->
+			@row.set @key, value

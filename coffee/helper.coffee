@@ -8,10 +8,22 @@ define (require) ->
 	objects: ['user', 'tag', 'comment', 'country']
 
 	groups: ['departement', 'organisation', 'project']
+
+	# Cuts a string to 'length' and then finds the last index of a space to make a nice cut and adds three dots.
+	partial: (string, length) ->
+		part = string.substr(0, length)
+		lastspace = part.lastIndexOf(' ')
+		part.substr(0, lastspace) + '...'
 	
 	ucfirst: (string) ->
 		string.charAt(0).toUpperCase() + string.slice(1);
-	
+
+	# Converts an array of strings to lowercase strings
+	# Used when comparing user input to array values
+	lcarray: (array) ->
+		_.map(array, (x) -> x.toLowerCase())
+
+	### DEP ###
 	getParentType: (object_type) ->
 		if ($.inArray(object_type, this.content_objects) > -1) then 'content' else 'object'
 	
@@ -60,6 +72,7 @@ define (require) ->
 		amount = if 0 <= parseInt(amount) <= 100 then amount else 0 # If amount is smaller then zero or bigger than hundred amount is zero
 		amount + '%' # Add % and return string
 
+	# This shouldn't be in helper, to specific for tables
 	getSumFromInputs: (inputs) ->
 		total = 0
 		

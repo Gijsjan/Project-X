@@ -1,5 +1,5 @@
-li.pagination.previous.greyed-out <<
-|	<% _.times(totalPages, function(index) { %>
-li.pagination(data-pagenumber!="<%= index + 1 %>") <%= index + 1 %>: <%= pageTitles[index] %>
-|	<% }); %>
-li.pagination.next >>
+ul.nav.nav-tabs#myTab
+	|<% _.times(pageTitles.length, function(index) { %>
+	li
+		a(href!="#<%= pageSlugs[index] %>", data-toggle="tab", data-target!="#tab<%= index + 1 %>") <%= pageTitles[index] %>
+	|<% }); %>

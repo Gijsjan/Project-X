@@ -2,12 +2,13 @@ define (require) ->
 	$ = require 'jquery'
 	_ = require 'underscore'
 	Backbone = require 'backbone'
+	BaseView = require 'views/base'
 	vPagination = require 'views/main/pagination'
 	vSelector = require 'views/main/selector'
 	vList = require 'views/object/content/list'
 	cContentList = require 'collections/object/content/content'
 
-	Backbone.View.extend
+	class vListControl extends BaseView
 		
 		id: 'list-control'
 		

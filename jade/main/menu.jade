@@ -1,20 +1,14 @@
-ul
-	li 
-		a(href='/') home
-	li
-		a(href='/content/link') links
-		a(href='/link/add') +
-	li
-		a(href='/content/event') events
-		a(href='/event/add') +
-	li
-		a(href='/content/video') videos
-		a(href='/video/add') +
-	li
-		a(href='/content/document') documents
-		a(href='/document/add') +
-	li
-		a(href='/content/note') notes
-		a(href='/note/add') +
-	li
-		a(href="/logout") logout
+div.navbar.navbar-inverse.navbar-fixed-top
+	div.navbar-inner
+		ul.nav
+			li.active
+				a(href="/") Home
+			li
+				a(href="/content/format") Formats
+		ul.nav.pull-right
+			li.dropdown
+				a.dropdown-toggle(href="#", data-toggle="dropdown") <%= username %>
+					b.caret
+				ul.dropdown-menu
+					li
+						a(href="/logout") logout

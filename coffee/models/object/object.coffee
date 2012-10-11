@@ -14,16 +14,6 @@ define (require) ->
 
 		'show': true
 
-		parse: (response) ->
-			# console.log 'parsing mObject'
-			response._rev = response.rev if response.rev?
-			delete response.rev
-			response.id = response._id if response._id?
-
-			@modelManager.register(@)
-
-			response
-
 		validate: (attrs) ->
 			response = {}
 			response.validationerrors = {}

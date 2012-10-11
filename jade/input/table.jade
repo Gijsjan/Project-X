@@ -1,35 +1,19 @@
 |<%
-|var headings = false;
-|var fixed = false;
-|%>
+|var heading = false;
+|_(columns).each(function(column) {
+|	if (column.heading) headings = true;
+|}); %>
 
-table.input-table
-	col(width="16px")
-	|<% _(columns).each(function(column) {
-	|		// Next two rows of code are here to avoid having two columns iterations
-	|		if (column.heading) headings = true;
-	|		if (column.input.type == 'options') fixed = column.input.fixed;
-	|%>
-	col(width!="<%= column.width %>%")
-	|<% }); %>
-	col(width="16px")
-
+.table
+	
 	|<% if (headings) { %>
-	tr.headings
-		th
-		|<% _(columns).each(function(column) { %>
-		th <%= column.heading %>
-		|<% }); %>
-		th
+	.row.headings
+		|<%	_(columns).each(function(column) { %>
+		div.heading(class!="span<%= column.span %>") <%= column.heading %>
+		|<%	}); %>
 	|<% } %>
 
-	tr.totals
-		td &nbsp;
-		|<% _(columns).each(function(column) { %>
-		td.total &nbsp;
-		|<% }); %>
-		td &nbsp;
 
-|<% if (!fixed) { %>
+|<% if (addrows) { %>
 div.add-row ...add extra row
 |<% } %>

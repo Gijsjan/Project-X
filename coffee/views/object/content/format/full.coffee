@@ -3,7 +3,8 @@ define (require) ->
 	vFullContent = require 'views/object/content/full'
 	tpl = require 'text!html/format/full.html'
 
-	vFullContent.extend
+	class vFullFormat extends vFullContent
+
 		render: ->
 			vFullContent.prototype.render.apply @
 

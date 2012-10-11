@@ -1,122 +1,164 @@
 define (require) ->
 	'age':
+		'title': 'Age'
 		'addrows': true
 		'columns': [
 			'key': 'importance'
-			'width': 5
+			'span': 1
 			'input':
 				'type': 'select'
 				'options': ['A', 'B', 'C', 'U']
 		,
 			'key': 'range'
-			'width': 95
+			'span': 2
 			'input':
-				'type': 'options'
+				'type': 'rowoptions'
 				'options': ['15 - 19y', '20 - 24y', '25 - 30y']
 		]
 	'capacity':
+		'title': 'Capacity'
 		'addrows': true
 		'columns': [
 			'key': 'role'
 			'heading': 'Role'
-			'width': 40
+			'span': 4
 			'input':
-				'type': 'text'
+				'type': 'textarea'
 		,
 			'key': 'departement'
 			'heading': 'Departement'
-			'width': 40
+			'span': 4
 			'input': 
-				'type': 'autocomplete'
+				'type': 'typeahead'
 				'dbview': 'group/departements'
 		,
 			'key': 'hours'
-			'heading': 'Hours/week'
-			'width': 20
+			'heading': 'Hours'
+			'span': 2
 			'input':
-				'type': 'text'
-		,
+				'type': 'textarea'
+		]
+	'competition':
+		'title': 'Competition'
+		'addrows': false
+		'columns': [
+			'key': 'competition'
+			'span': 6
+			'input':
+				'type': 'textarea'
 		]
 	'costs':
+		'title': 'Costs'
 		'addrows': true
 		'columns': [
 			'key': 'description'
 			'heading': 'Type'
-			'width': 60
+			'span': 6
 			'input':
-				'type': 'text'
+				'type': 'textarea'
 		,
 			'key': 'amount'
 			'heading': 'Amount'
-			'width': 20
+			'span': 2
 			'input':
+				'prepend': '€'
 				'type': 'text'
+				'append': ',-'
 		,
 			'key': 'frequency'
 			'heading': 'Frequency'
-			'width': 20
+			'span': 2
 			'input':
 				'type': 'select'
-				'options': ['once', 'per month', 'per year']
+				'options': ['Once', 'Per month', 'Per year']
+		]
+	'countries':
+		'title': 'Countries'
+		'addrows': true
+		'columns': [
+			'key': 'importance'
+			'span': 1
+			'input':
+				'type': 'select'
+				'options': ['A', 'B', 'C', 'U']
+		,
+			'key': 'country'
+			'span': 2
+			'input': 
+				'type': 'typeahead'
+				'dbview': 'object/countries'
 		]
 	'deliverables':
+		'title': 'Deliverables'
 		'addrows': true
 		'columns': [
 			'key': 'product'
 			'heading': 'Product'
-			'width': 50
+			'span': 5
 			'input':
-				'type': 'text'
+				'type': 'textarea'
 		,
 			'key': 'description'
 			'heading': 'Description'
-			'width': 50
+			'span': 5
+			'input':
+				'type': 'textarea'
+		]
+	'description':
+		'title': 'Description'
+		'addrows': false
+		'columns': [
+			'key': 'description'
+			'span': 6
 			'input':
 				'type': 'textarea'
 		]
 	'duration':
+		'title': 'Duration'
 		'addrows': true
 		'columns': [
 			'key': 'scope'
 			'heading': 'Scope'
-			'width': 50
+			'span': 5
 			'input':
-				'type': 'text'
+				'type': 'textarea'
 		,
 			'key': 'duration'
 			'heading': 'Duration'
-			'width': 50
+			'span': 5
 			'input':
-				'type': 'text'
+				'type': 'textarea'
 		]
 	'education':
+		'title': 'Education'
 		'addrows': true
 		'columns': [
 			'key': 'importance'
-			'width': 5
+			'span': 1
 			'input':
 				'type': 'select'
 				'options': ['A', 'B', 'C', 'U']
 		,
 			'key': 'education'
-			'width': 95
+			'span': 2
 			'input':
-				'type': 'options'
+				'type': 'rowoptions'
 				'options': ['primary/none', 'secondary', 'university']
 		]
 	'effects':
+		'title': 'Effects'
 		'addrows': false
 		'columns': [
 			'key': 'importance'
-			'width': 5
+			'span': 1
 			'input':
 				'type': 'select'
 				'options': ['A', 'B', 'C', 'U']
 		,
 			'key': 'effect'
-			'width': 95
+			'span': 9
 			'input':
-				'type': 'options'
+				'type': 'rowoptions'
 				'options': ['The target group gets more insight into the topic', 
 							'The target group is contemplating the topic', 
 							'The target group gets more understanding of different perspectives on the theme',
@@ -125,132 +167,144 @@ define (require) ->
 							'The target group discusses the topic with others',
 							'The target group participates in discussions on the topic']
 		]
-	'living':
+	'financing':
+		'title': 'Financing'
+		'addrows': false
+		'columns': [
+			'key': 'financing'
+			'span': 6
+			'input':
+				'type': 'textarea'
+		]
+	'goal':
+		'title': 'Goal'
+		'addrows': false
+		'columns': [
+			'key': 'goal'
+			'span': 6
+			'input':
+				'type': 'textarea'
+		]
+	'languages':
+		'title': 'Languages'
 		'addrows': true
 		'columns': [
 			'key': 'importance'
-			'width': 5
+			'span': 1
+			'input':
+				'type': 'select'
+				'options': ['A', 'B', 'C', 'U']
+		,
+			'key': 'language'
+			'span': 2
+			'input':
+				'type': 'rowoptions'
+				'options': ['Arabic', 'Chinese', 'English', 'French', 'Spanish']
+		]
+	'living':
+		'title': 'Living'
+		'addrows': true
+		'columns': [
+			'key': 'importance'
+			'span': 1
 			'input':
 				'type': 'select'
 				'options': ['A', 'B', 'C', 'U']
 		,
 			'key': 'living'
-			'width': 95
+			'span': 2
 			'input':
-				'type': 'options'
+				'type': 'rowoptions'
 				'options': ['urban', 'rural']
 		]
 	'media':
+		'title': 'Media'
 		'addrows': true
 		'columns': [
 			'key': 'media_type'
 			'heading': 'Type'
-			'width': 30
+			'span': 2
 			'input':
-				'type': 'text'
+				'type': 'textarea'
 		,
 			'key': 'name'
 			'heading': 'Name'
-			'width': 30
+			'span': 4
 			'input':
-				'type': 'text'
+				'type': 'textarea'
 		,
 			'key': 'description'
 			'heading': 'Description'
-			'width': 40
+			'span': 4
+			'input':
+				'type': 'textarea'
+		]
+	'monitoring':
+		'title': 'Monitoring'
+		'addrows': false
+		'columns': [
+			'key': 'monitoring'
+			'span': 6
 			'input':
 				'type': 'textarea'
 		]
 	'objectives':
+		'title': 'Objectives'
 		'addrows': false
 		'columns': [
 			'key': 'importance'
-			'width': 5
+			'span': 1
 			'input':
 				'type': 'select'
 				'options': ['A', 'B', 'C', 'U']
 		,
 			'key': 'objective'
-			'width': 95
+			'span': 9
 			'input':
-				'type': 'options'
+				'type': 'rowoptions'
 				'options': ['Contribute to freedom of speech', 'Contribute to freedom of expression', 'Contribute to free access to diverse informtion']
 		]
+	'participation':
+		'title': 'Participation'
+		'addrows': false
+		'columns': [
+			'key': 'participation'
+			'span': 6
+			'input':
+				'type': 'textarea'
+		]
 	'partners':
+		'title': 'Partners'
 		'addrows': true
 		'columns': [
 			'key': 'partner'
 			'heading': 'Partner'
-			'width': 40
+			'span': 4
 			'input':
-				'type': 'text'
+				'type': 'textarea'
 		,
 			'key': 'country'
 			'heading': 'Country'
-			'width': 20
+			'span': 2
 			'input': 
-				'type': 'autocomplete'
+				'type': 'typeahead'
 				'dbview': 'object/countries'
 		,
 			'key': 'role'
 			'heading': 'Role'
-			'width': 40
+			'span': 4
 			'input':
-				'type': 'text'
-		]
-	'profession':
-		'addrows': true
-		'columns': [
-			'key': 'importance'
-			'width': 5
-			'input':
-				'type': 'select'
-				'options': ['A', 'B', 'C', 'U']
-		,
-			'key': 'profession'
-			'width': 95
-			'input':
-				'type': 'options'
-				'options': ['politicians', 'civil servants', 'teachers', 'students', 'farmers', 'journalists', 'lawyer', 'businessmen']
-		]
-	'sex':
-		'addrows': true
-		'columns': [
-			'key': 'importance'
-			'width': 5
-			'input':
-				'type': 'select'
-				'options': ['A', 'B', 'C', 'U']
-		,
-			'key': 'sex'
-			'width': 95
-			'input':
-				'type': 'options'
-				'options': ['men', 'women']
-		]
-	'topics':
-		'addrows': false
-		'columns': [
-			'key': 'importance'
-			'width': 5
-			'input':
-				'type': 'select'
-				'options': ['A', 'B', 'C', 'U']
-		,
-			'key': 'topics'
-			'width': 95
-			'input':
-				'type': 'options'
-				'options': ['Democracy and Good Governance', 'Human Rights', 'Sexual Rights']
+				'type': 'textarea'
 		]
 	'producers':
+		'title': 'Producers'
 		'addrows': true
 		'columns': [
 			'key': 'percentage'
 			'heading': '%'
-			'width': 10
+			'span': 1
 			'input':
-				'type': 'text'
+				'type': 'textarea'
 				'constrain': 'percentage'
 			'relation': 
 				'type': 'sum'
@@ -258,9 +312,9 @@ define (require) ->
 		,
 			'key': 'producer'
 			'heading': 'Origin'
-			'width': 90
+			'span': 9
 			'input':
-				'type': 'options'
+				'type': 'rowoptions'
 				'options': [
 					'RNW production' 
 					'Co-production with (prio)partners'
@@ -268,18 +322,103 @@ define (require) ->
 					'User Generated Content'
 				]
 		]
+	'profession':
+		'title': 'Profession'
+		'addrows': true
+		'columns': [
+			'key': 'importance'
+			'span': 1
+			'input':
+				'type': 'select'
+				'options': ['A', 'B', 'C', 'U']
+		,
+			'key': 'profession'
+			'span': 2
+			'input':
+				'type': 'rowoptions'
+				'options': ['politicians', 'civil servants', 'teachers', 'students', 'farmers', 'journalists', 'lawyer', 'businessmen']
+		]
+	'sex':
+		'title': 'Sex'
+		'addrows': true
+		'columns': [
+			'key': 'importance'
+			'span': 1
+			'input':
+				'type': 'select'
+				'options': ['A', 'B', 'C', 'U']
+		,
+			'key': 'sex'
+			'span': 2
+			'input':
+				'type': 'rowoptions'
+				'options': ['men', 'women']
+		]
+	'success_factors':
+		'title': 'Success factors'
+		'addrows': false
+		'columns': [
+			'key': 'success_factors'
+			'span': 6
+			'input':
+				'type': 'textarea'
+		]
+	'title':
+		'title': 'Title'
+		'addrows': false
+		'columns': [
+			'key': 'title'
+			'span': 6
+			'input':
+				'type': 'textarea'
+		]
+	'tone_of_voice':
+		'title': 'Tone of voice'
+		'addrows': false
+		'columns': [
+			'key': 'tone_of_voice'
+			'span': 6
+			'input':
+				'type': 'textarea'
+		]
+	'topics':
+		'title': 'Topics'
+		'addrows': false
+		'columns': [
+			'key': 'importance'
+			'span': 1
+			'input':
+				'type': 'select'
+				'options': ['A', 'B', 'C', 'U']
+		,
+			'key': 'topics'
+			'span': 9
+			'input':
+				'type': 'rowoptions'
+				'options': ['Democracy and Good Governance', 'Human Rights', 'Sexual Rights']
+		]
 	'targets':
+		'title': 'Targets'
 		'addrows': true
 		'columns': [
 			'key': 'target_type'
 			'heading': 'Type'
-			'width': 60
+			'span': 6
 			'input':
-				'type': 'text'
+				'type': 'textarea'
 		,
 			'key': 'value'
 			'heading': 'Value'
-			'width': 40
+			'span': 4
 			'input':
-				'type': 'text'
-		]			
+				'type': 'textarea'
+		]
+	'unique_selling_points':
+		'title': 'Unique selling points'
+		'addrows': false
+		'columns': [
+			'key': 'unique_selling_points'
+			'span': 6
+			'input':
+				'type': 'textarea'
+		]

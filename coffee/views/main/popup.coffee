@@ -34,6 +34,7 @@ define (require) ->
 		id: 'popup'
 
 		initialize: ->
+			# console.log 'vPopup.initialize()'
 			@parent = @options.parent
 			@child = @options.child
 
@@ -45,6 +46,9 @@ define (require) ->
 			@render()
 
 			super
+
+		addClickEvent: ->
+			$(document).on 'click', (e) => @close() if $('#popup').has(e.target).length is 0 # If the user clicks outside the popup close the popup
 
 		render: ->
 			### THIS RENDER IS FIRED TWICE, WHY???? ###
@@ -60,11 +64,6 @@ define (require) ->
 			@$el.animate opacity: 1, 400
 
 			@
-
-		addClickEvent: ->
-			$(document).on 'click', (e) =>
-				container = $('#popup')
-				@close() if container.has(e.target).length is 0
 
 		close: ->
 			$(document).off 'click'

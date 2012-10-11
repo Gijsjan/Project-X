@@ -13,7 +13,7 @@ module.exports = ddoc;
 ddoc.views.formats = {
 	map: function(doc) {
 		if(doc.type == 'content/format') {
-			emit(doc.title);
+			emit(doc.title, doc);
 		}
 	}
 };

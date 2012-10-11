@@ -2,14 +2,20 @@ define (require) ->
 	BaseView = require 'views/base'
 	sListedViews = require 'switchers/views.listed'
 
-	class ContentList extends BaseView
+	class vContentList extends BaseView
 
 		id: 'contentlist'
 
 		initialize: ->
+			@$el.addClass('span6')
+
 			@collection.fetch
 				'success': (collection, response) =>
+					# console.log 'ContentList.initialize() => fetch().success '
+					@modelManager.register collection.models
 					@render()
+				'error': (collection, response) =>
+					@navigate 'login' if response.status is 401
 
 			super
 

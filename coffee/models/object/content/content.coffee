@@ -3,6 +3,7 @@ define (require) ->
 	mObject = require 'models/object/object'
 	cTag = require 'collections/object/tag'
 	cComment = require 'collections/object/comment'
+	hlpr = require 'helper'
 
 	class mContent extends mObject
 
@@ -16,8 +17,24 @@ define (require) ->
 
 		initialize: ->
 			super
+
+		# fetch: (options) ->
+		# 	console.log 'mContent.fetch()'
+
+		parse: (response) ->
+			# console.log 'mContent.parse()'
+
+			if response.rev? # if response is document than _rev is present, on update rev is present
+				response._rev = response.rev
+				delete response.rev
+
+			response.id = response._id if response._id?
+
+			response
 	
 		set: (attrs, options) ->
+			# console.log 'mContent.set()'
+
 			if attrs.newtags? and not (attrs.newtags instanceof cTag)
 				attrs.newtags = new cTag attrs.newtags
 

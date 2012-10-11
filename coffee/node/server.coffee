@@ -1,65 +1,24 @@
 http = require 'http'
-fs = require 'fs'
+url = require 'url'
+jsdom = require 'jsdom'
 
 http.createServer( (request, response) ->
-	base = '../..'
-	url = request.url.split '/'
+	urlparts = url.parse request.url, true
+	path = urlparts.pathname
+	console.log path
 
-	switch url[1]
+	if path is '//getheadings/'
+		jsdom.env urlparts.query.url, ['http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js'], (errors, window) ->
+			$ = window.$
+			
+			h1 = $.map($('h1'), (h1, i) -> $(h1).text().replace(/\s+/g, " ").trim())
+			h2 = $.map($('h2'), (h2, i) -> $(h2).text().replace(/\s+/g, " ").trim())
+			
+			response.writeHead 200, 'Content-Type': 'application/json'
+			response.end JSON.stringify('h1': h1, 'h2': h2)
+	else
+		response.writeHead 200, 'Content-Type': 'text/html'
+		response.end 'error'
+).listen(3000, '127.0.0.1')
 
-		when 'api'
-			data =
-				'lala': 'loloala'
-				'lelel': 'lilial'
-
-			stringy = JSON.stringify(data)
-
-			response.writeHead 200,
-				'Content-Length': stringy.length
-				'Content-Type': 'application/json'
-
-			response.end stringy
-
-		when 'js'
-			fs.readFile base+request.url, 'utf8', (err, js) ->
-				if (err)
-					throw err
-
-				response.writeHead 200,
-					'Content-Type': 'application/javascript'
-
-				response.end js
-
-		when 'css'
-			fs.readFile base+request.url, 'utf8', (err, css) ->
-				if (err)
-					throw err
-
-				response.writeHead 200,
-					'Content-Type': 'text/css'
-
-				response.end css
-
-		when 'templates'
-			fs.readFile base+request.url, 'utf8', (err, html) ->
-				if (err)
-					throw err
-
-				response.writeHead 200,
-					'Content-Type': 'text/html'
-
-				response.end html
-
-		else
-			fs.readFile '../../index.html', 'utf8', (err, html) ->
-				if (err)
-					throw err
-
-				response.writeHead 200,
-					'Content-Type': 'text/html'
-
-				response.end html
-
-).listen 80
-
-console.log 'Server running at http://127.0.0.1:80/'
+console.log 'Server running at http://127.0.0.1:3000/'

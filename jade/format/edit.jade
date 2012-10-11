@@ -1,133 +1,90 @@
-h2 Edit format
+div.row
+	div.span12
+		h2 Edit format: <%= title %>
 
-form.survey
+	//- h2 Edit format: <%= title.at(0).get('title') %>
+	
 
-	nav.pages
+	//- form.survey
+div.row
+	div.span8
+		nav.pages
+	div.span4
+		button#sSubmit.btn.btn-primary Save changes
 
-	div#pages
+div.row
+	.tab-content.span12
 
-		div.page(data-pagenumber="1")
+		.tab-pane#tab1(data-title="Definition")
 
-			h3.page-title Definition
+			section.title
 
-			label(for="title") 
-				h4 Title
-			input#title.regular.bind(type="text", name="title", value!="<%= title %>")
+			section.description
 
-			label(for="description") 
-				h4 Description
-			textarea#description.regular.bind(name="description") <%= description %>
+			section.goal
 
-			label(for="goal") 
-				h4 Goal
-			textarea#goal.regular.bind(name="goal") <%= goal %>
+			section.objectives
 
-			label(for="objectives") 
-				h4 Objectives
-			.objectives
+			section.topics
 
-			label(for="topics") 
-				h4 Topics
-			.topics
+			section.effects
 
-			label(for="effects") 
-				h4 Effects
-			.effects
+			section.unique_selling_points
 
-			label(for="unique_selling_points") 
-				h4 Unique selling points
-			textarea#unique_selling_points.regular.bind(name="unique_selling_points") <%= unique_selling_points %>
-
-			label(for="competition") 
-				h4 Competition
-			textarea#competition.regular.bind(name="competition") <%= competition %>
+			section.competition
 		
-		div.page(data-pagenumber="2")
+		.tab-pane#tab2(data-title="Target group")
 
-			h3.page-title Target group
+			.row
+				.span5.well
+					section.age
+				.span5.well
+					section.sex
 
-			label(for="age") 
-				h4 Age
-			.age
+			.row
+				.span5
+					.well
+						section.living
+					.well
+						section.education
+				.span5.well
+					section.profession
 
-			label(for="education") 
-				h4 Education
-			.education
-
-			label(for="living") 
-				h4 Living
-			.living
-
-			label(for="sex") 
-				h4 Sex
-			.sex
-
-			label(for="profession") 
-				h4 Profession
-			.profession
+			.row
+				.span5.well
+					section.countries
+				.span5.well
+					section.languages
 
 
-		div.page(data-pagenumber="3")
+		.tab-pane#tab3(data-title="Approach")
 
-			h3.page-title Approach
+			section.deliverables
 
-			label(for="deliverables")
-				h4 Deliverables
-			.deliverables
+			section.media
 
-			label(for="media")
-				h4 Media
-			.media
+			section.tone_of_voice
 
-			label(for="tone_of_voice") 
-				h4 Tone of voice
-			textarea#tone_of_voice.regular.bind(name="tone_of_voice") <%= tone_of_voice %>
+			section.producers
 
-			label(for="producers")
-				h4 Producers
-			.producers
+			section.partners
 
-			label(for="partners")
-				h4 Partners
-			.partners
+			section.participation
 
-			label(for="participation") 
-				h4 Participation
-			textarea#participation.regular.bind(name="participation") <%= participation %>
+			section.duration
 
-			label(for="duration")
-				h4 Duration
-			.duration
+		.tab-pane#tab4(data-title="Results")
 
-		div.page(data-pagenumber="4")
-			h3.page-title Results
+			section.success_factors
 
-			label(for="success_factors") 
-				h4 Success factors
-			textarea#success_factors.regular.bind(name="success_factors") <%= success_factors %>
+			section.targets
 
-			label(for="targets")
-				h4 Targets
-			.targets
+			section.monitoring
 
-			label(for="monitoring") 
-				h4 Monitoring
-			textarea#monitoring.regular.bind(name="monitoring") <%= monitoring %>
+		.tab-pane#tab5(data-title="Peoples and resources")
 
-		div.page(data-pagenumber="5")
-			h3.page-title People and resources
+			section.capacity
 
-			label(for="capacity")
-				h4 Capacity
-			.capacity
+			section.costs
 
-			label(for="costs") 
-				h4 Costs
-			.costs
-
-			label(for="financing") 
-				h4 Financing
-			textarea#financing.regular.bind(name="financing") <%= financing %>
-
-			br
-			div#sSubmit Save
+			section.financing

@@ -7,5 +7,3 @@ define (require) ->
 		model: (attributes, options) ->
 			model = if attributes.type then Models[attributes.type] else Backbone.Model()
 			new model attributes, options
-
-		url: '/api/objects' #remove?
