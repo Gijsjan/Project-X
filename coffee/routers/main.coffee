@@ -62,5 +62,6 @@ define (require) ->
 				type: 'DELETE'
 				url: '/db/_session'
 				success: =>
+					@globalEvents.trigger 'logoutsuccess'
 					@navigate 'login',
 						'trigger': true

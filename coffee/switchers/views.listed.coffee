@@ -15,7 +15,7 @@ define (require) ->
 	vOrganisation = require 'views/object/group/organisation/listed'
 	vProject = require 'views/object/group/project/listed'
 
-	'object/user': vUser
+	'user': vUser
 
 	'content/event': vEvent
 	'content/link': vLink

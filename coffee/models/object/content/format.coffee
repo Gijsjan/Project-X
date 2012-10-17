@@ -6,22 +6,20 @@ define (require) ->
 
 	class mFormat extends mContent
 
-		'data':
-			'type': 'content/format'
-
-
-		'xdata':
+		defaults: _.extend({}, mContent::defaults,
+			'type': "content/format"
 			'title': ""
-			'competition': new cInputTableRow
-			'description': new cInputTableRow
-			'financing': new cInputTableRow
-			'goal': new cInputTableRow
-			'monitoring': new cInputTableRow
-			'participation': new cInputTableRow
-			'success_factors': new cInputTableRow
-			'tone_of_voice': new cInputTableRow
-			'unique_selling_points': new cInputTableRow
-
+			'description': ""
+			'goal': ""
+			'competition': ""
+			'financing': ""
+			'monitoring': ""
+			'participation': ""
+			'success_factors': ""
+			'tone_of_voice': ""
+			'unique_selling_points': ""
+			'shortcut2countries': {}
+			'shortcut2departements': {}
 			'age': new cInputTableRow
 			'capacity': new cInputTableRow
 			'costs': new cInputTableRow
@@ -39,28 +37,50 @@ define (require) ->
 			'profession': new cInputTableRow
 			'sex': new cInputTableRow
 			'topics': new cInputTableRow
-			'targets': new cInputTableRow
+			'targets': new cInputTableRow)
 
-		defaults: ->
-			data = _.extend {}, @data, @xdata
-			_.extend {}, mContent::defaults, data
+
+		'validation':
+			'title':
+				'required': true
+				'message': 'Please enter a title!'
+			'description':
+				'required': true
+				'message': 'Please enter a description!'
+			'goal':
+				'required': true
+				'message': 'Please enter a goal!'
 
 		set: (attrs, options) ->
 			# console.log 'mFormat.set()'
 
-			# If model.set('attr', 'options') is used instead of model.set({attr: options}) attrs is a string
-			# For the loop to work, attrs has to be an object
-			if _.isString(attrs)
-				data = {}
-				data[attrs] = options
-				attrs = data
-
-			# for own attr, value of attrs
-			# 	if (@xdata.hasOwnProperty(attr)) and not (attrs[attr] instanceof cInputTableRow)
-			# 		attrs[attr] = new cInputTableRow value
+			if attrs.hasOwnProperty('_id') is false
+				# console.log 'YEAH'
+				# create shortcuts CAN BE IN OBJECT ASWELL?
+				# console.log attrs.hasOwnProperty 'countries'
+				if attrs.hasOwnProperty 'countries'
+					countries = {}
+					for own id, row of attrs.countries
+						countries[row.country.id] = row.country if _.isObject row.country
+					@set 'shortcut2countries', countries
+				if attrs.hasOwnProperty 'capacity'
+					departements = {}
+					for own id, row of attrs.capacity
+						departements[row.departement.id] = row.departement if _.isObject row.departement
+					@set 'shortcut2departements', departements
+			
+			# if _.isString(attrs)
+				
+			# 	# If model.set('attr', 'options') is used instead of model.set({attr: options}) attrs is a string
+			# 	# For the loop to work, attrs has to be an object
+			# 	# WHAT LOOP? IS THIS STILL NECESSARY?
+			# 	data = {}
+			# 	data[attrs] = options
+			# 	attrs = data
 
 			super
 
+		# MOVE TO BASEMODEL?
 		sync: (method, model, options) ->
 			# console.log 'mFormat.sync()'
 

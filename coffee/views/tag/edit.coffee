@@ -15,7 +15,7 @@ define (require) ->
 		initialize: () ->
 			@inputValue = ''
 
-			@tags = @model.get 'newtags' 
+			@tags = @model.get 'tags' 
 			@edit_tag_list = new vEditTagList
 				'parent': @
 				'collection': @tags

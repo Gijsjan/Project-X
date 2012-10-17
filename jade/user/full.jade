@@ -1,8 +1,8 @@
 .user(id!="object-<%= id %>")
-	h2.user-title <%= username %>
+	h2.user-title <%= name %>
 	nav.user-menu
-		a.editevent(href!="/<%= type %>/edit/<%= id %>") edit
+		a.editevent(href!="/user/edit/<%= id %>") edit
 		span.delete delete
 	.user-info
-		span <%= email %>
+		span <%= telephone %>
 	.user-body

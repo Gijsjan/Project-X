@@ -97,7 +97,7 @@ define (require) ->
 
 				# first tag loop checks if there is a 'tag match', ie the model has a tag that is checked
 				# two loops are needed, cuz if the last of (say) three tags is a match, the first two must also be shown and thus 'active'	
-				model.get('newtags').each (tag) =>
+				model.get('tags').each (tag) =>
 					slug = tag.get 'slug'
 					selector = getSelector tag.get 'type'
 
@@ -106,7 +106,7 @@ define (require) ->
 
 				# second tag loop updates the label info
 				# variable show is used cuz if a model must be shown, all tags are 'active'
-				model.get('newtags').each (tag) =>
+				model.get('tags').each (tag) =>
 					slug = tag.get 'slug'
 					selector = getSelector tag.get 'type'
 

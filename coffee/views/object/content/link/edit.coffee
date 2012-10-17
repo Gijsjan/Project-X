@@ -6,6 +6,7 @@ define (require) ->
 	tpl = require 'text!html/link/edit.html'
 
 	class vEditLink extends vEditContent
+		
 		events: _.extend({}, vEditContent.prototype.events, 
 			"paste .address": "getPageContents"
 			"change .possible_title_checkbox": "onLinkSelected"

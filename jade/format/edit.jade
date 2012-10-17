@@ -1,6 +1,9 @@
 div.row
 	div.span12
 		h2 Edit format: <%= title %>
+			|<% if (typeof id !== 'undefined') { %> 
+			small settings
+			|<% } %>
 
 	//- h2 Edit format: <%= title.at(0).get('title') %>
 	
@@ -15,7 +18,7 @@ div.row
 div.row
 	.tab-content.span12
 
-		.tab-pane#tab1(data-title="Definition")
+		.tab-pane.active#tab1(data-title="Definition")
 
 			section.title
 

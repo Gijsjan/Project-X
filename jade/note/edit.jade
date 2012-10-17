@@ -1,0 +1,11 @@
+h2 Edit Note
+form
+	div.pull-left
+		label(for="title") Title
+		input.bind#title(type="text", name="title", value!="<%= title %>")
+		label(for="body") Body
+		textarea.bind#body(name="body") <%= body %> 
+	div.pull-left#pagedown
+	br(style="clear:both") 
+	div.tags-wrapper 
+	button#sSubmit.btn.btn-primary Save changes

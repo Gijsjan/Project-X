@@ -5,6 +5,8 @@ define (require) ->
     ModelManager = require 'modelmanager'
     CollectionManager = require 'collectionmanager'
     ViewManager = require 'viewmanager'
+    AjaxManager = require 'ajaxmanager'
+    mUser = require 'models/object/user'
     vMenu = require 'views/main/menu'
     UserRouter = require 'routers/user'
     GroupRouter = require 'routers/group'
@@ -21,6 +23,7 @@ define (require) ->
         modelManager = new ModelManager()
         collectionManager = new CollectionManager()
         viewManager = new ViewManager(globalEvents)
+        ajaxManager = new AjaxManager(globalEvents)
         
         Backbone.Model::modelManager = modelManager
         Backbone.Model::globalEvents = globalEvents
@@ -33,6 +36,7 @@ define (require) ->
         Backbone.View::routeHistory = routeHistory
         Backbone.View::modelManager = modelManager
         Backbone.View::collectionManager = collectionManager
+        # Backbone.View::ajaxManager = ajaxManager
         Backbone.View::globalEvents = globalEvents
         Backbone.View::screenwidth = $(document).width()
         Backbone.View::screenheight = $(document).height()
@@ -79,6 +83,8 @@ define (require) ->
                 options['replace'] = true if href is '/logout' or href is '/login'
 
                 mainRouter.navigate href, options
+
+        currentUser = new mUser().login()
 
         new vMenu()
 

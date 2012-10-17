@@ -1,12 +1,18 @@
 define (require) ->
 	vContentListControl = require 'views/object/content/list.control'
 	vUserCommentList = require 'views/object/comment/list.user'
+	FullViews = require 'switchers/views.full'
+	mUser = require 'models/object/user'
+	cUser = require 'collections/object/user'
+	vFullUser = require 'views/object/user/full'
+	vUserList = require 'views/object/user/list'
 
-	Backbone.Router.extend
+
+	class UserRouter extends Backbone.Router
 		routes:
-			# user/:user_id is caught by :object_type/:id in routers/object.cofee
-			
-			
+			"user/:user_id": "showUser"
+			"user": "listUsers"
+
 			"user/:user_id/content": "content"
 			"user/:user_id/content/:slug": "content_type"
 			"user/:user_id/tag/:slug": "tag"
@@ -15,6 +21,28 @@ define (require) ->
 			#"user/:user_id/contacts": "contacts"
 			"user/:user_id/groups": "groups"
 			"user/:user_id/group/:slug": "group"
+
+		showUser: (user_id) ->
+			# console.log 'UserRouter.showUser()'
+			
+			
+			model = new mUser
+				'name': user_id
+
+			view = new vFullUser
+				'model': model 
+
+			@globalEvents.trigger 'showView',
+				'render': false
+				'currentView': view
+
+		listUsers: ->
+			# console.log 'UserRouter.listUsers()'
+			view = new vUserList()
+			
+			@globalEvents.trigger 'showView',
+				'render': false
+				'currentView': view
 
 		content: (user_id) ->
 			lc = new vContentListControl

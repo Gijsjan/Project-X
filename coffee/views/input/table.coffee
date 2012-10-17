@@ -92,6 +92,7 @@ define (require) ->
 			@tablevalue.on 'remove', (model, collection, options) =>
 				@$('tr[data-cid='+model.cid+']').remove()
 				@render()
+				@updateModel()
 			@tablevalue.on 'add', (model, collection, options) =>
 				@render()
 			@tablevalue.on 'change', (model, options) =>
@@ -295,22 +296,19 @@ define (require) ->
 					renderedView = view.render().$el.addClass('span'+column.span)
 					cell.html renderedView
 
-				# when 'autocomplete'
-				# 	iac = new vInputAutocomplete
-				# 		'dbview': column.input.dbview # departements
-				# 		'key': column.key # departement_id
-				# 		'row': row # model with all the data for this row, is used to set the new value
-				# 	# iac.on 'option_selected', @updateModel, @
-				# 	cell.html iac.render().$el
-
 				when 'typeahead'
-					view = new vInputTypeahead
-						'row': row # model with all the data for this row, is used to set the new value
-						'column': column
-					# iac.on 'option_selected', @updateModel, @
-					renderedView = view.render().$el
+					ta = new vInputTypeahead
+						'value': row.get(column.key)
+						'dbview': column.input.dbview
+						'span': column.span
+						'selectfromlist': true
+					ta.on 'valuechanged', (value) ->
+						row.set column.key, value
+
+					renderedView = ta.render().$el
 					cell.html renderedView
 
+				# CHANGE TO TYPEAHEAD STYLE
 				when 'select'
 					view = new vInputSelect
 						'row': row

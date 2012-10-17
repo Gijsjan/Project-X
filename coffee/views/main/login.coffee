@@ -2,9 +2,10 @@ define (require) ->
 	$ = require 'jquery'
 	_ = require 'underscore'
 	Backbone = require 'backbone'
+	BaseView = require 'views/base'
 	tplLogin = require 'text!html/main/login.html'
 
-	Backbone.View.extend
+	class vLogin extends BaseView
 
 		events:
 			"click button.btn-primary": "submitForm"
@@ -17,15 +18,17 @@ define (require) ->
 		
 		submitForm: ->
 			if @validate()
+				name = $('#username').val()
+
 				$.ajax
 					type: 'POST'
 					dataType: 'json'
 					url: '/db/_session'
 					data:
-						'name': $('#username').val()
+						'name': name
 						'password': $('#password').val()
 					success: (data) =>
-						@globalEvents.trigger 'loginsuccess' # Fire event to re-render the menu
+						@globalEvents.trigger 'loginsuccess', data.name # Fire event to re-render the menu
 						@navigate @routeHistory.pop()
 					error: (data) =>
 						data = $.parseJSON(data.responseText)

@@ -1,5 +1,7 @@
 define (require) ->
-	Backbone.View.extend
+	BaseView = require 'views/base'
+	
+	class vFullObject extends BaseView
 
 		events:
 			"click .editevent" : "edit"
@@ -22,15 +24,20 @@ define (require) ->
 						console.log response
 
 		initialize: ->
+			console.log 'vFullObject.initialize()'
 			@model.fetch
 				success: (model, response) =>
+					# console.log 'vFullObject.initialize() @model.fetch success'
 					@modelManager.register model
 					@render()
 				error: (model, response) =>
 					if response.status is 401
+						# console.log 'vFullObject.initialize() @model.fetch 401'
 						@navigate 'login'
 					else if response.status is 404
+						# console.log 'vFullObject.initialize() @model.fetch 404'
 						route = JSON.parse(response.responseText).route
 						@navigate route
 					else
+						# console.log 'vFullObject.initialize() @model.fetch error'
 						console.log response #debugging

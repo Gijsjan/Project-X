@@ -4,8 +4,9 @@ define (require) ->
 	Backbone = require 'backbone'
 	Markdown = require 'markdown'
 	vEditContent = require 'views/object/content/edit'
+	tpl = require 'text!html/note/edit.html'
 
-	vEditContent.extend
+	class vEditNote extends vEditContent
 	
 		events: _.extend({}, vEditContent.prototype.events,
 			'keyup #body': 'onKeyup')
@@ -27,10 +28,10 @@ define (require) ->
 			@converter = new Markdown.Converter()
 			@busy = false
 
-			vEditContent.prototype.initialize.apply @
+			super
 			
 		render: ->
-			vEditContent.prototype.render.apply @
+			super
 
 			@renderPagedown @model.get('body')
 

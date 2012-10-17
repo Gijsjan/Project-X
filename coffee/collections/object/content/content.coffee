@@ -13,6 +13,7 @@ define (require) ->
 		# To get the doc we need to pluck the value
 		parse: (response) ->
 			# console.log 'cContent.parse()'
+			@collectionManager.register @url, response
 			_.pluck(response.rows, 'value');
 	
 		# set: (attrs, options) ->

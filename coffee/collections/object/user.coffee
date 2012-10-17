@@ -1,10 +1,8 @@
 define (require) ->
 	_ = require 'underscore'
-	Backbone = require 'backbone'
+	BaseCollection = require 'collections/base'
 	mUser = require 'models/object/user'
 
-	Backbone.Collection.extend
+	class cUser extends BaseCollection
 
 		model: mUser
-
-		url: '/api/users'

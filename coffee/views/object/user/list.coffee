@@ -2,6 +2,7 @@ define (require) ->
 	BaseView = require 'views/base'
 	BaseCollection = require 'collections/base'
 	sListedViews = require 'switchers/views.listed'
+	cUser = require 'collections/object/user'
 	vInputList = require 'views/input/list'
 	vInputTypeahead = require 'views/input/typeahead'
 	vContainerAccordion = require 'views/container/accordion'
@@ -9,9 +10,9 @@ define (require) ->
 	tpl = require 'text!html/format/list.html'
 	hlp = require 'helper'
 
-	class vFormatList extends BaseView
+	class vUserList extends BaseView
 
-		id: 'formatlist'
+		id: 'userlist'
 
 		initialize: ->
 			@filters =
@@ -31,6 +32,7 @@ define (require) ->
 					@filtereditems.reset @collection.models
 			), 100
 
+			@collection = new cUser 'dbview': 'user/users'
 			@collection.fetch
 				'success': (collection, response) =>
 					# console.log 'vFormatList.initialize() => fetch().success '
@@ -40,7 +42,7 @@ define (require) ->
 					@navigate 'login' if response.status is 401
 
 			# ADD RESULT TO COLLECTIONMANAGER
-			@globalEvents.trigger 'ajaxGet'
+			@globalEvents.trigger 'ajaxGet',
 				'url': '/db/projectx/_design/content/_view/formatSelectors?group=true'
 				'success': (data) =>
 					countries = new BaseCollection()
@@ -70,11 +72,6 @@ define (require) ->
 						@filterCollection()
 
 					queue[1] = 'finished'
-					
-			# $.ajax
-				# 'dataType': 'json'
-				# 'error': (response) =>
-				# 	@navigate 'login' if response.status is 401
 
 			super
 

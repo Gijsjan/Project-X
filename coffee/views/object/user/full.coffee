@@ -3,12 +3,21 @@ define (require) ->
 	vFullObject = require 'views/object/full'
 	tpl = require 'text!html/user/full.html'
 
-	vFullObject.extend
+	class vFullUser extends vFullObject
+
+		# overrides vFullObject.initialize()
+		# initialize: ->
+		# 	@globalEvents.on 'userLoaded', @userLoaded, @
+
+		# userLoaded: (user) ->
+		# 	@model = user
+		# 	@render()
 	
 		render: ->
-			vFullObject.prototype.render.apply @
+			console.log 'vFullUser.render()'
+			super
 
-			tplr = _.template tpl, @model.toJSON()
-			@$el.html tplr
+			rhtml = _.template tpl, @model.toJSON()
+			@$el.html rhtml
 
 			@

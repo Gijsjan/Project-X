@@ -3,13 +3,25 @@ define (require) ->
 	Backbone = require 'backbone'
 	bootstrap = require 'bootstrap'
 	vEditContent = require 'views/object/content/edit'
-	vPagination = require 'views/main/pagination.pages'
+	vTabination = require 'views/main/tabination'
 	vInputTable = require 'views/input/table'
+	vModalContainer = require 'views/container/modal'
+	vContentSettings = require 'views/object/content/settings'
 	cInputTableRow = require 'collections/input/tablerow'
 	config = require 'config/object/content/format'
 	hlpr = require 'helper'
 
 	class vEditFormat extends vEditContent
+
+		events:
+			"click h2 small": "showInfo"
+
+		showInfo: ->
+			info = new vContentSettings
+				'model': @model
+			new vModalContainer
+				'view': info
+				'title': '"'+@model.get('title')+'" settings'
 
 		render: ->
 			super
@@ -25,7 +37,8 @@ define (require) ->
 					value = data
 
 				# The vInputTable converts a collection of tablerow data into a table, so the tablevalue is a cInputTableRow
-				value = new cInputTableRow value
+				# If value is not an cInputTableRow (on server load or new) convert to cInputTableRow
+				value = new cInputTableRow value if not (value instanceof cInputTableRow)
 
 				options = _.extend(configdata, 'tablekey': key, 'tablevalue': value) # Extend the config with tablekey (string) and value (cInputTableRow)
 
@@ -35,11 +48,11 @@ define (require) ->
 				@$('section.'+key).html v.render().$el
 
 			# CHANGE TO TABINATION?
-			pgn = new vPagination 'parent': @ # the url hash for linking to page: /content/link/bla2bli#p1 => hash = p1
+			pgn = new vTabination 'parent': @ # the url hash for linking to page: /content/link/bla2bli#p1 => hash = p1
 			pgn.on 'tabshown', @adjustTextareas, @
 			@$('nav.pages').html pgn.render().$el
 
-			@adjustTextareas()
+			hlpr.delay 0, @adjustTextareas # add delay of 0 to queue the adjusting, see: http://stackoverflow.com/questions/9502774/backbone-js-trigger-an-event-on-a-view-after-the-render
 
 			@
 
@@ -52,5 +65,9 @@ define (require) ->
 		# - the value from the input table has to be turned into a string if the 
 		#   corresponding value in the model is a string 
 		setModel: (key, value) ->
-			value = value[0][key] if _.isString @model.get(key)
-			@model.set key, value
+			obj = {}
+			if _.isString @model.get(key)
+				obj = value[0] 
+			else
+				obj[key] = value
+			@model.set obj, 'silent': true # silent true is added to avoid validation

@@ -1,197 +1,101 @@
-# @option.model_type = name of the models (departements, users) to make the call to the api
-# ??? @options.initValue if a value has already been entered (on edit)
-
 define (require) ->
-	_ = require 'underscore'
-	Backbone = require 'backbone'
 	BaseView = require 'views/base'
 	cResult = require 'collections/ac.result'
+	tpl = require 'text!html/input/list.html'
 	hlpr = require 'helper'
-	tpl = require 'text!html/input/autocomplete.html'
 
 	class vInputList extends BaseView
 
-		className: 'input-list'
-
-		### EVENTS ###
+		basetop: 0 # var to hold the initial height of the first <li> in the <ul>
 
 		events:
-			"keyup input.ac": "onKeyup"
+			'keyup input': 'onInputKeyup'
+			'click ul li a': 'onClickItem'
 
-			'mouseenter .ac-option': 'onHoverOption' 
-			'mouseleave .ac-option': 'onHoverOption'
-
-			'click .ac-option': 'onClickOption'
-
-		onKeyup: (e) ->
-			# console.log 'vInputList.onKeyup()'
-			value = hlpr.slugify(e.target.value)
-
+		onInputKeyup: (e) ->
+			active = @$('ul li.active')
+			@$('ul li.active').removeClass('active')
+			
 			switch e.keyCode
-				when 40 then @resultlist.highlightNext()
-				when 38 then @resultlist.highlightPrev()
-				when 13 then @onPressEnter(value)
+				when 40 # Down
+					if active.length is 0
+						@$('ul li:first').addClass('active')
+						@basetop = @$('ul li:first').position().top
+					else 
+						next = active.next()
+						next.addClass('active')
+					@adjustScroll()
+				when 38 # Up
+					if active.length is 0
+						@$('ul li:last').addClass('active')
+					else 
+						active.prev().addClass('active')
+					@adjustScroll()
+				when 13 # Enter
+					index = active.find('a').attr('data-index')
+					@trigger 'itemselected', @filtereditems.at(index)
 				else
-					@resultlist.reset @result.filter((model) -> model.get('key').indexOf(value) isnt -1)
+					if e.target.value is ''
+						@filtereditems.reset @items.models
+					else if e.target.value isnt ''
+						value = hlpr.slugify(e.target.value)
+						@filtereditems.reset @items.filter((model) -> model.get('key').indexOf(value) isnt -1)
 
-		onHoverOption: (e) ->
-			# console.log 'vInputList.onHoverOption()'
-			@resultlist.highlightByID(e.currentTarget.dataset.id)
+		adjustScroll: ->
+			activepos = @$('.active').position().top
+			ulpos = @$('ul.nav').position().top * -1
 
-		onClickOption: (e) ->
-			# console.log 'vInputList.onClickOption()'
-			@selectOption @resultlist.highlighted
+			if activepos < @basetop or activepos > @$('.overflow').height()
+				@$('.overflow').scrollTop(ulpos+activepos-100)
 
-		### /EVENTS ###
+		onClickItem: (e) ->
+			index = $(e.currentTarget).attr('data-index')
+			@trigger 'itemselected', @filtereditems.at(index)
 
 		initialize: ->
 			# console.log 'vInputList.initialize()'
-			@dbview = @options.dbview # The couchdb view to get the resultlist, ie 'group/departements', 'object/countries'
-			@key = @options.key
+			@dbview = if @options.dbview? then @options.dbview else '' # DBview is the name of the view in CouchDB ie: 'object/countries'
+			@items = if @options.items? then @options.items else ''
 
-
-			@resultlist = new cResult # Collection with the last result
-				'view': @dbview # REMOVE
-			@resultlist.on 'reset', @renderOptions, @
-			@resultlist.on 'model highlighted', (id) =>
-				@$('.highlight').removeClass 'highlight'
-				@$('div.ac-option[data-id='+id+']').addClass('highlight')
-
-			@result = new cResult # Collection with the last result
-				'view': @dbview
-			@result.fetch
-				success: (collection, response) =>
-					@render()
-				error: (collection, response) =>
-					@navigate 'login' if response.status is 401
-
-		render: ->
-			# console.log 'vInputList.render()'
-			@$el.html _.template(tpl,
-				'cid': ''
-				'key': @key
-				'value':
-					'value': '')
-
-			@resultlist.reset @result.models
-
-			@$('input.ac').focus()
-
-			@
-
-		renderOptions: ->
-			# console.log 'vInputList.renderOptions()'
-			@$('div.options').html ''
-			delete @resultlist.highlighted
+			@on 'reset', @reset, @
 			
-			@resultlist.each (model) =>
-				@$('div.options').append $('<div />', 
-					'data-id': model.get 'id'
-					'class': 'ac-option'
-					'id': 'ac-option-'+model.get('id')
-					'text': model.get('value'))
+			# create filtered items before fetching all items
+			@filtereditems = new cResult()
+			@filtereditems.on 'reset', @renderItems, @
 
-		onPressEnter: (value) ->
-			# console.log 'vInputList.onPressEnter()'
-			value = hlpr.slugify value
-
-			if not @resultlist.highlighted? # Is a model from the result list selected (isNew() is false) or has the user entered the full name in the input (isNew() is true)?
-				@resultlist.highlighted = @resultlist.find (model) ->
-					model.get('key') is value
-
-			if @resultlist.highlighted?
-				@selectOption @resultlist.highlighted
-
-		selectOption: (model) ->
-			@trigger 'done', model
-
-# @option.model_type = name of the models (departements, users) to make the call to the api
-# ??? @options.initValue if a value has already been entered (on edit)
-###
-define (require) ->
-	_ = require 'underscore'
-	Backbone = require 'backbone'
-	BaseView = require 'views/base'
-	cResult = require 'collections/ac.result'
-	tpl = require 'text!html/input/autocomplete.html'
-	hlpr = require 'helper'
-
-	class List extends BaseView
-
-		className: 'input-list'
-
-		events:
-			'keyup input.ac': 'onKeyup'
-			'mouseenter .ac-option': 'onHoverOption' 
-			'mouseleave .ac-option': 'onHoverOption'
-			'click .ac-option': 'onClickOption'
-
-		onKeyup: (e) ->
-			value = hlpr.slugify(e.target.value)
-			@value = value
-
-			if e.keyCode is 40 or e.keyCode is 38 # down or up arrow
-				@result.highlightNext() if e.keyCode is 40
-				@result.highlightPrev() if e.keyCode is 38
-			else if e.keyCode is 13 # enter
-				@trigger 'done', @result.highlighted
+			if @items is '' and @dbview isnt ''
+				# create and fetch all items, render view and reset @filtereditems
+				@items = new cResult 'dbview': @dbview
+				@items.fetch
+					'success': (collection, response) =>
+						# console.log 'vInputList.initialize() @items.fetch() success'
+						@render()
+						@filtereditems.reset collection.models
+					'error': (collection, response) =>
+						# console.log 'vInputList.initialize() @items.fetch() error'
+						@navigate 'login' if response.status is 401
 			else
-				if value.length > 2
-					hlpr.delayWithReset 300, =>
-						@result.fetch
-							success: (collection, response) =>
-								@result.reset collection.filter((model) -> model.get('key').indexOf(value) isnt -1)
-				else
-					@render()
+				@render()
+				@filtereditems.reset @items.models
 
-		onHoverOption: (e) ->
-			@result.highlightByID(e.currentTarget.dataset.id)
-
-		onClickOption: (e) ->
-			@trigger 'done', @result.highlighted
-
-		initialize: ->
-			@value = ''
-
-			@view = @options.view # ie: departements, users
-
-			@result = new cResult
-				'view': @view
-			@result.on 'model highlighted', (id) =>
-				@$('.highlight').removeClass 'highlight'
-				@$('div.ac-option[data-id='+id+']').addClass('highlight')
-			@result.on 'reset', @render, @
-
-			@result.fetch
-				success: (collection, response) =>
-					@render()
-				error: (collection, response) =>
-					@navigate 'login' if response.status is 401
-
-			super
-
+		reset: ->
+			@$('.overflow').scrollTop(0)
 
 		render: ->
 			# console.log 'vInputList.render()'
-
-			@$el.html _.template tpl, 'collection': @result
-
-			@$('input.ac').focus()
+			renderedHTML = _.template tpl
+			@$el.html renderedHTML
 
 			@
 
-		renderOptions: ->
-			@$('div.options').html ''
-			delete @resultlist.highlighted
-			
-			@resultlist.each (model) =>
-				@$('div.options').append $('<div />', 
-					'data-id': model.get 'id'
-					'class': 'ac-option'
-					'id': 'ac-option-'+model.get('id')
-					'text': model.get('value'))
+		renderItems: ->
+			# console.log 'vModal.renderItems()'
+			ul = @$ 'ul.nav'
+			ul.html ''
+			@filtereditems.each (item, index) ->
+				html = item.get('value')
+				html = html + ' ('+item.get('count')+')' if item.get('count')?
 
-			@$('div.options').css 'top', @$('input.ac').position().top
-			@$('div.options').css 'left', @$('input.ac').position().left
-			@$('div.options').css 'margin', 8 + @$('input.ac').height() + 'px 0 0 2px'
-###
+				a = $('<a />').attr('data-index', index).html html
+				li = $('<li />').html a
+				ul.append li

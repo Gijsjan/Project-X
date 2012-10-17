@@ -16,16 +16,16 @@ define (require) ->
 	vOrganisation = require 'views/object/group/organisation/full'
 	vProject = require 'views/object/group/project/full'
 
-	'comment': vComment
-	'user': vUser
+	'object/comment': vComment
+	'object/user': vUser
 
-	'event': vEvent
-	'link': vLink
-	'video': vVideo
-	'document': vDocument
-	'note': vNote
-	'format': vFormat
+	'content/event': vEvent
+	'content/link': vLink
+	'content/video': vVideo
+	'content/document': vDocument
+	'content/note': vNote
+	'content/format': vFormat
 
-	'departement': vDepartement
-	'organisation': vOrganisation
-	'project': vProject
+	'group/departement': vDepartement
+	'group/organisation': vOrganisation
+	'group/project': vProject

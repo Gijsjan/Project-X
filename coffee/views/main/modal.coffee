@@ -1,64 +1,31 @@
 define (require) ->
 	BaseView = require 'views/base'
-	cResult = require 'collections/ac.result'
+	# cResult = require 'collections/ac.result'
+	vInputList = require 'views/input/list'
 	tpl = require 'text!html/main/modal.html'
 	hlpr = require 'helper'
 
 	class vModal extends BaseView
 
-		events:
-			'keyup input': 'onInputKeyup'
-			'click ul li a': 'onClickItem'
-
-		onInputKeyup: (e) ->
-			active = @$('ul li.active')
-			@$('ul li.active').removeClass('active')
-			
-			switch e.keyCode
-				when 40 # Down
-					if active.length is 0
-						@$('ul li:first').addClass('active')
-					else 
-						next = active.next()
-						next.addClass('active')
-				when 38 # Up
-					if active.length is 0
-						@$('ul li:last').addClass('active')
-					else 
-						active.prev().addClass('active')
-				when 13 # Enter
-					index = active.find('a').attr('data-index')
-					@trigger 'itemselected', @filtereditems.at(index)
-				else
-					if e.target.value isnt ''
-						value = hlpr.slugify(e.target.value)
-						@filtereditems.reset @items.filter((model) -> model.get('key').indexOf(value) isnt -1)
-
-		onClickItem: (e) ->
-			index = $(e.currentTarget).attr('data-index')
-			@trigger 'itemselected', @filtereditems.at(index)
-
 		initialize: ->
-			@items = @options.items
+			@il = new vInputList
+				'items': @options.items
+			@il.on 'itemselected', (model) =>
+				@trigger 'itemselected', model
+				@$('.modal').modal('hide')
 
-			@filtereditems = new cResult()
-			@filtereditems.on 'reset', @renderItems, @
-
-			@filtereditems.reset @options.items.models
+			@render()
 
 		render: ->
-			renderedHTML = _.template tpl
+			renderedHTML = _.template tpl,
+				'title': 'Select from list'
 			@$el.html renderedHTML
 
-			@renderItems()
+			@$('.modal-body').html @il.$el
 
-			@
+			@$('.modal').on 'hidden', => @remove()
+			@$('.modal').on 'shown', => @$('input').focus() # set focus on the input when modal is shown
 
-		renderItems: ->
-			# console.log 'vModal.renderItems()'
-			ul = @$ 'ul.nav'
-			ul.html ''
-			@filtereditems.each (item, index) ->
-				a = $('<a />').attr('data-index', index).html item.get('value')
-				li = $('<li />').html a
-				ul.append li
+			@$('.modal').modal() # init modal
+
+			$('body').append @$el

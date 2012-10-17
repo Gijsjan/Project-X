@@ -13,7 +13,7 @@ define (require) ->
 	tplOrganisation = require 'text!html/organisation/listed.html'
 	tplProject = require 'text!html/project/listed.html'
 
-	'object/user': tplUser
+	'user': tplUser
 
 	'content/event': tplEvent
 	'content/link': tplLink

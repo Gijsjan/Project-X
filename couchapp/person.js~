@@ -1,0 +1,23 @@
+var couchapp = require('couchapp'),
+	path = require('path');
+
+ddoc = {
+	_id: '_design/person',
+	views: {},
+	lists: {},
+	shows: {}
+};
+
+module.exports = ddoc;
+
+ddoc.views.people = {
+	map: function(doc) {
+		if(doc.type == 'person') {
+			emit(doc._id, doc);
+		}
+	}
+};
+
+ddoc.validate_doc_update = function (newDoc, currentDoc, userCtx) {
+
+};

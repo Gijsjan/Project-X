@@ -16,16 +16,16 @@ define (require) ->
 	mOrganisation = require 'models/object/group/organisation'
 	mProject = require 'models/object/group/project'
 
-	'comment': mComment
-	'user': mUser
+	'object/comment': mComment
+	'object/user': mUser
 
-	'event': mEvent
-	'link': mLink
-	'video': mVideo
-	'document': mDocument
-	'note': mNote
-	'format': mFormat
+	'content/event': mEvent
+	'content/link': mLink
+	'content/video': mVideo
+	'content/document': mDocument
+	'content/note': mNote
+	'content/format': mFormat
 	
-	'departement': mDepartement
-	'organisation': mOrganisation
-	'project': mProject
+	'group/departement': mDepartement
+	'group/organisation': mOrganisation
+	'group/project': mProject

@@ -1,15 +1,7 @@
-nav#pagination.top
-	ul.pgn-nav
-		li.pgn-nav-elem.previous.greyed-out <
-		|	<% _.times(totalPages, function(index) { %>
-		li.pgn-nav-elem(data-page-number!="<%= index + 1 %>") <%= index + 1 %>
-		|	<% }); %>
-		li.pgn-nav-elem.next >
-div#item-wrapper
-nav#pagination.bottom
-	ul.pgn-nav
-		li.pgn-nav-elem.previous.greyed-out <
-		|	<% _.times(totalPages, function(index) { %>
-		li.pgn-nav-elem(data-page-number!="<%= index + 1 %>") <%= index + 1 %>
-		|	<% }); %>
-		li.pgn-nav-elem.next >
+.pages
+.pagination
+	ul
+		li.disabled
+			a(data-page="left") &laquo;
+		li
+			a(data-page="right") &raquo;

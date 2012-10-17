@@ -7,6 +7,9 @@ button.btn-narrow
 textarea
 	resize none
 
+a
+	outline none
+
 ul.dropdown-menu li
 	cursor pointer
 
@@ -43,5 +46,18 @@ div[data-input=typeahead] input.span4, div[data-input=select] input.span4
 	box-shadow 5px 5px 8px #CCC
 	z-index 2000
 
-#selectedlocations
-	padding 8px 15px
+#country-selected, #departement-selected
+	padding 0
+	margin-bottom 10px
+
+#country-heading, #departement-heading
+	position: relative
+
+.accordion-heading .input-typeahead
+	display inline-block
+	position absolute
+	right 4px
+	top 3px
+
+.accordion-heading .accordion-toggle
+	display inline-block

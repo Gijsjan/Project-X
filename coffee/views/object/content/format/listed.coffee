@@ -20,5 +20,4 @@ define (require) ->
 
 			@$('p[data-key=description]').attr('class', 'partial').html hlpr.partial(@model.get('description'), 120)
 
-
 			@

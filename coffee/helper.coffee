@@ -11,9 +11,14 @@ define (require) ->
 
 	# Cuts a string to 'length' and then finds the last index of a space to make a nice cut and adds three dots.
 	partial: (string, length) ->
-		part = string.substr(0, length)
-		lastspace = part.lastIndexOf(' ')
-		part.substr(0, lastspace) + '...'
+		# console.log typeof string
+		if typeof string is 'string'
+			part = string.substr(0, length)
+			lastspace = part.lastIndexOf(' ')
+			part.substr(0, lastspace) + '...'
+		else
+			console.log string
+			throw new Error('helper.partial() must receive String.')
 	
 	ucfirst: (string) ->
 		string.charAt(0).toUpperCase() + string.slice(1);

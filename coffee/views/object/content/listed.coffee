@@ -4,12 +4,13 @@ define (require) ->
 	tpl = require 'text!html/content/listed.html'
 
 	Backbone.View.extend
+
 		render: ->
 			tplRendered = _.template tpl, @model.toJSON()
 			@$el.html tplRendered
 
 			tags = new vTagList
-				tags: @model.get 'newtags'
+				tags: @model.get 'tags'
 			@$('.tags-wrapper').html tags.render().$el
 
 			@

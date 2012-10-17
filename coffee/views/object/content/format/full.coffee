@@ -6,7 +6,7 @@ define (require) ->
 	class vFullFormat extends vFullContent
 
 		render: ->
-			vFullContent.prototype.render.apply @
+			super
 
 			rtpl = _.template tpl, @model.toJSON()
 			@$('.content-body').html rtpl

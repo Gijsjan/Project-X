@@ -10,33 +10,19 @@ define (require) ->
 		'urlRoot': '/db/projectx/'
 
 		defaults: _.extend({}, mObject.prototype.defaults,
-			'show': true
-			'newtags': []
-			'comments': []
-			'commentcount': 0)
+			'owner': ""
+			'editors': []
+			'tags': []
+			'comments': [])
 
 		initialize: ->
 			super
-
-		# fetch: (options) ->
-		# 	console.log 'mContent.fetch()'
-
-		parse: (response) ->
-			# console.log 'mContent.parse()'
-
-			if response.rev? # if response is document than _rev is present, on update rev is present
-				response._rev = response.rev
-				delete response.rev
-
-			response.id = response._id if response._id?
-
-			response
 	
 		set: (attrs, options) ->
 			# console.log 'mContent.set()'
 
-			if attrs.newtags? and not (attrs.newtags instanceof cTag)
-				attrs.newtags = new cTag attrs.newtags
+			if attrs.tags? and not (attrs.tags instanceof cTag)
+				attrs.tags = new cTag attrs.tags
 
 			if attrs.comments? and not (attrs.comments instanceof cComment)
 				attrs.comments = new cComment attrs.comments

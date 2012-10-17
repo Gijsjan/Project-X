@@ -19,12 +19,12 @@ define (require) ->
 	'user': vUser
 	'comment': vComment
 
-	'event': vEvent
-	'link': vLink
-	'video': vVideo
-	'document': vDocument
-	'note': vNote
-	'format': vFormat
+	'content/event': vEvent
+	'content/link': vLink
+	'content/video': vVideo
+	'content/document': vDocument
+	'content/note': vNote
+	'content/format': vFormat
 	
 	'departement': vDepartement
 	'organisation': vOrganisation

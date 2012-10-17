@@ -3,23 +3,20 @@ define (require) ->
 	_ = require 'underscore'
 	Backbone = require 'backbone'
 	BaseView = require 'views/base'
+	mUser = require 'models/object/user'
 	tpl = require 'text!html/main/menu.html'
 
 	class vMenu extends BaseView
 
 		initialize: ->
-			@getUser()
-			
-			@globalEvents.on 'loginsuccess', =>
-				@getUser()
+			@globalEvents.on 'userLoaded', @userLoaded, @
 
-		getUser: ->
-			$.getJSON '/db/_session', (data) =>
-				@username = data.userCtx.name
-				@render()
+		userLoaded: (user) ->
+			@user = user
+			@render()
 
 		render: ->
 			@$el.html _.template tpl,
-				'username': @username
+				'username': @user.get 'name'
 			
 			$('body').prepend @$el
