@@ -32,16 +32,15 @@ define (require) ->
 
 			@il = new vInputList
 				'dbview': @dbview
-				'items': @items
+				'items': @items # CHANGE ITEMS TO COLLECTION?
 			@il.on 'itemselected', (model) => # when user clicks or gives enter on active option the itemselected event is triggered
 				@$('#'+@name).collapse('hide') # close the accordion-body
-				@addSelectedItem model.get('id'), model.get('value')
+				@addSelectedItem model.get('_id'), model.get('name')
 
 			super
 
 		addSelectedItem: (item, value) ->
 			index = @selecteditems.indexOf(item)
-
 			if index is -1
 				@$('#'+@name+'-selected').append @createButton(item, value)
 				@selecteditems.push item

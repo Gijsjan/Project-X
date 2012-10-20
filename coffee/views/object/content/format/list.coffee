@@ -2,10 +2,12 @@ define (require) ->
 	BaseView = require 'views/base'
 	BaseCollection = require 'collections/base'
 	sListedViews = require 'switchers/views.listed'
+	vListedFormat = require 'views/object/content/format/listed'
 	vInputList = require 'views/input/list'
 	vInputTypeahead = require 'views/input/typeahead'
 	vContainerAccordion = require 'views/container/accordion'
 	vPagination = require 'views/main/pagination'
+	cFormat = require 'collections/object/content/format'
 	tpl = require 'text!html/format/list.html'
 	hlp = require 'helper'
 
@@ -31,6 +33,8 @@ define (require) ->
 					@filtereditems.reset @collection.models
 			), 100
 
+			@collection = new cFormat
+				'dbview': 'content/format'
 			@collection.fetch
 				'success': (collection, response) =>
 					# console.log 'vFormatList.initialize() => fetch().success '
@@ -41,7 +45,7 @@ define (require) ->
 
 			# ADD RESULT TO COLLECTIONMANAGER
 			@globalEvents.trigger 'ajaxGet'
-				'url': '/db/projectx/_design/content/_view/formatSelectors?group=true'
+				'url': '_design/content/_view/formatSelectors?group=true'
 				'success': (data) =>
 					countries = new BaseCollection()
 					departements = new BaseCollection()
@@ -54,7 +58,7 @@ define (require) ->
 						departements.add obj if row.key[0] is 'departement'
 
 					@caCountry = new vContainerAccordion
-						'items': countries
+						'items': countries # CHANGE ITEMS TO COLLECTION?
 						'name': 'country'
 						'title': 'Country'
 					@caCountry.on 'selectionchanged', (items) =>
@@ -62,7 +66,7 @@ define (require) ->
 						@filterCollection()
 
 					@caDepartement = new vContainerAccordion
-						'items': departements
+						'items': departements # CHANGE ITEMS TO COLLECTION?
 						'name': 'departement'
 						'title': 'Departement'
 					@caDepartement.on 'selectionchanged', (items) =>
@@ -105,7 +109,7 @@ define (require) ->
 			# div = $('<div />').attr('id', 'page1').addClass('show')
 			# pagenumber = 1
 			@filtereditems.each (model, i) =>
-				t = new sListedViews[model.get 'type']
+				t = new vListedFormat
 					id: 'object-'+model.get 'id'
 					className: 'content listed '+model.get 'type'
 					model: model

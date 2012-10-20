@@ -32,7 +32,7 @@ define (require) ->
 					@filtereditems.reset @collection.models
 			), 100
 
-			@collection = new cUser 'dbview': 'user/users'
+			@collection = new cUser 'dbview': 'user/user'
 			@collection.fetch
 				'success': (collection, response) =>
 					# console.log 'vFormatList.initialize() => fetch().success '
@@ -43,7 +43,7 @@ define (require) ->
 
 			# ADD RESULT TO COLLECTIONMANAGER
 			@globalEvents.trigger 'ajaxGet',
-				'url': '/db/projectx/_design/content/_view/formatSelectors?group=true'
+				'url': '_design/content/_view/formatSelectors?group=true'
 				'success': (data) =>
 					countries = new BaseCollection()
 					departements = new BaseCollection()

@@ -2,6 +2,7 @@ define (require) ->
 	# OBJECTS
 	mUser = require 'models/object/user'
 	mComment = require 'models/object/comment'
+	mCountry = require 'models/object/object'
 
 	# CONTENT
 	mEvent = require 'models/object/content/event'
@@ -18,6 +19,7 @@ define (require) ->
 
 	'object/comment': mComment
 	'object/user': mUser
+	'object/country': mCountry
 
 	'content/event': mEvent
 	'content/link': mLink

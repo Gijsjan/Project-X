@@ -30,7 +30,7 @@ define (require) ->
 			'span': 4
 			'input': 
 				'type': 'typeahead'
-				'dbview': 'group/departements'
+				'dbview': 'group/departement'
 		,
 			'key': 'hours'
 			'heading': 'Hours'
@@ -86,7 +86,7 @@ define (require) ->
 			'span': 2
 			'input': 
 				'type': 'typeahead'
-				'dbview': 'object/countries'
+				'dbview': 'object/country'
 		]
 	'deliverables':
 		'title': 'Deliverables'
@@ -288,7 +288,7 @@ define (require) ->
 			'span': 2
 			'input': 
 				'type': 'typeahead'
-				'dbview': 'object/countries'
+				'dbview': 'object/country'
 		,
 			'key': 'role'
 			'heading': 'Role'

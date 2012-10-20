@@ -38,7 +38,7 @@ ddoc.updates = {
 ddoc.views.country = {
 	map: function(doc) {
 		if(doc.type == 'object/country') {
-			emit(doc.name, doc.slug);
+			emit(doc.name, 'slug':doc.slug);
 		}
 	}
 };

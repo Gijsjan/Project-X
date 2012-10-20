@@ -10,14 +10,46 @@ ddoc = {
 
 module.exports = ddoc;
 
-ddoc.views.formats = {
+ddoc.views.format = {
 	map: function(doc) {
 		if(doc.type == 'content/format') {
-			emit(doc.title, doc);
+			emit(doc.title);
 		}
 	}
 };
 
+ddoc.views.formatRelations = {
+	map: function(doc) {
+		if(doc.type == 'object/country') {
+			for (var format in doc.relations.content.format) {
+				emit([format, "country"])
+			}
+		}
+		if(doc.type == 'group/departement') {
+			for (var format in doc.relations.content.format) {
+				emit([format, "departement"])
+			}
+		}
+	}
+}
+
+// Produces a list of countries and departements with number of occurences
+ddoc.views.formatSelectors = {
+	map: function(doc) {
+		if(doc.type == 'object/country') {
+			for (var format in doc.relations.content.format) {
+				emit(["country", doc.name, doc], 1)
+			}
+		}
+		if(doc.type == 'group/departement') {
+			for (var format in doc.relations.content.format) {
+				emit(["departement", doc.name, doc], 1)
+			}
+		}
+	},
+	reduce: '_sum'
+}
+/*
 ddoc.views.formatSelectors = {
 	map: function(doc) {
 		if(doc.type == 'content/format') {
@@ -31,7 +63,7 @@ ddoc.views.formatSelectors = {
 	},
 	reduce: '_sum'
 };
-
+*/
 ddoc.validate_doc_update = function (newDoc, currentDoc, userCtx) {
 	/*
 	var required_attrs = {};

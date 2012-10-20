@@ -10,7 +10,7 @@ ddoc = {
 
 module.exports = ddoc;
 
-ddoc.views.user = {
+ddoc.views.users = {
 	map: function(doc) {
 		if(doc.type == 'user') {
 			emit(doc._id, doc);

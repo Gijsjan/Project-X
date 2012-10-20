@@ -50,6 +50,15 @@ define (require) ->
 			'goal':
 				'required': true
 				'message': 'Please enter a goal!'
+		# [a, b]
+		# [a, b, c]
+		updateRelations: (oldobj, newobj) -> 
+			console.log oldobj
+			console.log newobj
+			o = _.keys(oldobj)
+			n = _.keys(newobj)
+			console.log _.difference(n, o)
+
 
 		set: (attrs, options) ->
 			# console.log 'mFormat.set()'
@@ -59,10 +68,19 @@ define (require) ->
 				# create shortcuts CAN BE IN OBJECT ASWELL?
 				# console.log attrs.hasOwnProperty 'countries'
 				if attrs.hasOwnProperty 'countries'
+					previous = @previous('shortcut2countries')
+					
 					countries = {}
+					console.log attrs.countries
 					for own id, row of attrs.countries
-						countries[row.country.id] = row.country if _.isObject row.country
+						countries[row.country._id] = row.country if _.isObject row.country
 					@set 'shortcut2countries', countries
+
+					@updateRelations(previous, countries)
+					# @globalEvents.trigger 'ajaxPut',
+					# 	'url': '_design/object/_update/relation/'+row.country.id+'?type=format&id='+@get('id')
+					# 	'success': (data) ->
+					# 		console.log data
 				if attrs.hasOwnProperty 'capacity'
 					departements = {}
 					for own id, row of attrs.capacity

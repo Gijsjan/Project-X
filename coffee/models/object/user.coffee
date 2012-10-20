@@ -5,8 +5,7 @@ define (require) ->
 	class mUser extends mObject
 
 		'urlRoot': ->
-			console.log 'mUser.urlRoot()'
-			console.log @get('name')
+			# console.log 'mUser.urlRoot()'
 			'/db/projectx/'+@get 'name'
 	
 		defaults: _.extend({}, mObject::defaults,

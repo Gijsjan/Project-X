@@ -5,6 +5,7 @@ define (require) ->
 	Backbone = require 'backbone'
 	bootstrap = require 'bootstrap'
 	BaseView = require 'views/base'
+	# mCountry = require 'models/object/object'
 	vAutoCompleteList = require 'views/autocomplete/list'
 	# vPopup = require 'views/main/popup'
 	vModal = require 'views/main/modal'
@@ -26,33 +27,33 @@ define (require) ->
 			# console.log 'vInputTypeahead.onChange'
 
 			@$el.removeClass 'warning'
-			obj = @alloptions.find (model) =>
+			model = @alloptions.find (model) =>
 				value = @$('input').val()
 				index = value.lastIndexOf(' (')
-				return model.get('value') is value.substring(0, index)
+				value = if index > -1 then value.substring(0, index) else value
+				console.log model.get('value')
+				console.log value.toLowerCase()
+				return model.get('value') is value
 
 			hlpr.delay 300, => # delay is waiting for find() to finish
-				if obj?
-					@trigger 'valuechanged', obj.toJSON()
+				if model?
+					@trigger 'valuechanged', model.toJSON()
 				else
-					@trigger 'valuechanged', @emptyValue()
 					@$el.addClass 'warning'
+					@trigger 'valuechanged', @emptyValue()
 		
 		onBlur: ->
 			# console.log 'vInputTypeahead.onBlur'
 			@trigger 'valuechanged', @emptyValue() if @$('input').val() is ''
-			# @row.set @key, @emptyValue() if @$('input').val() is ''
 
 		onClickButton: ->
 			# console.log 'vInputTypeahead.onClickButton()'
 			modal = new vModal
 				'items': @alloptions
-			
-			# $('body').append modal.render().$el
 
 			modal.on 'itemselected', (model) => # when user clicks or gives enter on active option the itemselected event is triggered
-				@$('input').val model.get('value')
 				@$el.removeClass 'warning'
+				@$('input').val model.get('key')
 				@trigger 'valuechanged', model.toJSON()
 
 			false
@@ -71,6 +72,7 @@ define (require) ->
 						@navigate 'login' if response.status is 401
 			else
 				@alloptions = new cResult @items.models
+
 		render: ->
 			renderedHTML = _.template tpl,
 				'value': @value
@@ -85,9 +87,13 @@ define (require) ->
 
 			@$('input').typeahead
 				'source': (query, process) =>
-					_.map @alloptions.filter((model) -> model.get('key').indexOf(query) isnt -1), (m) -> 
-						value = m.get('value')
+					filtered = @alloptions.filter (model) ->
+						model.get('key').indexOf(query) isnt -1
+
+					_.map filtered, (m) -> 
+						value = m.get('key')
 						value = value + ' ('+m.get('count')+')' if m.get('count')?
+						value
 
 			@
 

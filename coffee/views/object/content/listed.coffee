@@ -9,8 +9,8 @@ define (require) ->
 			tplRendered = _.template tpl, @model.toJSON()
 			@$el.html tplRendered
 
-			tags = new vTagList
-				tags: @model.get 'tags'
-			@$('.tags-wrapper').html tags.render().$el
+			# tags = new vTagList
+			# 	tags: @model.get 'tags'
+			# @$('.tags-wrapper').html tags.render().$el
 
 			@

@@ -6,7 +6,7 @@ define (require) ->
 		
 		url: ->
 			dbview = @dbview.split '/'
-			'/db/projectx/_design/'+dbview[0]+'/_view/'+dbview[1]
+			'/db/projectx/_design/'+dbview[0]+'/_view/'+dbview[1]+'?include_docs=true'
 
 		initialize: (options) ->
 			# console.log 'BaseCollection.initialize()'
@@ -21,13 +21,8 @@ define (require) ->
 			else
 				Backbone.sync(method, collection, options)
 
-		# parse: (response) ->
-		# 	# console.log 'BaseCollection.parse()'
-		# 	@collectionManager.register @url(), response
-		# 	response.rows
-
 		parse: (response) ->
-			console.log 'cContent.parse()'
-			console.log response
-			@collectionManager.register @url, response
-			_.pluck(response.rows, 'value');
+			# console.log 'BaseCollection.parse()'
+
+			@collectionManager.register @url(), response
+			_.pluck(response.rows, 'doc');

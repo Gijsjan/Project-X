@@ -60,8 +60,7 @@ define (require) ->
 
 		formatlist: (object_type) ->
 			# console.log 'ContentRouter -> formatlist()'
-			v = new vFormatList 
-				'collection': new Collections['content/format']()
+			v = new vFormatList()
 			
 			@globalEvents.trigger 'showView',
 				'render': false

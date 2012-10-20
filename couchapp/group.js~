@@ -13,7 +13,7 @@ module.exports = ddoc;
 ddoc.views.departement = {
 	map: function(doc) {
 		if(doc.type == 'group/departement') {
-			emit(doc.name,  doc.slug);
+			emit(doc.name, {'id': doc._id, 'name': doc.name, 'slug': doc.slug});
 		}
 	}
 };

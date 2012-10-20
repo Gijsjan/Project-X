@@ -5,8 +5,11 @@ define (require) ->
 	class AjaxManager		
 		calls: {}
 
+		baseurl: '/db/projectx/'
+
 		constructor: (globalEvents) ->
 			globalEvents.on 'ajaxGet', @get, @
+			globalEvents.on 'ajaxPut', @put, @
 
 		post: (options) ->
 
@@ -15,13 +18,23 @@ define (require) ->
 				options.success @calls[options.url]
 			else
 				$.ajax
-					'url': options.url
+					'url': @baseurl + options.url
 					'dataType': 'json'
 					'success': (data) =>
 						@calls[options.url] = data
 						options.success(data)
 					'error': (response) =>
 						@navigate 'login' if response.status is 401
+
+		put: (options) ->
+			$.ajax
+				'url': @baseurl + options.url
+				'type': 'put'
+				'dataType': 'json'
+				'success': (data) =>
+					options.success(data)
+				'error': (response) =>
+					@navigate 'login' if response.status is 401
 
 
 		# register: (model) ->

@@ -39,7 +39,7 @@ define (require) ->
 						@filtereditems.reset @items.models
 					else if e.target.value isnt ''
 						value = hlpr.slugify(e.target.value)
-						@filtereditems.reset @items.filter((model) -> model.get('key').indexOf(value) isnt -1)
+						@filtereditems.reset @items.filter((model) -> model.get('slug').indexOf(value) isnt -1)
 
 		adjustScroll: ->
 			activepos = @$('.active').position().top
@@ -93,8 +93,8 @@ define (require) ->
 			ul = @$ 'ul.nav'
 			ul.html ''
 			@filtereditems.each (item, index) ->
-				html = item.get('value')
-				html = html + ' ('+item.get('count')+')' if item.get('count')?
+				html = item.get('key')
+				html = html + ' ('+item.get('count')+')' if item.get('count')? # if the list is rendered as a selector, the count var is available
 
 				a = $('<a />').attr('data-index', index).html html
 				li = $('<li />').html a
