@@ -5,13 +5,16 @@ define (require) ->
 	mUser = require 'models/object/user'
 	cUser = require 'collections/object/user'
 	vFullUser = require 'views/object/user/full'
+	vEditUser = require 'views/object/user/edit'
 	vUserList = require 'views/object/user/list'
 
 
 	class UserRouter extends Backbone.Router
 		routes:
-			"user/:user_id": "showUser"
-			"user": "listUsers"
+			"people/new": "edit"
+			"people/:id/edit": "edit"
+			"people/:id": "showUser"
+			"people": "listUsers"
 
 			"user/:user_id/content": "content"
 			"user/:user_id/content/:slug": "content_type"
@@ -22,19 +25,28 @@ define (require) ->
 			"user/:user_id/groups": "groups"
 			"user/:user_id/group/:slug": "group"
 
-		showUser: (user_id) ->
+		showUser: (id) ->
 			# console.log 'UserRouter.showUser()'
 			
-			
-			model = new mUser
-				'name': user_id
-
-			view = new vFullUser
-				'model': model 
+			model = new mUser 'id': id
+			view = new vFullUser 'model': model 
 
 			@globalEvents.trigger 'showView',
 				'render': false
 				'currentView': view
+
+		edit: (id) ->
+			model = if id? then new mUser('id': id) else new mUser()
+
+			ev = new vEditUser 'model': model
+			ev.on 'done', (model) ->
+				# console.log 'ContentRouter.edit() ' + object_type + ' || EditView || saved!'
+				@navigate 'people/' + id, true
+
+			# USE VIEWMANAGER
+			@globalEvents.trigger 'showView',
+				'render': false
+				'currentView': ev
 
 		listUsers: ->
 			# console.log 'UserRouter.listUsers()'

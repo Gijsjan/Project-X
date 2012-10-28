@@ -55,8 +55,7 @@ define (require) ->
 						@countryselector.collection = collection
 						@list.collection = collection
 						@render()
-					error: (collection, response) =>
-						@navigate 'login' if response.status is 401
+					error: (collection, response) => @globalEvents.trigger response.status+''
 		
 		addTagToSelector: (slug) ->
 			@tagselector.checkboxes.push slug

@@ -24,7 +24,7 @@ define (require) ->
 						@calls[options.url] = data
 						options.success(data)
 					'error': (response) =>
-						@navigate 'login' if response.status is 401
+						@globalEvents.trigger 'unauthorized' if response.status is 401
 
 		put: (options) ->
 			$.ajax
@@ -34,7 +34,7 @@ define (require) ->
 				'success': (data) =>
 					options.success(data)
 				'error': (response) =>
-					@navigate 'login' if response.status is 401
+					@globalEvents.trigger 'unauthorized' if response.status is 401
 
 
 		# register: (model) ->

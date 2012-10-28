@@ -1,13 +1,14 @@
 define (require) ->
-	_ = require 'underscore'
-	vListedContent = require 'views/object/content/listed'
+	# _ = require 'underscore'
+	vListed = require 'views/listed'
 	tpl = require 'text!html/note/listed.html'
 
-	vListedContent.extend
+	class vListedNote extends vListed
+		
 		render: ->
-			vListedContent.prototype.render.apply @
+			super
 
-			tplRendered = _.template tpl, @model.toJSON()
-			@$('.content-body').html tplRendered
+			rtpl = _.template tpl, @model.toJSON()
+			@$('.listed-body').html rtpl
 
 			@

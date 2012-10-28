@@ -3,7 +3,8 @@ define (require) ->
 	_ = require 'underscore'
 	Backbone = require 'backbone'
 	
-	class ViewManager		
+	class ViewManager
+		
 		constructor: (globalEvents) ->
 			@views = new Backbone.Collection()
 			@currentView = new Backbone.View()
@@ -16,6 +17,7 @@ define (require) ->
 			# console.log 'ViewManager => show'
 			@currentView = options.currentView
 			html = if options.render then @currentView.render().$el else @currentView.$el
+			
 			$('div#main').html html # the view is rendered after the model is fetched from the server in the views initialize function
 
 		register: (view) ->
@@ -27,13 +29,13 @@ define (require) ->
 
 			@views.add model
 
-		unregister: (view) ->
-			#console.log 'ViewManager => unregistering '+view.cid
-			view.off()
-			view.remove()
+		# unregister: (view) ->
+		# 	#console.log 'ViewManager => unregistering '+view.cid
+		# 	view.off()
+		# 	view.remove()
 
-			model = @views.get view.cid
-			@views.remove model
+		# 	model = @views.get view.cid
+		# 	@views.remove model
 
 		currentViewToLog: ->
 			console.log @currentView

@@ -4,12 +4,13 @@ define (require) ->
 	vFullContent = require 'views/object/content/full'
 	tpl = require 'text!html/note/full.html'
 
-	vFullContent.extend
-		render: ->
-			body = new Markdown.Converter().makeHtml(@model.get('body'))
-			@model.set 'body', body
+	class vFullNote extends vFullContent
 
-			vFullContent.prototype.render.apply @
+		render: ->
+			# body = new Markdown.Converter().makeHtml(@model.get('body'))
+			# @model.set 'body', body
+
+			super
 
 			tplRendered = _.template tpl, @model.toJSON()
 			@$('.content-body').html tplRendered

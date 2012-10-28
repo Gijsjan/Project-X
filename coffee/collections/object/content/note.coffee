@@ -1,9 +1,9 @@
 define (require) ->
-	Backbone = require 'backbone'
+	BaseCollection = require 'collections/base'
 	mNote = require 'models/object/content/note'
 
-	Backbone.Collection.extend
+	class cNote extends BaseCollection
 
 		model: mNote
 	
-		url: 'api/notes'
+		url: '/b/db/notes'

@@ -1,0 +1,9 @@
+.listed-icon
+	img(src!="/img/<%= bucket %>.png")
+.listed-main
+	.listed-title
+		h4
+			a(href!="/<%= bucket %>/<%= id %>") <%= title %> 
+			small
+				a(href!="/<%= bucket %>/<%= id %>/edit") edit
+	.listed-body

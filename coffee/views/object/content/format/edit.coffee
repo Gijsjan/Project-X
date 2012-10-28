@@ -13,8 +13,8 @@ define (require) ->
 
 	class vEditFormat extends vEditContent
 
-		events:
-			"click h2 small": "showInfo"
+		events: _.extend({}, vEditContent::events,
+			"click h2 small": "showInfo")
 
 		showInfo: ->
 			info = new vContentSettings
@@ -43,7 +43,7 @@ define (require) ->
 				options = _.extend(configdata, 'tablekey': key, 'tablevalue': value) # Extend the config with tablekey (string) and value (cInputTableRow)
 
 				v = new vInputTable options
-				v.on 'valuechanged', @setModel, @ # If the value (cInputTableRow) changes, set the model
+				v.on 'valuechanged', @updateModelAttributes, @ # If the value (cInputTableRow) changes, set the model
 				
 				@$('section.'+key).html v.render().$el
 
@@ -60,11 +60,11 @@ define (require) ->
 			_.each @$('.tab-pane.active textarea'), (textarea) ->
 				$(textarea).height textarea.scrollHeight # set the proper heights for textarea's
 
-		# - setModel is triggered by a change event on an vInputTable
+		# - updateModelAttributes is triggered by a change event on an vInputTable
 		# - the input table returns a key as a string and a value as an object
 		# - the value from the input table has to be turned into a string if the 
 		#   corresponding value in the model is a string 
-		setModel: (key, value) ->
+		updateModelAttributes: (key, value) ->
 			obj = {}
 			if _.isString @model.get(key)
 				obj = value[0] 

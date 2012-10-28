@@ -1,16 +1,16 @@
-define (require) ->
-	_ = require 'underscore'
-	vTagList = require 'views/tag/list'
-	tpl = require 'text!html/content/listed.html'
+# define (require) ->
+# 	_ = require 'underscore'
+# 	vTagList = require 'views/tag/list'
+# 	tpl = require 'text!html/content/listed.html'
 
-	Backbone.View.extend
+# 	Backbone.View.extend
 
-		render: ->
-			tplRendered = _.template tpl, @model.toJSON()
-			@$el.html tplRendered
+# 		render: ->
+# 			tplRendered = _.template tpl, @model.toJSON()
+# 			@$el.html tplRendered
 
-			# tags = new vTagList
-			# 	tags: @model.get 'tags'
-			# @$('.tags-wrapper').html tags.render().$el
+# 			# tags = new vTagList
+# 			# 	tags: @model.get 'tags'
+# 			# @$('.tags-wrapper').html tags.render().$el
 
-			@
+# 			@

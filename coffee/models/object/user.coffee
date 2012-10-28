@@ -1,38 +1,47 @@
 define (require) ->
-	_ = require 'underscore'
-	mObject = require 'models/object/object'
+	# _ = require 'underscore'
+	BaseModel = require 'models/base'
 
-	class mUser extends mObject
+	class mUser extends BaseModel
 
-		'urlRoot': ->
-			# console.log 'mUser.urlRoot()'
-			'/db/projectx/'+@get 'name'
+		'urlRoot': '/b/db/people'
+
+		'defaults':
+			'bucket': 'people'
+			'title': ''
+			'email': ''
+			'password': ''
+			
+		# 'urlRoot': ->
+		# 	# console.log 'mUser.urlRoot()'
+		# 	'/db/projectx/'+@get 'name'
 	
-		defaults: _.extend({}, mObject::defaults,
-			'type': 'user'
-			'name': ''
-			'database': ''
-			'telephone': []
-			'e-mail': [])
+		# defaults: _.extend({}, mObject::defaults,
+		# 	'type': 'user'
+		# 	'name': ''
+		# 	'database': ''
+		# 	'telephone': []
+		# 	'e-mail': [])
 
-		login: ->
-			$.getJSON '/db/_session', (data) =>
-				@set 'name', data.userCtx.name
-				@fetch
-					'success': (model, response) =>
-						@modelManager.register model
-						@globalEvents.trigger 'userLoaded', model
-					'error': (model, response) =>
-						@navigate 'login' if response.status is 401
+		# checkLogin: ->
+		# 	$.getJSON '/db/_session', (data) =>
+		# 		if data.userCtx.name?
+		# 			@set 'name', data.userCtx.name
+		# 			@fetch
+		# 				'success': (model, response) =>
+		# 					@globalEvents.trigger 'userLoaded', model
+		# 				'error': (model, response) =>
+		# 					@navigate 'login' if response.status is 401
+		# 		else
+		# 			@globalEvents.trigger 'login'
 				# @set 'name', data.userCtx.name
 
-		initialize: ->
+		# initialize: ->
 			# @on 'change:name', =>
 			# 	console.log 'mUser.on change:name'
 			# 	console.log @get('name')
 			# 	@fetch
 			# 		'success': (model, response) =>
-			# 			@modelManager.register model
 			# 			@globalEvents.trigger 'userLoaded', model
 			# 		'error': (model, response) =>
 			# 			@navigate 'login' if response.status is 401

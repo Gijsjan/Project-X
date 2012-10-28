@@ -20,8 +20,7 @@ define (require) ->
 					'data': data
 					success: (collection, response) =>
 						@render()
-					error: (collection, response) =>
-						@navigate 'login' if response.status is 401
+					error: (collection, response) => @globalEvents.trigger response.status+''
 
 		render: ->
 			@$el.html _.template tpl, 

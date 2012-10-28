@@ -3,8 +3,8 @@ define (require) ->
 	BaseCollection = require 'collections/base'
 	sListedViews = require 'switchers/views.listed'
 	cUser = require 'collections/object/user'
-	vInputList = require 'views/input/list'
-	vInputTypeahead = require 'views/input/typeahead'
+	# vInputList = require 'views/input/list'
+	# vInputTypeahead = require 'views/input/typeahead'
 	vContainerAccordion = require 'views/container/accordion'
 	vPagination = require 'views/main/pagination'
 	tpl = require 'text!html/format/list.html'
@@ -34,12 +34,10 @@ define (require) ->
 
 			@collection = new cUser 'dbview': 'user/user'
 			@collection.fetch
-				'success': (collection, response) =>
+				success: (collection, response) =>
 					# console.log 'vFormatList.initialize() => fetch().success '
-					@modelManager.register collection.models # PUT IN BASECOLLECTION
 					queue[0] = 'finished'
-				'error': (collection, response) =>
-					@navigate 'login' if response.status is 401
+				error: (collection, response) => @globalEvents.trigger response.status+''
 
 			# ADD RESULT TO COLLECTIONMANAGER
 			@globalEvents.trigger 'ajaxGet',
@@ -102,9 +100,9 @@ define (require) ->
 			# div = $('<div />').attr('id', 'page1').addClass('show')
 			# pagenumber = 1
 			@filtereditems.each (model, i) =>
-				t = new sListedViews[model.get 'type']
+				t = new sListedViews[model.get 'bucket']
 					id: 'object-'+model.get 'id'
-					className: 'content listed '+model.get 'type'
+					className: 'content listed '+model.get 'bucket'
 					model: model
 
 				pagination.addItem t.render().$el, i

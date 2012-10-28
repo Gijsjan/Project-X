@@ -1,10 +1,12 @@
 define (require) ->
 	_ = require 'underscore'
+	BaseModel = require 'models/base'
 	mContent = require 'models/object/content/content'
 
-	class mNote extends mContent
+	class mNote extends BaseModel
+
+		'urlRoot': '/b/db/notes'
 		
-		defaults: _.extend({}, mContent::defaults,
-			'type': 'content/note'
+		'defaults':
 			'title': ''
-			'body': '')
+			'body': ''

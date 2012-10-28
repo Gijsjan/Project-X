@@ -34,6 +34,7 @@ ddoc.views.formatRelations = {
 }
 
 // Produces a list of countries and departements with number of occurences
+
 ddoc.views.formatSelectors = {
 	map: function(doc) {
 		if(doc.type == 'object/country') {

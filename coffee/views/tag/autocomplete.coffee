@@ -62,7 +62,7 @@ define (require) ->
 					@fetchedTagLists[iv] = tags
 					@render tags
 				).error((response) =>
-					@navigate 'login' if response.status is 401
+					@globalEvents.trigger response.status+''
 				)
 			else
 				@render @fetchedTagLists[iv]

@@ -1,10 +1,11 @@
 define (require) ->
-	_ = require 'underscore'
-	vListedContent = require 'views/object/content/listed'
+	# _ = require 'underscore'
+	vListed = require 'views/listed'
 	tpl = require 'text!html/format/listed.html'
 	hlpr = require 'helper'
 
-	class vListedFormat extends vListedContent
+	class vListedFormat extends vListed
+		
 		events: ->
 			'click p[data-key=description]': 'toggleDescription'
 

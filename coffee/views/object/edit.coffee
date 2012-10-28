@@ -3,14 +3,14 @@
 # @options.id - only if id?
 
 define (require) ->
-	$ = require 'jquery'
-	_ = require 'underscore'
-	Backbone = require 'backbone'
+	# $ = require 'jquery'
+	# _ = require 'underscore'
+	# Backbone = require 'backbone'
 	BaseView = require 'views/base'
-	Models = require 'switchers/models'
+	# Models = require 'switchers/models'
 	EditTemplates = require 'switchers/templates.edit'
 	# vModal = require 'views/main/modal'
-	vLogin = require 'views/main/login'
+	# vLogin = require 'views/main/login'
 	helper = require 'helper'
 
 	class vEditObject extends BaseView
@@ -24,11 +24,7 @@ define (require) ->
 			"change textarea.bind": "onInputChanged"
 			"change select.bind": "onInputChanged"
 			
-			"click #sSubmit": "saveObject"
-			"click label[for=title]": "getInfo"
-
-		getInfo: ->
-			console.log @model.attributes
+			"click button.save": "saveObject"
 
 		onInputKeyup: (e) ->
 			if e.keyCode is 13
@@ -42,6 +38,16 @@ define (require) ->
 		onInputChanged: (e) ->
 			@model.set e.target.id, e.target.value, 'silent': true # update the model with a new value
 
+		saveObject: (e) ->
+			console.log 'vEditObject.saveObject()'
+
+			@model.save {},
+				success: (model, response) =>
+					@globalEvents.trigger 'modelSaved', model
+				error: (collection, response) => @globalEvents.trigger response.status+''
+
+			false
+		
 		initialize: ->
 			@model.on 'validated', (errors) ->
 				console.log errors
@@ -53,36 +59,20 @@ define (require) ->
 				@model.fetch
 					success: (model, response) =>
 						@render()
-					error: (model, response) =>
-						console.log 
-						@navigate 'login', Backbone.history.fragment if response.status is 401 
+					error: (model, response) => @globalEvents.trigger response.status+''
 
 			super
 
 		render: ->
 			# console.log 'vEditObject.render()'
-			tpl = EditTemplates[@model.get 'type']
-
+			tpl = EditTemplates[@model.get('bucket')]
+			console.log @model
 			html = _.template tpl, @model.toJSON()
 
 			@$el.html html
 			
 			@
 		
-		saveObject: ->
-			@model.save {},
-				success: (model, response) =>
-					@modelManager.register model
-					@trigger 'done', model
-				error: (model, response) =>
-					if response.status is 401
-						@navigate 'login'
-					else if response.validationerrors?
-						console.log response.validationerrors # debugging
-						@onValidationErrors response.validationerrors
-					else
-						console.log model
-						console.log response
 
 		onValidationErrors: (errors) ->
 			@$('.error').removeClass 'error' # remove all error classes
@@ -93,6 +83,3 @@ define (require) ->
 		addValidationError: (key) ->
 			@$('#'+key).addClass 'error' # add error class to input, textarea and select
 			@$('label[for='+key+']').addClass 'error' # add eror class to label
-
-
-			#false # is this necessary?

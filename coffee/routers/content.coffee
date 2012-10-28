@@ -5,6 +5,7 @@ define (require) ->
 	Models = require 'switchers/models'
 	vContentList = require 'views/object/content/list'
 	vFormatList = require 'views/object/content/format/list'
+	vNoteList = require 'views/object/content/note/list'
 	vObjectListControl = require 'views/object/list.control'
 	hlpr = require 'helper'
 

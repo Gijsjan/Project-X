@@ -305,7 +305,7 @@ define (require) ->
 					ta.on 'valuechanged', (value) ->
 						row.set column.key, value
 
-					renderedView = ta.render().$el
+					renderedView = ta.$el
 					cell.html renderedView
 
 				# CHANGE TO TYPEAHEAD STYLE

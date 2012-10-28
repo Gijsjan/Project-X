@@ -1,0 +1,369 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"coll",
+				"collectionUrl"
+			],
+			[
+				"col",
+				"collectionUrl"
+			],
+			[
+				"collection",
+				"collectionManager"
+			],
+			[
+				"user",
+				"userCtx"
+			]
+		]
+	},
+	"buffers":
+	[
+	],
+	"build_system": "",
+	"command_palette":
+	{
+		"height": 392.0,
+		"selected_items":
+		[
+			[
+				"install",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 449.0
+	},
+	"console":
+	{
+		"height": 139.0
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/home/gijs/www-src/coffee/views/object/content/video/listed.coffee",
+		"/home/gijs/www-src/coffee/app.coffee",
+		"/home/gijs/www-src/coffee/views/object/content/note/listed.coffee",
+		"/home/gijs/www-src/coffee/views/listed.coffee",
+		"/home/gijs/www-src/coffee/views/object/content/event/listed.coffee",
+		"/home/gijs/www-src/coffee/views/object/content/document/listed.coffee",
+		"/home/gijs/www-src/coffee/views/object/content/link/listed.coffee",
+		"/home/gijs/www-src/coffee/views/object/content/format/listed.coffee",
+		"/home/gijs/www-src/coffee/views/object/user/list.coffee",
+		"/home/gijs/www-src/coffee/views/object/content/listed.coffee",
+		"/home/gijs/www-src/coffee/views/base.coffee",
+		"/home/gijs/www-src/coffee/routers/main.coffee",
+		"/home/gijs/www-src/coffee/collections/object/content/note.coffee",
+		"/home/gijs/www-src/coffee/collections/object/user.coffee",
+		"/home/gijs/www-src/coffee/models/object/content/note.coffee",
+		"/home/gijs/www-src/coffee/models/object/user.coffee",
+		"/home/gijs/www-src/coffee/models/base.coffee",
+		"/home/gijs/www-src/coffee/switchers/views.listed.coffee",
+		"/home/gijs/www-src/coffee/models/object/object.coffee",
+		"/home/gijs/www-src/coffee/modelmanager.coffee",
+		"/home/gijs/www-src/coffee/collectionmanager.coffee",
+		"/home/gijs/www-src/coffee/views/object/edit.coffee",
+		"/home/gijs/www-src/coffee/routers/notes.coffee",
+		"/home/gijs/www-src/coffee/views/object/content/note/list.coffee",
+		"/home/gijs/www-src/coffee/viewmanager.coffee",
+		"/home/gijs/www-src/coffee/collections/base.coffee",
+		"/home/gijs/www-src/coffee/views/object/content/edit.coffee",
+		"/home/gijs/www-src/coffee/views/object/content/note/edit.coffee",
+		"/home/gijs/www-src/coffee/views/object/full.coffee",
+		"/home/gijs/www-src/coffee/views/object/content/format/list.coffee",
+		"/home/gijs/www-src/coffee/models/object/content/format.coffee",
+		"/home/gijs/www-src/coffee/views/object/content/list.coffee",
+		"/home/gijs/www-src/coffee/switchers/templates.edit.coffee",
+		"/home/gijs/www-src/coffee/views/object/content/note/full.coffee",
+		"/home/gijs/www-src/coffee/views/object/content/full.coffee",
+		"/home/gijs/www-src/coffee/views/object/user/full.coffee",
+		"/home/gijs/www-src/coffee/models/object/content/content.coffee",
+		"/home/gijs/www-src/coffee/routers/content.coffee",
+		"/home/gijs/www-src/coffee/routers/user.coffee",
+		"/home/gijs/www-src/coffee/views/main/menu.coffee",
+		"/home/gijs/www-src/coffee/routers/admin.coffee",
+		"/home/gijs/www-src/coffee/views/admin/home.coffee",
+		"/home/gijs/www-src/coffee/views/autocomplete/list.coffee",
+		"/home/gijs/www-src/coffee/ajaxmanager.coffee",
+		"/home/gijs/www-src/coffee/views/input/list.coffee",
+		"/home/gijs/www-src/coffee/views/input/typeahead.coffee",
+		"/home/gijs/www-src/coffee/views/input/table.coffee",
+		"/home/gijs/www-src/coffee/views/main/login.coffee",
+		"/home/gijs/www-src/coffee/views/object/content/format/edit.coffee",
+		"/home/gijs/www-src/coffee/views/main/popup.coffee",
+		"/home/gijs/www-src/coffee/views/object/content/link/edit.coffee",
+		"/home/gijs/www-src/coffee/views/object/content/event/edit.coffee",
+		"/home/gijs/www-src/coffee/views/object/content/document/edit.coffee",
+		"/home/gijs/www-src/coffee/main.coffee"
+	],
+	"find":
+	{
+		"height": 35.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+			""
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"saveObject",
+			"sListedViews",
+			"clearChangedCollections",
+			"model",
+			"collectionmanager",
+			"modelmanager",
+			"modelmanager.unreg",
+			"id",
+			"obj",
+			"collections",
+			"id",
+			"modelmanager.register",
+			"removeCollections",
+			"		# unregister: (view) ->\n		# 	#console.log 'ViewManager => unregistering '+view.cid\n		# 	view.off()\n		# 	view.remove()\n\n		# 	model = @views.get view.cid\n		# 	@views.remove model",
+			"unregister",
+			"remove",
+			"meta",
+			"sync",
+			"@modelManager",
+			"modelmanager",
+			"Models",
+			"vObjectListControl",
+			"vLogin",
+			"modelmanager",
+			"showView",
+			"render()",
+			"charset",
+			"note",
+			"Format",
+			"format",
+			"Format",
+			"cNote",
+			"note",
+			"@$('#value').val()",
+			"@$('#bucket').val()",
+			"person",
+			"getKeys",
+			"key",
+			"@keys",
+			"getObject",
+			"render: ->",
+			"\"",
+			"shortcut2",
+			"shortcuttocountries",
+			"emptyValue",
+			"typeah",
+			"vInput",
+			"typeahead",
+			"vType",
+			"cResult",
+			"render",
+			"http://",
+			"setTimeout",
+			"setInterval",
+			"0",
+			"setTimeout",
+			"$('#username')",
+			"loginSuccess",
+			"userLoaded",
+			"loginSuccess",
+			"userLoaded",
+			"sSubmit",
+			"valuechanged(model",
+			"setModel",
+			"valuechanged",
+			"userLoaded"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"sheets":
+			[
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 0.0
+	},
+	"input":
+	{
+		"height": 33.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"replace":
+	{
+		"height": 0.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+			[
+				"modelsuser",
+				"models/object/user.coffee"
+			],
+			[
+				"useredit",
+				"views/object/user/edit.coffee"
+			],
+			[
+				"routers",
+				"routers/user.coffee"
+			],
+			[
+				"objectedit",
+				"views/object/edit.coffee"
+			],
+			[
+				"coll",
+				"collectionmanager.coffee"
+			],
+			[
+				"modelsbase",
+				"models/base.coffee"
+			],
+			[
+				"app",
+				"app.coffee"
+			],
+			[
+				"modelm",
+				"modelmanager.coffee"
+			],
+			[
+				"routersmain",
+				"routers/main.coffee"
+			],
+			[
+				"viewm",
+				"viewmanager.coffee"
+			],
+			[
+				"collec",
+				"collectionmanager.coffee"
+			],
+			[
+				"notelist",
+				"views/object/content/note/list.coffee"
+			],
+			[
+				"routesnots",
+				"routers/notes.coffee"
+			],
+			[
+				"viewma",
+				"viewmanager.coffee"
+			],
+			[
+				"collection",
+				"collections/base.coffee"
+			],
+			[
+				"modelsnote",
+				"models/object/content/note.coffee"
+			],
+			[
+				"models",
+				"models/base.coffee"
+			],
+			[
+				"model",
+				"modelmanager.coffee"
+			],
+			[
+				"viewsnoteedit",
+				"views/object/content/note/edit.coffee"
+			],
+			[
+				"viewsobjectfull",
+				"views/object/full.coffee"
+			],
+			[
+				"modelman",
+				"modelmanager.coffee"
+			],
+			[
+				"routercontent",
+				"routers/content.coffee"
+			],
+			[
+				"type",
+				"views/input/typeahead.coffee"
+			],
+			[
+				"login",
+				"views/main/login.coffee"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"show_minimap": true,
+	"show_open_files": true,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 314.0,
+	"status_bar_visible": true
+}

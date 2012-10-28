@@ -31,20 +31,19 @@ define (require) ->
 				value = @$('input').val()
 				index = value.lastIndexOf(' (')
 				value = if index > -1 then value.substring(0, index) else value
-				console.log model.get('value')
-				console.log value.toLowerCase()
 				return model.get('value') is value
 
 			hlpr.delay 300, => # delay is waiting for find() to finish
 				if model?
-					@trigger 'valuechanged', model.toJSON()
+					# @trigger 'valuechanged', model.toJSON()
+					@valuechanged(model)
 				else
 					@$el.addClass 'warning'
-					@trigger 'valuechanged', @emptyValue()
+					@valuechanged()
 		
 		onBlur: ->
 			# console.log 'vInputTypeahead.onBlur'
-			@trigger 'valuechanged', @emptyValue() if @$('input').val() is ''
+			@valuechanged() if @$('input').val() is ''
 
 		onClickButton: ->
 			# console.log 'vInputTypeahead.onClickButton()'
@@ -54,12 +53,16 @@ define (require) ->
 			modal.on 'itemselected', (model) => # when user clicks or gives enter on active option the itemselected event is triggered
 				@$el.removeClass 'warning'
 				@$('input').val model.get('key')
-				@trigger 'valuechanged', model.toJSON()
+				@valuechanged(model)
 
 			false
 
+		valuechanged: (model) ->
+			value = if model? then model.get('id') else ""
+			@trigger 'valuechanged', value
+
 		initialize: ->		
-			@value = if @options.value? and @options.value isnt '' then @options.value else @emptyValue() # the initial value the <input> should hold
+			@value = if @options.value? and @options.value isnt '' then @options.value else '' # the initial value the <input> should hold
 			@span = if @options.span? then @options.span else 2 # the width of the input
 			@selectfromlist = if @options.selectfromlist? then @options.selectfromlist else false # if the user can select the item from a list (modal)
 			@dbview = if @options.dbview? then @options.dbview else '' # DBview is the name of the view in CouchDB ie: 'object/countries'
@@ -68,14 +71,20 @@ define (require) ->
 			if @items is '' and @dbview isnt ''
 				@alloptions = new cResult 'dbview': @dbview
 				@alloptions.fetch
-					'error': (collection, response) =>
-						@navigate 'login' if response.status is 401
+					success: (collection, response) =>
+						# console.log collection
+						@render()
+					error: (collection, response) => @globalEvents.trigger response.status+''
 			else
 				@alloptions = new cResult @items.models
+				@render()
 
 		render: ->
+			model = @alloptions.get(@value)
+			value = if model? then model.get('key') else ""
+
 			renderedHTML = _.template tpl,
-				'value': @value
+				'value': value
 				'span': @span
 			@$el.html renderedHTML
 
@@ -96,8 +105,3 @@ define (require) ->
 						value
 
 			@
-
-		emptyValue: ->
-			id: ''
-			key: ''
-			value: ''

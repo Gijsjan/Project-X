@@ -17,13 +17,13 @@ define (require) ->
 	tplProject = require 'text!html/project/edit.html'
 
 	'object/comment': tplComment
-	'object/user': tplUser
+	'people': tplUser
 	
 	'content/event': tplEvent
 	'content/link': tplLink
 	'content/video': tplVideo
 	'content/document': tplDocument
-	'content/note': tplNote
+	'notes': tplNote
 	'content/format': tplFormat
 
 	'group/departement': tplDepartement

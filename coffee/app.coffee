@@ -12,6 +12,9 @@ define (require) ->
     GroupRouter = require 'routers/group'
     ContentRouter = require 'routers/content'
     MainRouter = require 'routers/main'
+    AdminRouter = require 'routers/admin'
+    NotesRouter = require 'routers/notes'
+    vLogin = require 'views/main/login'
     hlpr = require 'helper'
 
     initialize: ->
@@ -20,14 +23,16 @@ define (require) ->
 
         globalEvents = _.extend {}, Backbone.Events
 
-        modelManager = new ModelManager()
         collectionManager = new CollectionManager()
+        modelManager = new ModelManager()
         viewManager = new ViewManager(globalEvents)
         ajaxManager = new AjaxManager(globalEvents)
         
         Backbone.Model::modelManager = modelManager
+        Backbone.Model::collectionManager = collectionManager
         Backbone.Model::globalEvents = globalEvents
 
+        Backbone.Collection::modelManager = modelManager
         Backbone.Collection::collectionManager = collectionManager
         Backbone.Collection::removeByCid = (cid) ->
             model = @getByCid(cid)
@@ -43,6 +48,7 @@ define (require) ->
         Backbone.View::navigate = (loc) -> mainRouter.navigate loc, 'trigger': true # Set a generic navigate function for all views
 
         Backbone.Router::globalEvents = globalEvents
+        Backbone.Router::viewManager = viewManager
         #Backbone.Router::currentView = currentView
 
 
@@ -50,6 +56,8 @@ define (require) ->
         contentRouter = new ContentRouter()
         userRouter = new UserRouter()
         groupRouter = new GroupRouter()
+        adminRouter = new AdminRouter()
+        notesRouter = new NotesRouter()
         mainRouter = new MainRouter() # define mainRouter after objectRouter so mainRouter's routes are used first
 
         # OPT: REWRITE ONCE TO ALL ROUTERS
@@ -84,7 +92,7 @@ define (require) ->
 
                 mainRouter.navigate href, options
 
-        currentUser = new mUser().login()
+        # currentUser = new mUser().checkLogin() # load new user and check if a login cookie is set (and the user can be savely loaded)
 
         new vMenu()
 
@@ -108,3 +116,22 @@ define (require) ->
 
         div = $('<div />').html('routeHistory').on 'click', -> console.log routeHistory
         $('#webdev').append div
+
+        globalEvents.on '401', -> # Unauthorized
+            loginView = new vLogin()
+            $('div#main').html loginView.render().$el
+
+        globalEvents.on 'unauthorized', -> # The 'login' events triggers the route to /login
+            loginView = new vLogin()
+            $('div#main').html loginView.render().$el
+
+        globalEvents.on 'loginSuccess', -> # If the login is a success, the user info is still not loaded, so re-check the login
+            new mUser().checkLogin()
+
+        globalEvents.on 'modelSaved', (model) ->
+            mainRouter.navigate model.get('bucket')+'/'+model.get('id'), 
+                'trigger': true
+
+        globalEvents.on 'modelRemoved', (model) ->
+            mainRouter.navigate model.get('bucket'), 
+                'trigger': true

@@ -1,13 +1,13 @@
 define (require) ->
-	_ = require 'underscore'
-	vListedContent = require 'views/object/content/listed'
+	# _ = require 'underscore'
+	vListed = require 'views/listed'
 	tpl = require 'text!html/video/listed.html'
 
-	vListedContent.extend
+	class vListedVideo extends vListed
 		render: ->
-			vListedContent.prototype.render.apply @
+			super
 
 			tplRendered = _.template tpl, @model.toJSON()
-			@$('.content-body').html tplRendered
+			@$('.listed-body').html tplRendered
 
 			@

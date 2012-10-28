@@ -4,6 +4,7 @@ define (require) ->
 	Backbone = require 'backbone'
 	BaseView = require 'views/base'
 	tplLogin = require 'text!html/main/login.html'
+	hlpr = require 'helper'
 
 	class vLogin extends BaseView
 
@@ -18,17 +19,17 @@ define (require) ->
 		
 		submitForm: ->
 			if @validate()
-				name = $('#username').val()
+				email = $('#username').val()
 
 				$.ajax
 					type: 'POST'
 					dataType: 'json'
-					url: '/db/_session'
+					url: '/b/db/authorize'
 					data:
-						'name': name
+						'email': email
 						'password': $('#password').val()
 					success: (data) =>
-						@globalEvents.trigger 'loginsuccess', data.name # Fire event to re-render the menu
+						@globalEvents.trigger 'loginSuccess'
 						@navigate @routeHistory.pop()
 					error: (data) =>
 						data = $.parseJSON(data.responseText)
@@ -40,6 +41,8 @@ define (require) ->
 
 			@$('.modal').modal
 				'backdrop': 'static'
+
+			@$('.modal').on 'shown', => @$('#username').focus() # focus only works after animation has finished
 
 			@
 

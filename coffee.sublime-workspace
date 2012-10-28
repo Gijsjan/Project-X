@@ -1,0 +1,779 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"coll",
+				"collectionUrl"
+			],
+			[
+				"col",
+				"collectionUrl"
+			],
+			[
+				"collection",
+				"collectionManager"
+			],
+			[
+				"user",
+				"userCtx"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "coffee/modelmanager.coffee",
+			"settings":
+			{
+				"buffer_size": 151,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "coffee/models/base.coffee",
+			"settings":
+			{
+				"buffer_size": 673,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "coffee/routers/notes.coffee",
+			"settings":
+			{
+				"buffer_size": 2053,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "coffee/views/object/content/note/list.coffee",
+			"settings":
+			{
+				"buffer_size": 1533,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "coffee/app.coffee",
+			"settings":
+			{
+				"buffer_size": 5426,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "coffee/viewmanager.coffee",
+			"settings":
+			{
+				"buffer_size": 1190,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "Searching 134 files for \"modelmanager\"\n\n/home/gijs/www-src/coffee/app.coffee:\n    3      _ = require 'underscore'\n    4      Backbone = require 'backbone'\n    5:     ModelManager = require 'modelmanager'\n    6      CollectionManager = require 'collectionmanager'\n    7      ViewManager = require 'viewmanager'\n    .\n   24  \n   25          collectionManager = new CollectionManager()\n   26:         modelManager = new ModelManager()\n   27          viewManager = new ViewManager(globalEvents)\n   28          ajaxManager = new AjaxManager(globalEvents)\n   29          \n   30:         Backbone.Model::modelManager = modelManager\n   31          Backbone.Model::globalEvents = globalEvents\n   32  \n   33:         Backbone.Collection::modelManager = modelManager\n   34          Backbone.Collection::collectionManager = collectionManager\n   35          Backbone.Collection::removeByCid = (cid) ->\n   ..\n   38  \n   39          Backbone.View::routeHistory = routeHistory\n   40:         Backbone.View::modelManager = modelManager\n   41          Backbone.View::collectionManager = collectionManager\n   42          # Backbone.View::ajaxManager = ajaxManager\n   ..\n   98          $('#webdev').append div\n   99  \n  100:         div = $('<div />').html('modelManager').on 'click', -> console.log hlpr.deepCopy(modelManager.models)\n  101          $('#webdev').append div\n  102  \n  103:         div = $('<div />').html('modelManager.collections').on 'click', -> console.log hlpr.deepCopy(modelManager.collections)\n  104          $('#webdev').append div\n  105  \n\n/home/gijs/www-src/coffee/modelmanager.coffee:\n    3  	_ = require 'underscore'\n    4  	\n    5: 	class ModelManager		\n    6  		models: {}\n    7  \n\n/home/gijs/www-src/coffee/collections/base.coffee:\n   22  				obj.data.id = obj.meta.key\n   23  				delete obj.meta\n   24: 				@modelManager.register obj.data, @url\n   25  				obj.data\n   26  \n\n/home/gijs/www-src/coffee/models/base.coffee:\n   10  			# console.log 'BaseModel.sync()'\n   11  \n   12: 			m = @modelManager.models[@id]\n   13  			if method is 'read' and m?\n   14  				options.success(m)\n   ..\n   17  \n   18  		parse: (response) ->\n   19: 			@modelManager.register response\n   20  \n   21  			if response.meta? # a !!!collection!!! returns objects with the meta attribute (which hold the bucket and key)\n\n/home/gijs/www-src/coffee/models/object/content/format.coffee:\n   92  			# console.log 'mFormat.sync()'\n   93  \n   94: 			m = @modelManager.models[@id]\n   95  			if method is 'read' and m?\n   96  				options.success(m)\n\n19 matches across 5 files\n\n\nSearching 134 files for \"collectionmanager\"\n\n/home/gijs/www-src/coffee/app.coffee:\n    4      Backbone = require 'backbone'\n    5      ModelManager = require 'modelmanager'\n    6:     CollectionManager = require 'collectionmanager'\n    7      ViewManager = require 'viewmanager'\n    8      AjaxManager = require 'ajaxmanager'\n    .\n   23          globalEvents = _.extend {}, Backbone.Events\n   24  \n   25:         collectionManager = new CollectionManager()\n   26          modelManager = new ModelManager()\n   27          viewManager = new ViewManager(globalEvents)\n   ..\n   32  \n   33          Backbone.Collection::modelManager = modelManager\n   34:         Backbone.Collection::collectionManager = collectionManager\n   35          Backbone.Collection::removeByCid = (cid) ->\n   36              model = @getByCid(cid)\n   ..\n   39          Backbone.View::routeHistory = routeHistory\n   40          Backbone.View::modelManager = modelManager\n   41:         Backbone.View::collectionManager = collectionManager\n   42          # Backbone.View::ajaxManager = ajaxManager\n   43          Backbone.View::globalEvents = globalEvents\n   ..\n  104          $('#webdev').append div\n  105  \n  106:         div = $('<div />').html('collectionManager').on 'click', -> console.log hlpr.deepCopy(collectionManager.collections)\n  107          $('#webdev').append div\n  108  \n\n/home/gijs/www-src/coffee/collectionmanager.coffee:\n    4  	h = require 'helper'\n    5  	\n    6: 	class CollectionManager		\n    7  		collections: {}\n    8  \n\n/home/gijs/www-src/coffee/collections/ac.result.coffee:\n   28  			# console.log 'BaseCollection.parse()'\n   29  \n   30: 			@collectionManager.register @url(), response\n   31  			response.rows\n   32  \n\n/home/gijs/www-src/coffee/collections/base.coffee:\n    7  		sync: (method, collection, options) ->\n    8  			# console.log 'BaseCollection.sync()'\n    9: 			cachedResponse = @collectionManager.collections[@url]\n   10  \n   11  			if method is 'read' and cachedResponse?\n   ..\n   16  		parse: (response) ->\n   17  			# console.log 'BaseCollection.parse()'\n   18: 			@collectionManager.register @url, response\n   19  \n   20  			response = _.map response, (obj) =>\n   ..\n   38  		# 	# console.log 'BaseCollection.parse()'\n   39  		# 	url = if typeof @url is 'function' then @url() else @url\n   40: 		# 	@collectionManager.register url, response\n   41  		# 	_.pluck(response.rows, 'doc');\n\n/home/gijs/www-src/coffee/collections/object/content/content.coffee:\n   14  		parse: (response) ->\n   15  			# console.log 'cContent.parse()'\n   16: 			@collectionManager.register @url, response\n   17  			_.pluck(response.rows, 'value');\n   18  	\n\n/home/gijs/www-src/coffee/collections/object/content/format.coffee:\n   13  		# 	# console.log 'cFormat.sync()'\n   14  \n   15: 		# 	c = @collectionManager.collections[@url]\n   16  		# 	if method is 'read' and c?\n   17  		# 		options.success(c)\n\n/home/gijs/www-src/coffee/views/object/content/format/list.coffee:\n   43  					@navigate 'login' if response.status is 401\n   44  \n   45: 			# ADD RESULT TO COLLECTIONMANAGER\n   46  			@globalEvents.trigger 'ajaxGet'\n   47  				'url': '_design/content/_view/formatSelectors?group=true'\n\n/home/gijs/www-src/coffee/views/object/user/list.coffee:\n   41  					@navigate 'login' if response.status is 401\n   42  \n   43: 			# ADD RESULT TO COLLECTIONMANAGER\n   44  			@globalEvents.trigger 'ajaxGet',\n   45  				'url': '_design/content/_view/formatSelectors?group=true'\n\n19 matches across 8 files\n",
+			"settings":
+			{
+				"buffer_size": 6038,
+				"line_ending": "Unix",
+				"name": "Find Results",
+				"scratch": true
+			}
+		},
+		{
+			"file": "coffee/collections/base.coffee",
+			"settings":
+			{
+				"buffer_size": 1194,
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "",
+	"command_palette":
+	{
+		"height": 392.0,
+		"selected_items":
+		[
+			[
+				"install",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 449.0
+	},
+	"console":
+	{
+		"height": 139.0
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/home/gijs/www-src/coffee/collectionmanager.coffee",
+		"/home/gijs/www-src/coffee/views/object/edit.coffee",
+		"/home/gijs/www-src/coffee/views/object/content/edit.coffee",
+		"/home/gijs/www-src/coffee/views/object/content/note/edit.coffee",
+		"/home/gijs/www-src/coffee/routers/notes.coffee",
+		"/home/gijs/www-src/coffee/models/base.coffee",
+		"/home/gijs/www-src/coffee/collections/base.coffee",
+		"/home/gijs/www-src/coffee/collections/object/user.coffee",
+		"/home/gijs/www-src/coffee/collections/object/content/note.coffee",
+		"/home/gijs/www-src/coffee/views/object/content/note/list.coffee",
+		"/home/gijs/www-src/coffee/viewmanager.coffee",
+		"/home/gijs/www-src/coffee/app.coffee",
+		"/home/gijs/www-src/coffee/views/base.coffee",
+		"/home/gijs/www-src/coffee/models/object/content/note.coffee",
+		"/home/gijs/www-src/coffee/views/object/full.coffee",
+		"/home/gijs/www-src/coffee/views/object/user/list.coffee",
+		"/home/gijs/www-src/coffee/modelmanager.coffee",
+		"/home/gijs/www-src/coffee/models/object/user.coffee",
+		"/home/gijs/www-src/coffee/views/object/content/format/list.coffee",
+		"/home/gijs/www-src/coffee/models/object/content/format.coffee",
+		"/home/gijs/www-src/coffee/views/object/content/list.coffee",
+		"/home/gijs/www-src/coffee/switchers/templates.edit.coffee",
+		"/home/gijs/www-src/coffee/views/object/content/note/full.coffee",
+		"/home/gijs/www-src/coffee/views/object/content/full.coffee",
+		"/home/gijs/www-src/coffee/views/object/user/full.coffee",
+		"/home/gijs/www-src/coffee/models/object/content/content.coffee",
+		"/home/gijs/www-src/coffee/models/object/object.coffee",
+		"/home/gijs/www-src/coffee/routers/content.coffee",
+		"/home/gijs/www-src/coffee/routers/user.coffee",
+		"/home/gijs/www-src/coffee/routers/main.coffee",
+		"/home/gijs/www-src/coffee/views/main/menu.coffee",
+		"/home/gijs/www-src/coffee/routers/admin.coffee",
+		"/home/gijs/www-src/coffee/views/admin/home.coffee",
+		"/home/gijs/www-src/coffee/views/autocomplete/list.coffee",
+		"/home/gijs/www-src/coffee/ajaxmanager.coffee",
+		"/home/gijs/www-src/coffee/views/input/list.coffee",
+		"/home/gijs/www-src/coffee/views/input/typeahead.coffee",
+		"/home/gijs/www-src/coffee/views/input/table.coffee",
+		"/home/gijs/www-src/coffee/views/main/login.coffee",
+		"/home/gijs/www-src/coffee/views/object/content/format/edit.coffee",
+		"/home/gijs/www-src/coffee/views/main/popup.coffee",
+		"/home/gijs/www-src/coffee/views/object/content/link/edit.coffee",
+		"/home/gijs/www-src/coffee/views/object/content/event/edit.coffee",
+		"/home/gijs/www-src/coffee/views/object/content/document/edit.coffee",
+		"/home/gijs/www-src/coffee/main.coffee"
+	],
+	"find":
+	{
+		"height": 35.0
+	},
+	"find_in_files":
+	{
+		"height": 93.0,
+		"where_history":
+		[
+			""
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"collectionmanager",
+			"modelmanager",
+			"modelmanager.unreg",
+			"id",
+			"obj",
+			"collections",
+			"id",
+			"modelmanager.register",
+			"removeCollections",
+			"		# unregister: (view) ->\n		# 	#console.log 'ViewManager => unregistering '+view.cid\n		# 	view.off()\n		# 	view.remove()\n\n		# 	model = @views.get view.cid\n		# 	@views.remove model",
+			"unregister",
+			"remove",
+			"meta",
+			"sync",
+			"@modelManager",
+			"modelmanager",
+			"Models",
+			"vObjectListControl",
+			"vLogin",
+			"modelmanager",
+			"showView",
+			"render()",
+			"charset",
+			"note",
+			"Format",
+			"format",
+			"Format",
+			"cNote",
+			"note",
+			"@$('#value').val()",
+			"@$('#bucket').val()",
+			"person",
+			"getKeys",
+			"key",
+			"@keys",
+			"getObject",
+			"render: ->",
+			"\"",
+			"shortcut2",
+			"shortcuttocountries",
+			"emptyValue",
+			"typeah",
+			"vInput",
+			"typeahead",
+			"vType",
+			"cResult",
+			"render",
+			"http://",
+			"setTimeout",
+			"setInterval",
+			"0",
+			"setTimeout",
+			"$('#username')",
+			"loginSuccess",
+			"userLoaded",
+			"loginSuccess",
+			"userLoaded",
+			"sSubmit",
+			"valuechanged(model",
+			"setModel",
+			"valuechanged",
+			"userLoaded"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 4,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "coffee/modelmanager.coffee",
+					"settings":
+					{
+						"buffer_size": 151,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								122,
+								122
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/CoffeeScript/CoffeeScript.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "coffee/models/base.coffee",
+					"settings":
+					{
+						"buffer_size": 673,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								271,
+								271
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/CoffeeScript/CoffeeScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "coffee/routers/notes.coffee",
+					"settings":
+					{
+						"buffer_size": 2053,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/CoffeeScript/CoffeeScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 306.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "coffee/views/object/content/note/list.coffee",
+					"settings":
+					{
+						"buffer_size": 1533,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/CoffeeScript/CoffeeScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 204.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "coffee/app.coffee",
+					"settings":
+					{
+						"buffer_size": 5426,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								715,
+								715
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/CoffeeScript/CoffeeScript.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 153.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "coffee/viewmanager.coffee",
+					"settings":
+					{
+						"buffer_size": 1190,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								155,
+								155
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/CoffeeScript/CoffeeScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"settings":
+					{
+						"buffer_size": 6038,
+						"regions":
+						{
+							"match":
+							{
+								"flags": 112,
+								"regions":
+								[
+									[
+										166,
+										178
+									],
+									[
+										190,
+										202
+									],
+									[
+										398,
+										410
+									],
+									[
+										417,
+										429
+									],
+									[
+										597,
+										609
+									],
+									[
+										612,
+										624
+									],
+									[
+										728,
+										740
+									],
+									[
+										743,
+										755
+									],
+									[
+										991,
+										1003
+									],
+									[
+										1006,
+										1018
+									],
+									[
+										1238,
+										1250
+									],
+									[
+										1294,
+										1306
+									],
+									[
+										1402,
+										1414
+									],
+									[
+										1470,
+										1482
+									],
+									[
+										1647,
+										1659
+									],
+									[
+										1819,
+										1831
+									],
+									[
+										1997,
+										2009
+									],
+									[
+										2144,
+										2156
+									],
+									[
+										2432,
+										2444
+									],
+									[
+										2737,
+										2754
+									],
+									[
+										2766,
+										2783
+									],
+									[
+										2967,
+										2984
+									],
+									[
+										2991,
+										3008
+									],
+									[
+										3233,
+										3250
+									],
+									[
+										3253,
+										3270
+									],
+									[
+										3524,
+										3541
+									],
+									[
+										3544,
+										3561
+									],
+									[
+										3771,
+										3788
+									],
+									[
+										3832,
+										3849
+									],
+									[
+										4015,
+										4032
+									],
+									[
+										4193,
+										4210
+									],
+									[
+										4445,
+										4462
+									],
+									[
+										4635,
+										4652
+									],
+									[
+										4870,
+										4887
+									],
+									[
+										5108,
+										5125
+									],
+									[
+										5339,
+										5356
+									],
+									[
+										5604,
+										5621
+									],
+									[
+										5881,
+										5898
+									]
+								],
+								"scope": ""
+							}
+						},
+						"selection":
+						[
+							[
+								3949,
+								3949
+							]
+						],
+						"settings":
+						{
+							"detect_indentation": false,
+							"output_tag": 2,
+							"result_base_dir": "",
+							"result_file_regex": "^([A-Za-z\\\\/<].*):$",
+							"result_line_regex": "^ +([0-9]+):",
+							"scroll_past_end": true,
+							"syntax": "Packages/Default/Find Results.hidden-tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 1241.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "coffee/collections/base.coffee",
+					"settings":
+					{
+						"buffer_size": 1194,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								674,
+								674
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/CoffeeScript/CoffeeScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 0.0
+	},
+	"input":
+	{
+		"height": 33.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"replace":
+	{
+		"height": 0.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+			[
+				"viewm",
+				"viewmanager.coffee"
+			],
+			[
+				"collec",
+				"collectionmanager.coffee"
+			],
+			[
+				"app",
+				"app.coffee"
+			],
+			[
+				"notelist",
+				"views/object/content/note/list.coffee"
+			],
+			[
+				"routesnots",
+				"routers/notes.coffee"
+			],
+			[
+				"viewma",
+				"viewmanager.coffee"
+			],
+			[
+				"collection",
+				"collections/base.coffee"
+			],
+			[
+				"coll",
+				"collectionmanager.coffee"
+			],
+			[
+				"modelsbase",
+				"models/base.coffee"
+			],
+			[
+				"modelsnote",
+				"models/object/content/note.coffee"
+			],
+			[
+				"models",
+				"models/base.coffee"
+			],
+			[
+				"model",
+				"modelmanager.coffee"
+			],
+			[
+				"viewsnoteedit",
+				"views/object/content/note/edit.coffee"
+			],
+			[
+				"viewsobjectfull",
+				"views/object/full.coffee"
+			],
+			[
+				"modelman",
+				"modelmanager.coffee"
+			],
+			[
+				"routercontent",
+				"routers/content.coffee"
+			],
+			[
+				"type",
+				"views/input/typeahead.coffee"
+			],
+			[
+				"login",
+				"views/main/login.coffee"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"show_minimap": true,
+	"show_open_files": true,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 314.0,
+	"status_bar_visible": true
+}

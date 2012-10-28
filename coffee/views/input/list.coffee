@@ -39,7 +39,7 @@ define (require) ->
 						@filtereditems.reset @items.models
 					else if e.target.value isnt ''
 						value = hlpr.slugify(e.target.value)
-						@filtereditems.reset @items.filter((model) -> model.get('slug').indexOf(value) isnt -1)
+						@filtereditems.reset @items.filter((model) -> model.get('value').indexOf(value) isnt -1)
 
 		adjustScroll: ->
 			activepos = @$('.active').position().top
@@ -67,13 +67,11 @@ define (require) ->
 				# create and fetch all items, render view and reset @filtereditems
 				@items = new cResult 'dbview': @dbview
 				@items.fetch
-					'success': (collection, response) =>
+					success: (collection, response) =>
 						# console.log 'vInputList.initialize() @items.fetch() success'
 						@render()
 						@filtereditems.reset collection.models
-					'error': (collection, response) =>
-						# console.log 'vInputList.initialize() @items.fetch() error'
-						@navigate 'login' if response.status is 401
+					error: (collection, response) => @globalEvents.trigger response.status+''
 			else
 				@render()
 				@filtereditems.reset @items.models

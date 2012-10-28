@@ -8,31 +8,31 @@ define (require) ->
 
 	class vEditNote extends vEditContent
 	
-		events: _.extend({}, vEditContent.prototype.events,
-			'keyup #body': 'onKeyup')
+		# events: _.extend({}, vEditContent::events,
+		# 	'keyup #body': 'onKeyup')
 
-		onKeyup: (e) ->
-			if not @busy
-				@busy = true
+		# onKeyup: (e) ->
+		# 	if not @busy
+		# 		@busy = true
 
-				setTimeout( =>
-					@renderPagedown $(e.currentTarget).val()
-				, 1600)
+		# 		setTimeout( =>
+		# 			@renderPagedown $(e.currentTarget).val()
+		# 		, 1600)
 
-		renderPagedown: (text) ->
-			@$('#pagedown').html @converter.makeHtml(text)
-			@$('#pagedown').scrollTop @$('#pagedown').height()
-			@busy = false
+		# renderPagedown: (text) ->
+		# 	@$('#pagedown').html @converter.makeHtml(text)
+		# 	@$('#pagedown').scrollTop @$('#pagedown').height()
+		# 	@busy = false
 
-		initialize: ->
-			@converter = new Markdown.Converter()
-			@busy = false
+		# initialize: ->
+		# 	@converter = new Markdown.Converter()
+		# 	@busy = false
 
-			super
+		# 	super
 			
 		render: ->
 			super
 
-			@renderPagedown @model.get('body')
+			# @renderPagedown @model.get('body')
 
 			@

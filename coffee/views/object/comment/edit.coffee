@@ -25,15 +25,11 @@ define (require) ->
 						@$('textarea#comment').val '' #empty the textarea
 						@collection.add model, # add model to the beginning of the collection
 							'at': 0
-					error: (model, response) =>
-						console.log response
-						@navigate 'login' if response.status is 401
+					error: (collection, response) => @globalEvents.trigger response.status+''
 			else
 				@model.save {},
 					success: (model, response) =>
 						console.log 'alla'
 						# @navigate 'object/'+model.get('content_id')
-					error: (model, response) =>
-						console.log response
-						@navigate 'login' if response.status is 401
+					error: (collection, response) => @globalEvents.trigger response.status+''
 						

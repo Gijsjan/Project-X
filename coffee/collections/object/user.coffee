@@ -1,8 +1,9 @@
 define (require) ->
-	_ = require 'underscore'
 	BaseCollection = require 'collections/base'
-	mUser = require 'models/object/user'
+	mPerson = require 'models/object/user'
 
-	class cUser extends BaseCollection
+	class cPeople extends BaseCollection
 
-		model: mUser
+		model: mPerson
+	
+		url: '/b/db/people'

@@ -15,8 +15,7 @@ define (require) ->
 				'dataType': 'json'
 				'success': (data) =>
 					console.log data
-				'error': (response) =>
-					@navigate 'login' if response.status is 401
+				error: (collection, response) => @globalEvents.trigger response.status+''
 
 		render: ->
 			rhtml = _.template tpl, @model.toJSON()

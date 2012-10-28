@@ -3,8 +3,8 @@ define (require) ->
 	BaseCollection = require 'collections/base'
 	sListedViews = require 'switchers/views.listed'
 	vListedFormat = require 'views/object/content/format/listed'
-	vInputList = require 'views/input/list'
-	vInputTypeahead = require 'views/input/typeahead'
+	# vInputList = require 'views/input/list'
+	# vInputTypeahead = require 'views/input/typeahead'
 	vContainerAccordion = require 'views/container/accordion'
 	vPagination = require 'views/main/pagination'
 	cFormat = require 'collections/object/content/format'
@@ -38,10 +38,8 @@ define (require) ->
 			@collection.fetch
 				'success': (collection, response) =>
 					# console.log 'vFormatList.initialize() => fetch().success '
-					@modelManager.register collection.models # PUT IN BASECOLLECTION
 					queue[0] = 'finished'
-				'error': (collection, response) =>
-					@navigate 'login' if response.status is 401
+				error: (collection, response) => @globalEvents.trigger response.status+''
 
 			# ADD RESULT TO COLLECTIONMANAGER
 			@globalEvents.trigger 'ajaxGet'
@@ -74,11 +72,6 @@ define (require) ->
 						@filterCollection()
 
 					queue[1] = 'finished'
-					
-			# $.ajax
-				# 'dataType': 'json'
-				# 'error': (response) =>
-				# 	@navigate 'login' if response.status is 401
 
 			super
 

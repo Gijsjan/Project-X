@@ -1,11 +1,13 @@
 define (require) ->
-	_ = require 'underscore'
+	vListed = require 'views/listed'
 	tpl = require 'text!html/user/listed.html'
 
-	Backbone.View.extend
+	class vListedUser extends vListed
 	
 		render: ->
-			tplr = _.template tpl, @model.toJSON()
-			@$el.html tplr
+			super
+
+			rtpl = _.template tpl, @model.toJSON()
+			@$('.listed-body').html rtpl
 
 			@

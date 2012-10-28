@@ -1,0 +1,22 @@
+.row	
+	form
+		.span5
+			label(for="bucket") Bucket
+			select#bucket
+				option people
+				option notes
+			label(for="key") Key
+			input#key
+			label(for="value") Value
+			textarea#value
+			label
+			button.btn.btn-primary#submit(type="submit") Save
+		.span5
+			label(for="relation") Relation
+			select
+			label(for="relationtype") type
+			input#relationtype
+
+.row
+	ul#person.nav.nav-list.span5
+	ul#note.nav.nav-list.span5

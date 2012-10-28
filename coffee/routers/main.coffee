@@ -12,12 +12,10 @@ define (require) ->
 			'object/:id': 'object'
 			'tag/:slug': 'tagList'
 			'404': 'notfound'
-			'login': 'login'
-			'logout': 'logout'
+			# 'login': 'login'
+			# 'logout': 'logout'
 
 		home: ->
-			home = new vListControl()
-			$('div#main').html home.$el
 
 		# if an object is not found cuz a) the type is unknown or b) the id is not found, it is redirected to /object/:id
 		# if object cannot find the type and id (ie: the id is wrong), it is redirected to 404
@@ -27,13 +25,7 @@ define (require) ->
 				success: (model, response) =>
 					@navigate response.text+'/'+id,
 						'trigger': true
-				error: (model, response) =>
-					if response.status is 401
-						@navigate 'login',
-							'trigger': true
-					if response.status is 404
-						@navigate '404',
-							'trigger': true
+				error: (model, response) => @globalEvents.trigger response.status+''
 
 
 		contentList: (slug) ->
@@ -49,19 +41,19 @@ define (require) ->
 		notfound: ->
 			$('div#main').html 'not found!'
 
-		login: ->
-			# console.log @lastRoute
-			loginView = new vLogin
-				href: @lastRoute # send lastRoute to the loginView to redirect the user to where s/he came from, lastRoute is stored in app.js
-			$('div#main').html loginView.render().$el
+		# login: ->
+		# 	# console.log @lastRoute
+		# 	loginView = new vLogin
+		# 		href: @lastRoute # send lastRoute to the loginView to redirect the user to where s/he came from, lastRoute is stored in app.js
+		# 	$('div#main').html loginView.render().$el
 
-		logout: ->
-			# $.post('/api/logout').error (response) =>
-			# 	@navigate 'login', true if response.status is 401
-			$.ajax
-				type: 'DELETE'
-				url: '/db/_session'
-				success: =>
-					@globalEvents.trigger 'logoutsuccess'
-					@navigate 'login',
-						'trigger': true
+		# logout: ->
+		# 	# $.post('/api/logout').error (response) =>
+		# 	# 	@navigate 'login', true if response.status is 401
+		# 	$.ajax
+		# 		type: 'DELETE'
+		# 		url: '/db/_session'
+		# 		success: =>
+		# 			@globalEvents.trigger 'logoutsuccess'
+		# 			@navigate 'login',
+		# 				'trigger': true
