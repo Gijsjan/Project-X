@@ -1,5 +1,0 @@
-ul.nav.nav-tabs#myTab
-	|<% _.times(pageTitles.length, function(index) { %>
-	li
-		a(href!="#<%= pageSlugs[index] %>", data-toggle="tab", data-target!="#tab<%= index + 1 %>") <%= pageTitles[index] %>
-	|<% }); %>

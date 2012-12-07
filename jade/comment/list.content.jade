@@ -1,8 +1,0 @@
-|	<% comments.each(function (comment, i) { %>
-.comment(id!="object-<%= comment.get('id') %>")
-	.comment-info
-		span <%= comments.length - i %>
-		a(href!="/user/<%= comment.get('created_by') %>") <%= comment.get('created_by') %>
-		a(href!="/comment/<%= comment.get('id') %>") <%= comment.get('created') %>
-	.comment-body <%= comment.get('comment') %>
-|	<% }); %>

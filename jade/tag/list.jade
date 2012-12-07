@@ -1,5 +1,0 @@
-| <%	tags.each(function(tag) { %>
-li.tag-item
-	a.tag(href!="/<%= tag.get('type') %>/<%= tag.get('slug') %>") <%= tag.get('slug') %>
-	span.add-tag +
-| <% 	}); %>

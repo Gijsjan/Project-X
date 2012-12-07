@@ -1,8 +1,0 @@
-.comment(id!="object-<%= id %>")
-	nav.comment-menu
-		a.editevent(href!="/<%= type %>/edit/<%= id %>") edit
-		span.delete delete
-	.comment-info
-		a(href!="/user/<%= created_by %>") <%= created_by %>
-		a(href!="/comment/<%= id %>") <%= created %>
-	.comment-body <%= comment %>
