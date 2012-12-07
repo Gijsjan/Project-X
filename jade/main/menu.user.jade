@@ -1,0 +1,11 @@
+ul.nav.pull-right
+	li.dropdown
+		a.dropdown-toggle(href="#", data-toggle="dropdown") <%= email %>
+			b.caret
+		ul.dropdown-menu
+			li
+				a(href!="/people/<%= id %>") Profile
+			li
+				a(href!="/admin") Admin
+			li
+				a.logout(href="/") logout

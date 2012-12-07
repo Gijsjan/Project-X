@@ -1,45 +1,55 @@
 define (require) ->
-	mObject = require 'models/object/object'
-	vLogin = require 'views/main/login'
-	vContentList = require 'views/object/content/list'
-	vListControl = require 'views/object/content/list.control'
+	BaseRouter = require 'routers/base'
+	# mObject = require 'models/object/object'
+	# vLogin = require 'views/main/login'
+	# vContentList = require 'views/object/content/list'
+	# vListControl = require 'views/object/content/list.control'
 
-	Backbone.Router.extend
-		routes:
-			"": "home"
-			'all': 'home'
-			'content': 'home'
-			'object/:id': 'object'
-			'tag/:slug': 'tagList'
+	class MainRouter extends BaseRouter
+
+		'routes':
+			'': 'home'
 			'404': 'notfound'
+
+			# 'test/2012filter': 'filter2012'
+			# 'all': 'home'
+			# 'content': 'home'
+			# 'object/:id': 'object'
+			# 'tag/:slug': 'tagList'
 			# 'login': 'login'
 			# 'logout': 'logout'
 
 		home: ->
+			@breadcrumbs = {}
+
+			$('div#main').html ''
+
+		notfound: ->
+			@breadcrumbs = 'Not found': ''
+
+			$('div#main').html 'not found!' # CHANGE TO VIEW
 
 		# if an object is not found cuz a) the type is unknown or b) the id is not found, it is redirected to /object/:id
 		# if object cannot find the type and id (ie: the id is wrong), it is redirected to 404
-		object: (id) ->
-			model = new mObject 'id': id
-			model.fetch
-				success: (model, response) =>
-					@navigate response.text+'/'+id,
-						'trigger': true
-				error: (model, response) => @globalEvents.trigger response.status+''
+		# object: (id) ->
+		# 	model = new mObject 'id': id
+		# 	model.fetch
+		# 		success: (model, response) =>
+		# 			@navigate response.text+'/'+id,
+		# 				'trigger': true
+		# 		error: (model, response) => @globalEvents.trigger response.status+''
 
 
-		contentList: (slug) ->
-			home = new vListControl
-				preSelectedContent: [slug]
-			$('div#main').html home.$el
+		# contentList: (slug) ->
+		# 	home = new vListControl
+		# 		preSelectedContent: [slug]
+		# 	$('div#main').html home.$el
 
-		tagList: (slug) ->
-			home = new vListControl
-				preSelectedTag: [slug]
-			$('div#main').html home.$el
+		# tagList: (slug) ->
+		# 	home = new vListControl
+		# 		preSelectedTag: [slug]
+		# 	$('div#main').html home.$el
 
-		notfound: ->
-			$('div#main').html 'not found!'
 
 		# login: ->
 		# 	# console.log @lastRoute

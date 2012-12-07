@@ -6,5 +6,5 @@ define (require) ->
 	class mListItem extends Backbone.Model
 
 		'defaults':
-			'key': '' # name
-			'value': '' # slug
+			'id': '' # name
+			'title': '' # slug

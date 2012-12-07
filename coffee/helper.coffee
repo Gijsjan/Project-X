@@ -4,10 +4,10 @@ define (require) ->
 	Backbone = require 'backbone'
 
 	content_objects: ['note', 'video', 'link', 'document', 'event', 'format']
-
+	
 	objects: ['user', 'tag', 'comment', 'country']
 
-	groups: ['departement', 'organisation', 'project']
+	groups: ['department', 'organisation', 'project']
 
 	# Cuts a string to 'length' and then finds the last index of a space to make a nice cut and adds three dots.
 	partial: (string, length) ->

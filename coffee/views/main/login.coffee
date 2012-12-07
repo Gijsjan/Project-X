@@ -1,7 +1,4 @@
 define (require) ->
-	$ = require 'jquery'
-	_ = require 'underscore'
-	Backbone = require 'backbone'
 	BaseView = require 'views/base'
 	tplLogin = require 'text!html/main/login.html'
 	hlpr = require 'helper'
@@ -18,24 +15,11 @@ define (require) ->
 				@$('.modal').modal('hide')
 		
 		submitForm: ->
-			if @validate()
-				email = $('#username').val()
+			if @valid()
+				require('models/CurrentUser').login $('#username').val(), $('#password').val()
 
-				$.ajax
-					type: 'POST'
-					dataType: 'json'
-					url: '/b/db/authorize'
-					data:
-						'email': email
-						'password': $('#password').val()
-					success: (data) =>
-						@globalEvents.trigger 'loginSuccess'
-						@navigate @routeHistory.pop()
-					error: (data) =>
-						data = $.parseJSON(data.responseText)
-						@$('#login-alert').html(data.reason).show()
-						@$('button.btn-primary').html 'Try again!'
-		
+		initialize: ->
+
 		render: ->
 			@$el.html _.template(tplLogin)
 
@@ -46,7 +30,7 @@ define (require) ->
 
 			@
 
-		validate: ->
+		valid: ->
 			valid = true
 			@$('#username-alert').css 'visibility', 'hidden'
 			@$('#password-alert').css 'visibility', 'hidden'

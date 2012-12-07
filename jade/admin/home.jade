@@ -1,22 +1,19 @@
 .row	
 	form
-		.span5
+		.span8
 			label(for="bucket") Bucket
 			select#bucket
-				option people
-				option notes
+				| <% for (i in lists) { %>
+				option <%= lists[i] %>
+				| <% } %>
 			label(for="key") Key
 			input#key
 			label(for="value") Value
-			textarea#value
+			textarea.span8#value(style="height:200px")
 			label
 			button.btn.btn-primary#submit(type="submit") Save
-		.span5
-			label(for="relation") Relation
-			select
-			label(for="relationtype") type
-			input#relationtype
 
 .row
-	ul#person.nav.nav-list.span5
-	ul#note.nav.nav-list.span5
+	| <% for (i in lists) { %>
+	ul.nav.nav-list.span3(id!="<%= lists[i] %>")
+	| <% } %>

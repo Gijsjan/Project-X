@@ -1,73 +1,206 @@
-_ = require('underscore')
-db = require('riak-js').getClient()
+_ = require 'underscore'
+http = require 'http'
+
+Models = require './switchers/models'
+
+riak = require './riak'
+relationManager = require './RelationManager'
+CallbackQueue = require './CallbackQueue'
+
 express = require('express')
+RedisStore = require('connect-redis')(express)
+sessionStore = new RedisStore()
 app = express()
 
 app.use express.bodyParser()
 app.use express.cookieParser('b3SSdon4M3SSw14h')
-app.use express.cookieSession 'secret': 'D0ntm3ssw1ththeB3ss'
-
-# app.use (req, res, next) ->
-# 	# console.log req.body
-# 	# if req.session.token
-# 	# 	console.log req.session.token
-# 	# else if req.body.email is 'agijsbro@gmail.com' and req.body.password is 'gijs'
-# 	# 	req.session.token = 'this is a token'
-# 	# else
-# 	# 	writeResponse 401, res
-
-# 	console.log req.session.cookie
-# 	console.log req.cookies
-
+app.use express.cookieSession 
+	'secret': 'D0ntm3ssw1ththeB3ss'
+	'store': sessionStore
+	'cookie':
+		'maxAge': 60 * 60 * 1000 # 60 minutes
+app.use (req, res, next) ->
+	if req.url is '/db/login'
+		next()
+	else if req.session.currentUser?
+		riak.currentUser = req.session.currentUser
+		next()
+	else
+		writeResponse 401, res
 
 app.param 'bucket', (req, res, next, id) ->
 	buckets =
 		'people': {}
 		'notes': {}
+		'departments': {}
+		'organisations': {}
 
 	if buckets.hasOwnProperty(id)
 		next()
 	else
 		writeResponse 404, res
 
-app.get '/db/:bucket', (req, res) ->
-	db.getAll req.params.bucket, (err, data, meta) ->
-		writeResponse data, res
+### GET ###
 
-app.get '/db/:bucket/:id', (req, res) ->	
-	db.get req.params.bucket, req.params.id, (err, data, meta) ->
-		if (err) then writeResponse err.statusCode, res
-		else
-			data['id'] = req.params.id
-			data['bucket'] = req.params.bucket
+# app.get '/db/test/getfromgijs', (req, res) ->
+# 	riak.getfromgijs (data) -> writeResponse data, res
+
+app.get '/db/authorize', (req, res) ->
+	riak.read
+		'bucket': 'people'
+		'key': req.session.currentUser.id
+		success: (data) ->
+			data = 401 if _.isNumber(data) and data isnt 200
 			writeResponse data, res
 
-app.put '/db/:bucket/:id', (req, res) ->
-	delete req.body.id # don't save the id and bucket
-	delete req.body.bucket
+# getRelations = (data, success) ->
+# 	if not _.isEmpty data.relations
+# 		for own relation, value of data.relations
+# 			riak.read
+# 				'bucket': 'relations'
+# 				'key': data.id+'|'+relation
+# 				success: (response) ->
+# 					data.relations[relation] = response
+# 					success data
 
-	db.save req.params.bucket, req.params.id, req.body
+# app.get '/db/:bucket/:key/relations', (req, res) ->
+# 	relationManager.get
+# 		'groupBucket': req.params.bucket
+# 		'groupKey': req.params.key
+# 		success: (relations) -> writeResponse relations, res
 
-	req.body['id'] = req.params.id
-	req.body['bucket'] = req.params.bucket
-	writeResponse req.body, res
+app.get '/db/relations/:key', (req, res) ->
+	riak.read
+		'bucket': 'relations'
+		'key': req.params.key
+		success: (data) -> writeResponse data, res
 
+app.get '/db/:bucket/:key', (req, res) ->
+	relationManager.get
+		'groupBucket': req.params.bucket
+		'groupKey': req.params.key
+		success: (relations) ->
+			riak.read
+				'bucket': req.params.bucket
+				'key': req.params.key
+				success: (data) -> 
+					data.relations = relations
+					writeResponse data, res
+
+	# db.get 'people', req.body.email
+	# writeResponse req.body, res
+
+app.get '/db/relations', (req, res) ->
+	riak.readAllRelations
+		success: (data) -> writeResponse data, res
+
+app.get '/db/:bucket', (req, res) ->
+	riak.readAll
+		'bucket': req.params.bucket
+		success: (data) -> writeResponse data, res
+
+# app.get '/db/:bucket/mine', (req, res) ->
+# 	riak.filterByIndex req.params.bucket, 'owner', req.session.currentUser, (data) -> writeResponse data, res
+
+# app.get '/db/bucket/:bucket/value/:value', (req, res) ->
+# 	riak.filterByKey
+# 		'bucket': req.params.bucket
+# 		'func': 'starts_with'
+# 		'value': req.params.value
+# 		success: (data) -> writeResponse data, res
+
+# app.get '/db/bucket/:bucket/index/:index/value/:value', (req, res) ->
+# 	riak.filterByIndex req.params.bucket, req.params.index, req.params.value, (data) -> writeResponse data, res
+
+### POST ###
+
+#LOGIN
+app.post '/db/login', (req, res) ->
+	riak.filterByIndex
+		'bucket': 'people'
+		'index': 'email'
+		'value': req.body.email
+		success: (people) ->
+			person = new Models['people'] people[0] # email is unique, so only one person should be found and returned
+
+			if person.id? and person.get('password') is req.body.password
+				req.session.currentUser = person.getRelationAttributes()
+				writeResponse person, res
+			else
+				writeResponse 401, res
+
+#LOGOUT
+app.post '/db/logout', (req, res) ->
+	req.session.currentUser = null
+	writeResponse 200, res
+
+# extendData = (req, res, next) ->
+# 	req.body.created = new Date()
+# 	if req.params.bucket is 'notes'
+# 		req.body.owner = req.session.currentUser
+# 	next()
+
+	# if not _.isEmpty req.body.relations
+	# 	for own relation, data of req.body.relations
+	# 		riak.update
+	# 			'bucket': 'relations'
+	# 			'key': req.body.id+'|'+relation
+	# 			'data': data
+	# 			success: (response) ->
+	# 				req.body.relations[relation] = true
+
+#CREATE
 app.post '/db/:bucket', (req, res) ->
-	delete req.body.bucket
+	req.body.created = new Date()
+	req.body.owner = req.session.currentUser if req.params.bucket is 'notes'
 
-	db.save req.params.bucket, undefined, req.body, (err, result, meta) ->
-		req.body['id'] = meta.key
-		req.body['bucket'] = req.params.bucket
-		writeResponse req.body, res
+	model = new Models[req.params.bucket] req.body
+	model.save (value) -> writeResponse value, res
 
-app.post '/db/authorize', (req, res) ->
-	db.get 'people', req.body.email
-	writeResponse req.body, res
 
-app.delete '/db/:bucket/:id', (req, res) ->
-	db.remove req.params.bucket, req.params.id
+### PUT ###
 
-	writeResponse 204, res
+#UPDATE
+
+# app.put '/db/relations', (req, res) ->
+
+app.put '/db/:bucket/:key', (req, res) ->
+	queue = new CallbackQueue 2, (args) ->
+		[model, relations] = [args.model, args.relations]
+		model.relations = relations
+		writeResponse model, res
+
+	model = new Models[req.params.bucket] req.body
+	model.save queue.register('model')
+	
+	relationManager.set
+		'groupModel': model
+		'relations': req.body.relations
+		success: queue.register('relations')
+	# riak.update 
+	# 	'bucket': req.params.bucket
+	# 	'key': req.params.key
+	# 	'data': req.body
+	# 	success: (response) -> writeResponse response, res
+
+
+	# delete req.body.bucket
+
+	# db.save req.params.bucket, undefined, req.body, (err, result, meta) ->
+	# 	req.body['id'] = meta.key
+	# 	req.body['bucket'] = req.params.bucket
+	# 	writeResponse req.body, res
+
+### DELETE ###
+
+app.delete '/db/:bucket/:key', (req, res) ->
+	relationManager.destroy
+		'modelData': req.body.modelData
+
+	riak.remove
+		'bucket': @get('type')
+		'key': @get('id')
+		success: (statusCode) -> writeResponse statusCode, res
 
 	# req.body['id'] = req.params.id
 	# req.body['bucket'] = req.params.bucket

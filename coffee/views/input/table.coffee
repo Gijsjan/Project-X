@@ -4,16 +4,17 @@
 #
 define (require) ->
 	# _ = require 'underscore'
-	# Backbone = require 'backbone'
+	Backbone = require 'backbone'
 	jqueryui = require 'jqueryui'
 	BaseView = require 'views/base'
-	cInputTableRow = require 'collections/input/tablerow'
-	mInputTableRow = require 'models/input/tablerow'
+	# cInputTableRow = require 'collections/input/tablerow'
+	# mInputTableRow = require 'models/input/tablerow'
 	# vInputAutocomplete = require 'views/input/autocomplete'
+	EditableList = require 'views/ui/editablelist'
 	vInputTypeahead = require 'views/input/typeahead'
 	vInputTextarea = require 'views/input/textarea'
 	vInputSelect = require 'views/input/select'
-	vWarning = require 'views/main/warning'
+	vWarning = require 'views/ui/warning'
 	# tpl = require 'text!html/input/table.html'
 	hlpr = require 'helper'
 
@@ -48,7 +49,7 @@ define (require) ->
 			attrs = {}
 			for column, index in @columns
 				attrs[column.key] = ''
-			@tablevalue.push new mInputTableRow(attrs) # add model to end of collection
+			@tablevalue.push new Backbone.Model(attrs) # add model to end of collection
 
 		removeRow: (e) ->
 			# console.log 'vInputTable.removeRow()'
@@ -98,35 +99,9 @@ define (require) ->
 			@tablevalue.on 'change', (model, options) =>
 				@updateModel()
 			
-			@rowlength = if @tablevalue.length > 0 then @tablevalue.length else 3
+			@rowlength = if @tablevalue.length > 0 then @tablevalue.length else 1
 			
 			super
-
-		renderTitle: ->
-			navul = $('<ul />').addClass('nav nav-pills')
-			navli = $('<li />')
-			nava = $('<a />').html(@tabletitle)
-
-			if @addrows			
-				nava.addClass('dropdown-toggle').attr('data-toggle', 'dropdown')
-				navb = $('<b />').addClass('caret')
-				nava.append navb
-				
-				
-				ddli = $('<li />')
-				dda = $('<a />').addClass('add-row').html('Add row')
-				ddli.html dda
-
-				ddul = $('<ul />').addClass('dropdown-menu')
-				ddul.html ddli
-
-				navli.addClass('dropdown')
-				navli.append(ddul)
-
-			navli.prepend(nava)
-			navul.html navli
-
-			navul
 
 		render: ->
 			# Render the table, the cols, tr.headings, tr.totals and div.add-row
@@ -161,7 +136,7 @@ define (require) ->
 				
 				for i in [0..(size-1)]
 					attrs[rowoptionskey] = rowoptions[i] if rowoptionskey isnt '' # add the rowoptions to the rows if the rowoptionskey is set
-					itrs.push(new mInputTableRow attrs)
+					itrs.push new Backbone.Model(attrs)
 
 				@tablevalue.reset itrs
 
@@ -178,6 +153,32 @@ define (require) ->
 	
 			@
 
+		renderTitle: ->
+			navul = $('<ul />').addClass('nav nav-pills')
+			navli = $('<li />')
+			nava = $('<a />').html(@tabletitle)
+
+			if @addrows			
+				nava.addClass('dropdown-toggle').attr('data-toggle', 'dropdown')
+				navb = $('<b />').addClass('caret')
+				nava.append navb
+				
+				
+				ddli = $('<li />')
+				dda = $('<a />').addClass('add-row').html('Add row')
+				ddli.html dda
+
+				ddul = $('<ul />').addClass('dropdown-menu')
+				ddul.html ddli
+
+				navli.addClass('dropdown')
+				navli.append(ddul)
+
+			navli.prepend(nava)
+			navul.html navli
+
+			navul
+
 		renderHeadings: ->
 			rowdiv = $('<div />').addClass('headings row')
 			rowdiv.append $('<div />').addClass('span1 half').html('&nbsp;')
@@ -188,7 +189,7 @@ define (require) ->
 			rowdiv
 
 		# Each row is programmatically created and put before the tr.totals (the last row).
-		# @param row = mInputTableRow || holds the row data (attributes: {'role': 'value', 'departement': {}, 'hours': 'value'})
+		# @param row = mInputTableRow || holds the row data (attributes: {'role': 'value', 'department': {}, 'hours': 'value'})
 		# @param rowindex = int || count of the row, starting at 0
 		renderRow: (row, rowindex) ->
 			rowdiv = $('<div />').addClass('row').attr('data-cid', row.cid)
@@ -306,6 +307,21 @@ define (require) ->
 						row.set column.key, value
 
 					renderedView = ta.$el
+					cell.html renderedView
+
+				when 'editablelist'
+					el = new EditableList
+						'value': row.get(column.key)
+						'dbview': column.input.dbview
+						'span': column.span
+						'selectfromlist': true
+					el.on 'valuechanged', (collection) =>
+						@trigger 'valuechanged', column.key, collection.toJSON()
+
+						# console.log 'vInputTable'
+						# console.log list
+
+					renderedView = el.$el
 					cell.html renderedView
 
 				# CHANGE TO TYPEAHEAD STYLE

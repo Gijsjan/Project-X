@@ -1,31 +1,31 @@
 define (require) ->
 	# OBJECTS
-	tplComment = require 'text!html/comment/edit.html'
-	tplUser = require 'text!html/user/edit.html'
+	# tplComment = require 'text!html/comment/edit.html'
+	tplPeople = require 'text!html/person/edit.html'
 
 	# CONTENT
-	tplEvent = require 'text!html/event/edit.html'
-	tplLink = require 'text!html/link/edit.html'
-	tplVideo = require 'text!html/video/edit.html'
-	tplDocument = require 'text!html/document/edit.html'
-	tplNote = require 'text!html/note/edit.html'
-	tplFormat = require 'text!html/format/edit.html'
+	tplNote = require 'text!html/content/note/edit.html'
+	# tplEvent = require 'text!html/event/edit.html'
+	# tplLink = require 'text!html/link/edit.html'
+	# tplVideo = require 'text!html/video/edit.html'
+	# tplDocument = require 'text!html/document/edit.html'
+	# tplFormat = require 'text!html/format/edit.html'
 
 	# GROUPS
-	tplDepartement = require 'text!html/departement/edit.html'
-	tplOrganisation = require 'text!html/organisation/edit.html'
-	tplProject = require 'text!html/project/edit.html'
+	tplDepartment = require 'text!html/group/department/edit.html'
+	tplOrganisation = require 'text!html/group/organisation/edit.html'
+	tplProject = require 'text!html/group/project/edit.html'
 
-	'object/comment': tplComment
-	'people': tplUser
+	# 'object/comment': tplComment
+	'people': tplPeople
 	
-	'content/event': tplEvent
-	'content/link': tplLink
-	'content/video': tplVideo
-	'content/document': tplDocument
 	'notes': tplNote
-	'content/format': tplFormat
+	# 'content/event': tplEvent
+	# 'content/link': tplLink
+	# 'content/video': tplVideo
+	# 'content/document': tplDocument
+	# 'content/format': tplFormat
 
-	'group/departement': tplDepartement
-	'group/organisation': tplOrganisation
-	'group/project': tplProject
+	'departments': tplDepartment
+	'organisations': tplOrganisation
+	'projects': tplProject

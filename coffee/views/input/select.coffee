@@ -90,17 +90,17 @@ define (require) ->
 
 			@
 
-		validate: (value) ->
-			console.log 'vInputSelect.validate()'
-			index = hlpr.lcarray(@selectoptions).indexOf(value.toLowerCase())
+		# validate: (value) ->
+		# 	console.log 'vInputSelect.validate()'
+		# 	index = hlpr.lcarray(@selectoptions).indexOf(value.toLowerCase())
 			
-			if index is -1
-				@$('.control-group').addClass 'warning'
-			else
-				@$('.control-group').removeClass 'warning'
-				value = @selectoptions[index]
+		# 	if index is -1
+		# 		@$('.control-group').addClass 'warning'
+		# 	else
+		# 		@$('.control-group').removeClass 'warning'
+		# 		value = @selectoptions[index]
 
-			value
+		# 	value
 
 		setInputValue: (value) ->
 			value = @validate value

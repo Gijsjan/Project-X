@@ -1,20 +1,41 @@
-div.navbar.navbar-inverse.navbar-fixed-top
-	div.navbar-inner
-		ul.nav
-			li.active
-				a(href="/") Home
-			li
-				a(href="/content/format") Formats
-			li
-				a(href="/notes") Notes
-			li
-				a(href="/users") Users
-		ul.nav.pull-right
-			li.dropdown
-				a.dropdown-toggle(href="#", data-toggle="dropdown") <%= username %>
-					b.caret
-				ul.dropdown-menu
-					li
-						a(href!="/user/<%= username %>") profile
-					li
-						a(href="/logout") logout
+.navbar.navbar-inverse.navbar-fixed-top
+	.navbar-inner
+		.container
+			ul.nav
+				li.active
+					a(href="/") Home
+				li
+					a(href="/content/format") Formats
+				li.dropdown
+					a.dropdown-toggle(href="#", data-toggle="dropdown") Notes
+						b.caret
+					ul.dropdown-menu
+						li
+							a(href!="/notes/mine") My Notes
+						li
+							a(href!="/notes") All Notes
+						li
+							a(href!="/notes/new") New
+				li.dropdown
+					a.dropdown-toggle(href="#", data-toggle="dropdown") People
+						b.caret
+					ul.dropdown-menu
+						li
+							a(href!="/people") All People
+						li
+							a(href!="/people/new") New Person				
+				li.dropdown
+					a.dropdown-toggle(href="#", data-toggle="dropdown") Groups
+						b.caret
+					ul.dropdown-menu
+						li
+							a(href!="/organisations") Organisations
+						li
+							a(href!="/projects") Projects
+						li
+							a(href!="/departments") Departments
+						li
+							a(href!="/people/new") New Group
+
+ul.breadcrumb
+	.container

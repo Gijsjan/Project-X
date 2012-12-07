@@ -1,13 +1,12 @@
 define (require) ->
-	_ = require 'underscore'
 	Backbone = require 'backbone'
+	viewManager = require 'ViewManager'
 
 	class BaseView extends Backbone.View
 
 		initialize: ->
-			# console.log 'BaseView -> registering'
-			@globalEvents.trigger 'registerView', @
+			viewManager.register @
 
-		unregister: ->
-			# console.log 'BaseView -> unregistering'
-			@globalEvents.trigger 'unregisterView', @
+		navigate: (location) ->
+			router = new Backbone.Router
+			router.navigate location, 'trigger': true

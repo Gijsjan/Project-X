@@ -1,0 +1,7 @@
+.accordion-group
+	.accordion-heading(id!="<%= name %>-heading")
+		a.accordion-toggle(data-toggle="collapse", data-parent="#selectors", href!="#<%= name %>") <%= title %>
+	.accordion-body.collapse(id!="<%= name %>")
+		.accordion-inner
+.accordion-group(style="border:none")
+	.accordion-heading(id!="<%= name %>-selected")

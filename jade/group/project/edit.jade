@@ -1,0 +1,6 @@
+h2 Edit Project
+form
+	div.pull-left
+		label(for="title") Title
+		input.bind#title(type="text", name="title", value!="<%= title %>")
+	button.save.btn.btn-primary(onclick="return false") Save changes

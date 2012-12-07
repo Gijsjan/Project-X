@@ -1,6 +1,6 @@
 define (require) ->
 	BaseView = require 'views/base'
-	cResult = require 'collections/ac.result'
+	cListItems = require 'collections/listitems'
 	tpl = require 'text!html/input/list.html'
 	hlpr = require 'helper'
 
@@ -49,7 +49,7 @@ define (require) ->
 				@$('.overflow').scrollTop(ulpos+activepos-100)
 
 		onClickItem: (e) ->
-			index = $(e.currentTarget).attr('data-index')
+			index = e.currentTarget.dataset.index
 			@trigger 'itemselected', @filtereditems.at(index)
 
 		initialize: ->
@@ -60,12 +60,12 @@ define (require) ->
 			@on 'reset', @reset, @
 			
 			# create filtered items before fetching all items
-			@filtereditems = new cResult()
+			@filtereditems = new cListItems()
 			@filtereditems.on 'reset', @renderItems, @
 
 			if @items is '' and @dbview isnt ''
 				# create and fetch all items, render view and reset @filtereditems
-				@items = new cResult 'dbview': @dbview
+				@items = new cListItems [], 'dbview': @dbview
 				@items.fetch
 					success: (collection, response) =>
 						# console.log 'vInputList.initialize() @items.fetch() success'
@@ -91,7 +91,7 @@ define (require) ->
 			ul = @$ 'ul.nav'
 			ul.html ''
 			@filtereditems.each (item, index) ->
-				html = item.get('key')
+				html = item.get('title')
 				html = html + ' ('+item.get('count')+')' if item.get('count')? # if the list is rendered as a selector, the count var is available
 
 				a = $('<a />').attr('data-index', index).html html

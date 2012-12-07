@@ -1,11 +1,21 @@
 define (require) ->
 	BaseView = require 'views/base'
 	tpl = require 'text!html/admin/home.html'
+	ajax = require 'AjaxManager'
 	hlpr = require 'helper'
 
 	class vAdminHome extends BaseView
 
-		events:
+		'id': 'admin'
+
+		'lists': [
+			'people'
+			'notes'
+			'departments'
+			'organisations'
+		]
+
+		'events':
 			'click #submit': 'onSubmit'
 			'click ul.nav li a': 'getObject'
 			'click ul.nav li a button': 'deleteObject'
@@ -16,10 +26,10 @@ define (require) ->
 			value = @$('#value').val()
 
 			if key isnt ''
-				url = 'http://projectx/riak/buckets/'+bucket+'/keys/'+key
+				url = '/b/db/'+bucket+'/'+key
 				type = 'PUT'
 			else
-				url = 'http://projectx/riak/buckets/'+bucket+'/keys'
+				url = '/b/db/'+bucket
 				type = 'POST'
 
 			$.ajax
@@ -39,19 +49,13 @@ define (require) ->
 		getObject: (e) ->
 			key = e.currentTarget.dataset.key
 			bucket = e.currentTarget.dataset.bucket
-			$.ajax
-				'url': 'http://projectx/riak/buckets/'+bucket+'/keys/'+key # +@$('#bucket').val()
-				'type': 'GET'
-				'contentType': 'application/json; charset=UTF-8'
-				'dataType': 'json'
-				'success': (data) =>
+
+			ajax.get
+				'url': '/db/'+bucket+'/'+key # +@$('#bucket').val()
+				success: (data) =>
 					@$('#bucket').val(bucket)
 					@$('#key').val(key)
-					@$('#value').val(JSON.stringify(data))
-				'error': (response, status, error) =>
-					console.log response
-					console.log status
-					console.log error
+					@$('#value').val(JSON.stringify(data, null, 4))
 
 			false
 
@@ -60,55 +64,26 @@ define (require) ->
 			key = e.currentTarget.dataset.key
 			bucket = e.currentTarget.dataset.bucket
 
-			$.ajax
-				'url': 'http://projectx/riak/buckets/'+bucket+'/keys/'+key # +@$('#bucket').val()
-				'type': 'DELETE'
-				'contentType': 'application/json; charset=UTF-8'
-				'dataType': 'json'
-				'success': (data) =>
-					console.log data
-					@updateView()
-				'error': (response) =>
-					console.log response
+			ajax.delete
+				'url': '/db/'+bucket+'/'+key # +@$('#bucket').val()
+				success: (data) => @updateView()
 
 			false
 
 		updateView: ->
-			@getPeople()
-			@getNotes()
+			for list in @lists
+				@getList(list)
 
-		getPeople: ->
-			$.ajax
-				'url': 'http://projectx/b/db/people' # +@$('#bucket').val()
-				'type': 'GET'
-				'contentType': 'application/json; charset=UTF-8'
-				'dataType': 'json'
-				'success': (data) =>
-					# @people = data
-					# @renderPeople()
-					@renderBucketList('person', data)
-				'error': (response) =>
-					console.log response
-
-		getNotes: ->
-			$.ajax
-				# 'url': 'http://projectx/riak/buckets/notes/keys?keys=true' # +@$('#bucket').val()
-				'url': 'http://projectx/b/db/notes' # +@$('#bucket').val()
-				'type': 'GET'
-				'contentType': 'application/json; charset=UTF-8'
-				'dataType': 'json'
-				'success': (data) =>
-					# @notes = data
-					# @renderNotes()
-					@renderBucketList('note', data)
-				'error': (response) =>
-					console.log response
+		getList: (type) ->
+			ajax.get
+				'url': '/db/'+type
+				success: (data) => @renderBucketList(type, data)
 		
 		initialize: ->
 			@render()
 
 		render: ->
-			html = _.template tpl
+			html = _.template tpl, 'lists': @lists
 
 			@$el.html html
 
@@ -116,26 +91,26 @@ define (require) ->
 
 			@
 
-		renderPeople: ->
-			@$('ul#person').html ''
-			for person in @people
-				close = $('<button />').addClass('close').html('&times;').attr('data-key', person).attr('data-bucket', 'people')
-				a = $('<a />').attr('href', '#').attr('data-key', person).attr('data-bucket', 'people')
-				li = $('<li />').html(a.html(person).append(close))
-				@$('ul#person').append li
+		# renderPeople: ->
+		# 	@$('ul#person').html ''
+		# 	for person in @people
+		# 		close = $('<button />').addClass('close').html('&times;').attr('data-key', person).attr('data-bucket', 'people')
+		# 		a = $('<a />').attr('href', '#').attr('data-key', person).attr('data-bucket', 'people')
+		# 		li = $('<li />').html(a.html(person).append(close))
+		# 		@$('ul#person').append li
 
-		renderNotes: ->
-			@$('ul#note').html ''
-			for note in @notes
-				close = $('<button />').addClass('close').html('&times;').attr('data-key', note.meta.key).attr('data-bucket', note.meta.bucket)
-				a = $('<a />').attr('href', '#').attr('data-key', note.meta.key).attr('data-bucket', note.meta.bucket)
-				li = $('<li />').html(a.html(note.data.title).append(close))
-				@$('ul#note').append li
+		# renderNotes: ->
+		# 	@$('ul#note').html ''
+		# 	for note in @notes
+		# 		close = $('<button />').addClass('close').html('&times;').attr('data-key', note.id).attr('data-bucket', note.type)
+		# 		a = $('<a />').attr('href', '#').attr('data-key', note.id).attr('data-bucket', note.type)
+		# 		li = $('<li />').html(a.html(note.title).append(close))
+		# 		@$('ul#note').append li
 
 		renderBucketList: (id, list) ->
 			@$('ul#'+id).html ''
 			for item in list
-				close = $('<button />').addClass('close').html('&times;').attr('data-key', item.meta.key).attr('data-bucket', item.meta.bucket)
-				a = $('<a />').attr('href', '#').attr('data-key', item.meta.key).attr('data-bucket', item.meta.bucket)
-				li = $('<li />').html(a.html(item.data.title).append(close))
+				close = $('<button />').addClass('close').html('&times;').attr('data-key', item.id).attr('data-bucket', id)
+				a = $('<a />').attr('href', '#').attr('data-key', item.id).attr('data-bucket', id)
+				li = $('<li />').html(a.html(item.title).append(close))
 				@$('ul#'+id).append li

@@ -1,12 +1,20 @@
 define (require) ->
-	Backbone = require 'backbone'
+	BaseRouter = require 'routers/base'
 	vAdminHome = require 'views/admin/home'
+	vAdminRelations = require 'views/admin/relations'
 
-	class AdminRouter extends Backbone.Router
+	class AdminRouter extends BaseRouter
 		
 		routes:
-			'admin/home': 'home'
+			'admin': 'home'
+			'admin/relations': 'relations'
 
 		home: ->
-			home = new vAdminHome()
-			$('div#main').html home.$el
+			@breadcrumbs = 'Admin': ''
+			@view = new vAdminHome()
+
+		relations: ->
+			@breadcrumbs = 'Admin': '/admin'
+			@breadcrumbs['Relations'] = ''
+
+			@view = new vAdminRelations()

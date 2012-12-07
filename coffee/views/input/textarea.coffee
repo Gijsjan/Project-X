@@ -1,10 +1,7 @@
-# inputvalue = string = the value from the input
-# @value = object = (selected) option in the format returned by db for autocomplete options {_id: '', key: '', value: ''}
-
 define (require) ->
 	BaseView = require 'views/base'
 
-	class vInputTextarea extends BaseView
+	class Textarea extends BaseView
 
 		tagName: 'textarea'
 
@@ -12,25 +9,30 @@ define (require) ->
 			'keyup': 'onKeyup'
 			'change': 'onChange'
 
+		'height': 60
+
 		onKeyup: (e) ->
 			target = $(e.currentTarget)
-			target.height(20)
+			target.height(@height)
 			target.height target[0].scrollHeight
 
 		onChange: (e) ->
-			# console.log 'vInputTextarea.onChange'
-			@model.set @key, e.currentTarget.value
+			@trigger 'valuechanged', @$el.val()
 
 		initialize: ->
-			@key = @options.key
-			@model = @options.model
+			[@key, @value, @span] = [@options.key, @options.value, @options.span]
+
+			@render()
+
+			super
 
 		render: ->
-			@$el.attr('data-key', @key)
-			@$el.height(20)
-
-			value = if @model? and @model.get(@key)? then @model.get(@key) else ''
+			@$el.height(@height)
 			
-			@$el.attr('value', value)
+			@$el.attr('data-key', @key)
+			@$el.attr('name', @key)
+			@$el.attr('id', @key)
+			@$el.addClass('span'+@span)
+			@$el.html @value
 
 			@

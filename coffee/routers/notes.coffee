@@ -1,62 +1,51 @@
 define (require) ->
-	EditViews = require 'switchers/views.edit'
-	FullViews = require 'switchers/views.full'
-	Collections = require 'switchers/collections'
-	Models = require 'switchers/models'
-	mNote = require 'models/object/content/note'
-	vNoteList = require 'views/object/content/note/list'
-	vFullNote = require 'views/object/content/note/full'
-	vEditNote = require 'views/object/content/note/edit'
+	BaseRouter = require 'routers/base'
+	# EditViews = require 'switchers/views.edit'
+	# FullViews = require 'switchers/views.full'
+	# Collections = require 'switchers/collections'
+	# Models = require 'switchers/models'
+	mNote = require 'models/content/note'
+	vNoteList = require 'views/content/note/list'
+	vFullNote = require 'views/content/note/full'
+	vEditNote = require 'views/content/note/edit'
 	# vObjectListControl = require 'views/object/list.control'
 	hlpr = require 'helper'
 
-	class NotesRouter extends Backbone.Router
+	class NotesRouter extends BaseRouter
 
-		routes:		
+		'routes':		
 			"notes/new": "edit"
 			"notes/:id/edit": "edit"
+			# "notes/mine": "listMyNotes" # DOESNT WORK WITH TRAILING SLASH?
 			"notes/:id": "show"
-			"notes": "notelist" # DOESNT WORK WITH TRAILING SLASH?
+			"notes": "list" # DOESNT WORK WITH TRAILING SLASH?
 
 		show: (id) ->
 			# console.log 'NotesRouter.show()'
+			@breadcrumbs = 'Notes': '/notes'
+			@breadcrumbs[id] = ''
 
-			data =
-				'className': 'note full'
-				'id': 'object '+id
-				'model': new mNote
-					'id': id
-
-			full = new vFullNote data
-
-			$('div#main').html full.$el
+			@view = new vFullNote 'id': id
 
 		edit: (id) ->
-			# console.log 'ContentRouter -> edit()'
-			# parent_type = hlpr.getParentType object_type # CHANGE THIS -> OBJECT/CONTENT/GROUP IS ALREADY GIVEN IN OBJECT_TYPE
-			# data =
-			# 	'className': 'note edit' # className cannot be dynamicly set in the view, only other options is using jQuery's addClass in the views initialize method
-			# 	'model': new mNote()
+			@breadcrumbs = 'Notes': '/notes'
+			@breadcrumbs[id] = '/notes/'+id if id?
+			@breadcrumbs.edit = ''
 
-			# if id? # id is defined when edit event is triggered, but not when the add event is triggered
-			# 	data.model = new Models['content/'+object_type] id: id #override the default model with a model with an id
-			# 	data.id = id
 			model = if id? then new mNote('id': id) else new mNote()
 
-			ev = new vEditNote 'model': model
-			ev.on 'done', (model) ->
-				# console.log 'ContentRouter.edit() ' + object_type + ' || EditView || saved!'
-				@navigate model.get('bucket') + '/' + model.get('id'), true
-
-			# USE VIEWMANAGER
-			@globalEvents.trigger 'showView',
-				'render': false
-				'currentView': ev
-
-		notelist: (object_type) ->
+			@view = new vEditNote 'model': model
+		
+		list: ->
 			# console.log 'ContentRouter -> notelist()'
-			v = new vNoteList()
-			
-			@globalEvents.trigger 'showView',
-				'render': false
-				'currentView': v
+			@breadcrumbs = 'Notes': ''
+
+			@view = new vNoteList()
+
+		# listMyNotes: ->
+		# 	# console.log 'ContentRouter -> notelist()'
+		# 	@breadcrumbs =
+		# 		'All Notes': '/notes' 
+		# 		'My Notes': ''
+
+		# 	@view = new vNoteList 'mine': true

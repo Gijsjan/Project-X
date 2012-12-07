@@ -1,0 +1,15 @@
+.row	
+	form
+		.span8
+			label(for="bucket") Bucket
+			select#bucket
+				option relations
+			label(for="key") Key
+			input#key
+			label(for="value") Value
+			textarea.span8#value(style="height:200px")
+			label
+			button.btn.btn-primary#submit(type="submit") Save
+
+.row
+	ul.nav.nav-list.span8(id!="relations")

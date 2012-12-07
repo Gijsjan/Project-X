@@ -3,13 +3,16 @@ require.config
         'jquery': '../lib/jquery/jquery'
         'jqueryui': '../lib/jquery/jquery-ui'
         'bootstrap': '../lib/bootstrap/js/bootstrap'
-        'underscore': '../lib/underscore/underscore133amdjs'
-        'backbone': '../lib/backbone/backbone092amdjs'
+        'underscore': '../lib/underscore/underscore'
+        'backbone': '../lib/backbone/backbone'
         'markdown': '../lib/Markdown.Converter'
         'domready': '../lib/require/domready'
         'text': '../lib/require/text'
         'html': '../../html'
+
     shim:
+        'underscore':
+            exports: '_'
         'backbone':
             deps: ['underscore', 'jquery']
             exports: 'Backbone'
@@ -18,7 +21,10 @@ require.config
 
 define (require) ->
     domready = require '../lib/require/domready'
+    currentUser = require 'models/CurrentUser'
     app = require 'app'
 
     domready ->
-        app.initialize()
+        currentUser.authorize()
+        currentUser.on 'loaded', ->
+            app.initialize()
