@@ -60,7 +60,6 @@ class RelationManager
 		relations = {} if not relations?
 
 		groupBucket = groupModel.get 'type'
-		# groupModel = new ModelSwitcher[groupBucket] modelData
 
 		queueLength = _.size(groupModel.relations)
 		mainQueue = new CallbackQueue queueLength, success
@@ -69,6 +68,8 @@ class RelationManager
 			queue = new CallbackQueue 2, (data) ->
 				items = relations[itemBucket] || []
 
+				console.log 'ib'+itemBucket
+				
 				# REMOVE COLLECTIONS? ONLY SLOWING THINGS DOWN
 				allRelations = new CollectionSwitcher[itemBucket] data.allRelations
 				oldRelations = new CollectionSwitcher[itemBucket] data.oldRelations
@@ -115,9 +116,6 @@ class RelationManager
 					item.set groupBucket, groups
 
 					allRelations.add item
-
-				console.log itemBucket+'----------------------------'
-				console.log allRelations.toJSON()
 
 				riak.write
 					'bucket': 'relations'

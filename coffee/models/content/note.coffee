@@ -1,9 +1,7 @@
 define (require) ->
-	# _ = require 'underscore'
 	BaseModel = require 'models/base'
-	# mContent = require 'models/content'
 
-	class mNote extends BaseModel
+	class Note extends BaseModel
 
 		'urlRoot': '/b/db/notes'
 		
@@ -11,4 +9,12 @@ define (require) ->
 			'type': 'notes'
 			'title': ''
 			'body': ''
-			'owner': ''
+		
+		'relations':
+			'owners': []
+			'editors': []
+			'readers': []
+			'organisations': []
+			'departments': []
+			'projects': []
+			'comments': []

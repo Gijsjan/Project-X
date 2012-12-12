@@ -1,12 +1,40 @@
-Department = require '../collections/department'
-Organisation = require '../collections/organisation'
+Annotation = require '../collections/annotation'
+Content = require '../collections/content'
+Group = require '../collections/group'
 Person = require '../collections/person'
+
+Comment = require '../collections/annotations/comment'
+
 Note = require '../collections/content/note'
 
+Department = require '../collections/groups/department'
+Organisation = require '../collections/groups/organisation'
+Project = require '../collections/groups/project'
+
+Owner = require '../collections/people/owner'
+Editor = require '../collections/people/editor'
+Reader = require '../collections/people/reader'
+Member = require '../collections/people/member'
+
+
 CollectionSwitcher =
+	'annotations': Annotation
+	'content': Content
+	'groups': Group
+	'people': Person
+	
+	'comments': Comment
+
+	'notes': Note
+	
 	'departments': Department
 	'organisations': Organisation
-	'people': Person
-	'notes': Note
+	'projects': Project
+
+	'owners': Owner
+	'editors': Editor
+	'readers': Reader
+	'members': Member
+	
 
 module.exports = CollectionSwitcher

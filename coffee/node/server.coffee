@@ -2,6 +2,7 @@ _ = require 'underscore'
 http = require 'http'
 
 Models = require './switchers/models'
+user = require './models/people/user'
 
 riak = require './riak'
 relationManager = require './RelationManager'
@@ -24,6 +25,7 @@ app.use (req, res, next) ->
 		next()
 	else if req.session.currentUser?
 		riak.currentUser = req.session.currentUser
+		user.set req.session.currentUser
 		next()
 	else
 		writeResponse 401, res
@@ -151,10 +153,13 @@ app.post '/db/logout', (req, res) ->
 
 #CREATE
 app.post '/db/:bucket', (req, res) ->
-	req.body.created = new Date()
-	req.body.owner = req.session.currentUser if req.params.bucket is 'notes'
-
 	model = new Models[req.params.bucket] req.body
+
+	# relationManager.set
+	# 	'groupModel': model
+	# 	'relations': req.body.relations
+	# 	'success': ->
+	
 	model.save (value) -> writeResponse value, res
 
 

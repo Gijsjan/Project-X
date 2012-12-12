@@ -145,30 +145,6 @@ class Riak
 
 		@readData(new RequestOptions(), success, mapred)
 
-	# getfromgijs: (success) ->
-	# 	mapred = 
-	# 		'inputs': [["test","notes|gijs|2012"],["test","notes|gijs|2011"],["test","notes|gijs|2010"]],
-	# 		'query': [
-	# 			'map':
-	# 				'language': 'javascript'
-	# 				'source': 'function(value, keyData, arg) { data = JSON.parse(value.values[0].data); data = _.where(data, {"owner": "gijs"}); return data; }'
-	# 				'keep': true]
-
-	# 	@readData(success, mapred)
-
-		# @options['path'] = '/buckets/'+bucket+'/index/'+index+'_bin/'+value
-		# @options['method'] = 'GET'
-
-		# req = http.request @options, (res) ->
-		# 	data = ''
-		# 	res.setEncoding 'utf8'
-		# 	res.on 'data', (chunk) -> data += chunk
-		# 	res.on 'end', -> 
-		# 		data = JSON.parse(data)
-		# 		callback data
-		# req.on 'error', (e) -> console.log e
-		# req.end()
-
 
 
 module.exports = new Riak()
