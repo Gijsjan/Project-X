@@ -4,9 +4,6 @@ RequestOptions = require('./RequestOptions')
 
 class Riak
 
-	constructor: ->
-		@currentUser = ''
-
 	# private
 	readData: (requestOptions, success, mapred) ->
 		if mapred?

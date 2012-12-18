@@ -1,11 +1,17 @@
+_ = require 'underscore'
 Content = require '../content'
+# relationManager = require '../../RelationManager'
 
 class Note extends Content
-	
-	'defaults':
+
+	# initialize: ->
+	# 	console.log Content
+
+	# 'defaults': console.log(Content)
+
+	'defaults': _.extend({}, Content::defaults, 
 		'type': 'notes'
-		'title': ''
-		'body': ''
+		'body': '')
 
 		# 'owners': 'attached'
 		# 'editors': 'attached'

@@ -24,7 +24,6 @@ app.use (req, res, next) ->
 	if req.url is '/db/login'
 		next()
 	else if req.session.currentUser?
-		riak.currentUser = req.session.currentUser
 		user.set req.session.currentUser
 		next()
 	else
@@ -153,13 +152,7 @@ app.post '/db/logout', (req, res) ->
 
 #CREATE
 app.post '/db/:bucket', (req, res) ->
-	model = new Models[req.params.bucket] req.body
-
-	# relationManager.set
-	# 	'groupModel': model
-	# 	'relations': req.body.relations
-	# 	'success': ->
-	
+	model = new Models[req.params.bucket] req.body	
 	model.save (value) -> writeResponse value, res
 
 
@@ -170,18 +163,18 @@ app.post '/db/:bucket', (req, res) ->
 # app.put '/db/relations', (req, res) ->
 
 app.put '/db/:bucket/:key', (req, res) ->
-	queue = new CallbackQueue 2, (args) ->
-		[model, relations] = [args.model, args.relations]
-		model.relations = relations
-		writeResponse model, res
+	# queue = new CallbackQueue 2, (args) ->
+	# 	[model, relations] = [args.model, args.relations]
+	# 	model.relations = relations
+	# 	writeResponse model, res
 
 	model = new Models[req.params.bucket] req.body
-	model.save queue.register('model')
+	model.save (response) -> writeResponse response, res
 	
-	relationManager.set
-		'groupModel': model
-		'relations': req.body.relations
-		success: queue.register('relations')
+	# relationManager.set
+	# 	'groupModel': model
+	# 	'relations': req.body.relations
+	# 	success: queue.register('relations')
 	# riak.update 
 	# 	'bucket': req.params.bucket
 	# 	'key': req.params.key

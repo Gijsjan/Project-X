@@ -1,7 +1,7 @@
-BaseModel = require './base'
+Base = require './base'
 
-class Person extends BaseModel
-	
+class Person extends Base
+
 	'defaults':
 		'type': 'people'
 		'title': ''

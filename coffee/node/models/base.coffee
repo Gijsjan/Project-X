@@ -1,39 +1,185 @@
 _ = require 'underscore'
 Backbone = require 'backbone'
 riak = require '../riak'
+CallbackQueue = require '../CallbackQueue'
 exec = require('child_process').exec
 
-class BaseModel extends Backbone.Model
+class Base extends Backbone.Model
+
+	'defaults':
+		'created': ''
+		'updated': ''
 
 	# Default relationAttributes, can be overriden
 	'relationAttributes': [
 		'id'
 		'title'
-	]
+	]			
 
 	getRelationAttributes: ->
 		attributes = {}
 
 		for attribute in @relationAttributes
-			attributes[attribute] = @get attribute
+			attributes[attribute] = @get attributeverkiezingen oss
 
 		attributes
 
 	save: (success) ->
-		@unset 'relations'
 		# if model has an id (on update), than callback(), else (on create) generate key with uuidgen and callback() after the exec callback(stdout)
 		generateKey = (callback) =>
-			if not @isNew() then callback() else
+			if not @isNew() 
+				@set 'updated', new Date()
+				
+				callback() 
+			else
+				@set 'created', new Date()
+				
 				exec 'uuidgen', (error, stdout, stderr) =>
 					@set 'id', stdout.replace(/[^a-z0-9-]+/g, '') # remove unwanted chars (spaces) from stdout and set id
 					callback()
-		
-		generateKey =>
-			riak.write
-				'bucket': @get 'type'
-				'key': @get 'id'
-				'data': @toJSON()
-				'success': success
+
+		@_setRelations
+			success: (response) =>
+				generateKey =>
+					# Loop through attributes and unset every attribute that is not defined in @defaults
+					# This is done to discard 'relations' and other client side mess if necessary
+					for own attribute, value of @attributes
+						if not @defaults[attribute]? and attribute isnt 'id'
+							@unset attribute
+
+					riak.write
+						'bucket': @get 'type'
+						'key': @get 'id'
+						'data': @toJSON()
+						'success': success
+
+	_getRelations: (args) ->
+		[groupBucket, groupKey, success] = [args.groupBucket, args.groupKey, args.success]
+
+		groupModel = new ModelSwitcher[groupBucket] 'id': groupKey
+
+		# Calculate the queueLength and determine if attached relations exist
+		attached = false
+		queueLength = 0
+		for own itemBucket, relationType of groupModel.relations
+			if relationType is 'separate' then queueLength++ else attached = true
+		queueLength++ if attached
+
+		_queueComplete = (response) ->
+			if attached # if the model has attached relations, response returns a list of groups in response[groupBucket]
+				groups = response[groupBucket] # get groups from response
+				attachedRelations = _.find groups, (group) -> group.id is groupKey # find the group we are looking for
+
+				for own itemBucket, relationType of groupModel.relations # iterate the relations of the model
+					if relationType is 'attached'
+						response[itemBucket] = if attachedRelations? then attachedRelations[itemBucket] else []
+
+				delete response[groupBucket] # discard the list
+
+			success response
+
+		# Create a callback queue
+		callbackQueue = new CallbackQueue queueLength, _queueComplete
+
+		# Iterate the relations to read the separate relations
+		for own itemBucket, relationType of groupModel.relations
+			if relationType is 'separate'
+				riak.read
+					'bucket': 'relations'
+					'key': groupKey + '|' + itemBucket
+					'success': callbackQueue.register(itemBucket)
+
+		# Attached relations are all located in 'relations||groupBucket' (ie: relations||people), so only one read is needed
+		if attached
+			riak.read
+				'bucket': 'relations'
+				'key': groupBucket
+				'success': callbackQueue.register(groupBucket)
+
+
+	
+	_setRelations: (args) ->
+		[success] = [args.success]
+
+		relations = @get('relations')? || {}
+		groupBucket = @get 'type'
+
+		queueLength = _.size(@relations)
+		mainQueue = new CallbackQueue queueLength, success
+
+		_writeRelations = (itemBucket) =>
+			queue = new CallbackQueue 2, (data) =>
+				newRelations = relations[itemBucket] || []
+				
+				# REMOVE COLLECTIONS? ONLY SLOWING THINGS DOWN
+				[allRelations, oldRelations] = [data.allRelations, data.oldRelations]
+
+				riak.write
+					'bucket': 'relations'
+					'key': @get('id')+'|'+itemBucket
+					'data': newRelations.toJSON()
+					'success': mainQueue.register(itemBucket)
+
+				_difference = (oldRelations, newRelations) ->
+					remove = []
+
+					newRelations.each (relation) ->
+						model = oldRelations.get relation.id
+
+						remove.push model.id if model?
+
+					newRelations.remove remove
+					oldRelations.remove remove
+
+					[oldRelations, newRelations]
+
+
+				[remove, add] = _difference(oldRelations, newRelations)
+
+				add.each (model) ->
+					item = allRelations.get(model.id) || model
+
+					groups = item.get(groupBucket) || []
+					groups.push @toJSON()
+					
+					item.set groupBucket, groups
+
+					allRelations.add item
+
+				remove.each (model) ->
+					item = allRelations.get(model.id) || model
+					
+					groups = item.get(groupBucket) || []
+					groups = _.filter groups, (group) -> group.id isnt @id
+
+					item.set groupBucket, groups
+
+					allRelations.add item
+
+				riak.write
+					'bucket': 'relations'
+					'key': itemBucket
+					'data': allRelations.toJSON()
+
+			riak.read
+				'bucket': 'relations'
+				'key': @get('id')+'|'+itemBucket
+				success: queue.register('oldRelations')
+
+			riak.read
+				'bucket': 'relations'
+				'key': itemBucket
+				success: queue.register('allRelations')
+
+		for own itemBucket, relationType of @relations
+			_writeRelations itemBucket
+
+module.exports = Base
+
+			
+
+
+
 
 	# addRelations: (args) ->
 	# 	[bucket, relations] = [args.bucket, args.relations]
@@ -147,4 +293,3 @@ class BaseModel extends Backbone.Model
 	# 						'success': ->
 
 
-module.exports = BaseModel

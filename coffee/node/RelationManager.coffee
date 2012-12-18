@@ -55,10 +55,10 @@ class RelationManager
 
 	
 	set: (args) ->
-		[groupModel, relations, success] = [args.groupModel, args.relations, args.success]
+		[groupModel, success] = [args.groupModel, args.success]
 
-		relations = {} if not relations?
-
+		relations = groupModel.get('relations')? || {}
+		console.log relations
 		groupBucket = groupModel.get 'type'
 
 		queueLength = _.size(groupModel.relations)
@@ -67,8 +67,6 @@ class RelationManager
 		_writeRelations = (itemBucket) ->
 			queue = new CallbackQueue 2, (data) ->
 				items = relations[itemBucket] || []
-
-				console.log 'ib'+itemBucket
 				
 				# REMOVE COLLECTIONS? ONLY SLOWING THINGS DOWN
 				allRelations = new CollectionSwitcher[itemBucket] data.allRelations

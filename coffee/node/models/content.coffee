@@ -1,24 +1,40 @@
-BaseModel = require './base'
+_ = require 'underscore'
+Base = require './base'
 user = require './people/user'
 
-class Content extends BaseModel
+class Content extends Base
 	
-	'defaults':
-		'type': 'content'
-		'title': ''
+	'defaults': _.extend({}, Base::defaults, 
+		'title': '')
 
 	'relations':
-		'owners': 'attached'
-		'editors': 'attached'
-		'readers': 'attached'
-		'organisations': 'attached'
-		'departments': 'attached'
-		'projects': 'attached'
-		'comments': 'separate'
+		'owners': 
+			'storetype': 'attached'
+			'data': []
+		'editors': 
+			'storetype': 'attached'
+			'data': []
+		'readers': 
+			'storetype': 'attached'
+			'data': []
+		'organisations': 
+			'storetype': 'attached'
+			'data': []
+		'departments': 
+			'storetype': 'attached'
+			'data': []
+		'comments': 
+			'storetype': 'separate'
+			'data': []
+		'projects': 
+			'storetype': 'attached'
+			'data': []
 
 	initialize: ->
-		console.log user.toJSON()
-		# if @isNew()
+		if @isNew()
+			@relations.owners.data.push user.getRelationAttributes()
+
+		super
 
 
 module.exports = Content
