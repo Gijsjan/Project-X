@@ -1,11 +1,18 @@
 define (require) ->
+	_ = require 'underscore'
 	Backbone = require 'backbone'
 	bootstrap = require 'bootstrap'
+	async = require 'async'
 	BaseView = require 'views/base'
 	vModal = require 'views/ui/modal'
 	vInputList = require 'views/input/list'
 	cListItems = require 'collections/listitems'
+	BaseModel = require 'models/base'
+	BaseCollection = require 'collections/base'
+	Models = require 'switchers/models'
+	Collections = require 'switchers/collections'
 	hlpr = require 'helper'
+	test = require 'test'
 	tpl = require 'text!html/input/typeahead.html'
 
 	# Typeahead shows an option list while typing an input
@@ -63,21 +70,36 @@ define (require) ->
 			@clear()
 			@trigger 'valuechanged', item.toJSON()
 
-		initialize: ->		
-			# @value = if @options.value? and @options.value isnt '' then @options.value else '' # the initial value the <input> should hold
-			@span = if @options.span? then @options.span else 2 # the width of the input
-			@selectfromlist = if @options.selectfromlist? then @options.selectfromlist else false # if the user can select the item from a list (modal)
-			@dbview = if @options.dbview? then @options.dbview else '' # DBview is the name of the view in CouchDB ie: 'object/countries'
-			@items = if @options.items? then @options.items else ''
+		initialize: ->
+			test.that(@options.collection).exists()
+			
+			[@span, @selectfromlist, @items, @collectionTypes] = [@options.span, @options.selectfromlist, @options.items, @options.collection]
+			@span = 2 if not @span?
+			@selectfromlist = true if not @selectfromlist?
+			@items = [] if not @items?
+			@collectionTypes = [@collectionTypes] if _.isString @collectionTypes
 
-			if @items is '' and @dbview isnt ''
-				@alloptions = new cListItems [], 'dbview': @dbview
-				@alloptions.fetch
-					success: (collection, response) => @render()
-					error: (collection, response) => @globalEvents.trigger response.status+''
-			else
-				@alloptions = new cListItems @items.models
+			@alloptions = new BaseCollection()
+			@alloptions.model.parse = (attributes) ->
+				console.log attributes
+				attributes.title = attributes.title + '('+attributes.type+')'
+				attributes
+
+			getModels = (type, callback) ->
+				new Collections[type]().fetch (response) => callback null, response.models
+			
+			async.map @collectionTypes, getModels, (err, allmodels) =>
+				for models in allmodels
+					@alloptions.add models
 				@render()
+
+
+			# if @items.length is 0
+			# 	@alloptions = new Collections[@collections[0]]()
+			# 	@alloptions.fetch => @render()
+			# else
+			# 	@alloptions = new Collections[@collections[0]] @items.models
+			# 	@render()
 
 		render: ->
 			# model = @alloptions.get(@value)
@@ -96,12 +118,7 @@ define (require) ->
 				@$el.append b
 
 			@$('input').typeahead
-				'source': (query, process) => 
-					@alloptions
-						.chain()
-						.filter((item) -> (new RegExp(query, 'i')).test(item.get('title')))
-						.map((item) -> item.get('title'))
-						.value()
+				'source': @alloptions.pluck('title')
 
 			@
 

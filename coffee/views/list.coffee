@@ -3,27 +3,23 @@ define (require) ->
 	BaseCollection = require 'collections/base'
 	ev = require 'EventDispatcher'
 	vPagination = require 'views/ui/pagination'
-	sCollections = require 'switchers/collections'
-	sListedViews = require 'switchers/views.listed'
+	Switcher = require 'switchers/switcher'
 	tpl = require 'text!html/content/note/list.html'
 
 	class vList extends BaseView
 
 		id: 'list'
 
-		initialize: ->
-			# console.log 'vList.initialize()'
+		initialize: ->			
 			@filters = {}
 
 			@render()
 
-			@filtereditems = new BaseCollection()
+			@filtereditems = new Switcher.Collections[@model.type]()
 			@filtereditems.on 'reset', @renderCollection, @
 
-			@collection = new sCollections[@type]() # @type is set in the child views initialize()
-			@collection.fetch
-				success: (collection, response) => @filtereditems.reset collection.models
-				error: (collection, response) => ev.trigger response.status+''
+			@collection = new Switcher.Collections[@model.type]() # @type is set in the child views initialize()
+			@collection.fetch (collection, response) => @filtereditems.reset collection.models
 
 			super
 
@@ -40,7 +36,7 @@ define (require) ->
 			pagination = new vPagination 'itemCount': @filtereditems.length
 			
 			@filtereditems.each (model, i) =>
-				t = new sListedViews[@type]
+				t = new Switcher.Views.Listed[@model.type]
 					'model': model
 
 				pagination.addItem t.render().$el, i

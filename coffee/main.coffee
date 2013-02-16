@@ -6,6 +6,7 @@ require.config
         'underscore': '../lib/underscore/underscore'
         'backbone': '../lib/backbone/backbone'
         'markdown': '../lib/Markdown.Converter'
+        'async': '../lib/async'
         'domready': '../lib/require/domready'
         'text': '../lib/require/text'
         'html': '../../html'

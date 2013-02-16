@@ -5,7 +5,10 @@ define (require) ->
 	class vListed extends BaseView
 
 		render: ->
-			tplRendered = _.template tpl, @model.toJSON()
+			data = @model.toJSON()
+			data.type = @model.type
+
+			tplRendered = _.template tpl, data
 			@$el.html tplRendered
 
 			@

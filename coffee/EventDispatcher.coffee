@@ -12,17 +12,15 @@ define (require) ->
 				loginView = new vLogin()
 				$('div#main').html loginView.render().$el
 
-	# ev.on 'unauthorized', -> # The 'login' events triggers the route to /login
-	# 	loginView = new vLogin 'currentUser': currentUser
-	# 	$('div#main').html loginView.render().$el
+			@on 'modelSaved', (model) ->
+				id = model.get('id')
+				id = model.get('username') if model.type is 'person'
 
-	# ev.on 'loginSuccess', -> # If the login is a success, the user info is still not loaded, so re-check the login
-	#     new mPerson().checkLogin()
-
-			@on 'modelSaved', (model) ->			
-				router.navigate model.get('type')+'/'+model.get('id'), 'trigger': true
+				router.navigate model.type+'/'+id, 'trigger': true
 
 			@on 'modelRemoved', (model) ->
-				router.navigate model.get('type'), 'trigger': true
+				# DOESNT GO TO CORRECT PAGE
+				console.log 'EventDispatcher.modelRemoved: but navigates to model.type instead of plural or removed page'
+				router.navigate model.type, 'trigger': true
 
 	new EventDispatcher()

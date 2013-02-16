@@ -7,6 +7,7 @@ define (require) ->
 
 		'urlRoot': '/b/db/projects'
 		
+		'type': 'projects'
+		
 		'defaults':
-			'type': 'projects'
 			'title': ''

@@ -1,5 +1,5 @@
 define (require) ->
-	mPerson = require 'models/person'
+	mPerson = require 'models/person.full'
 	ajax = require 'AjaxManager'
 	ev = require 'EventDispatcher'
 
@@ -22,15 +22,16 @@ define (require) ->
 					
 
 		login: (email, password) ->
-			ajax.post
+			data =
+				'email': email
+				'password': password
+			
+			ajax.post data,
 				'url': '/db/login'
-				'data':
-					'email': email
-					'password': password
 				success: (data) => @loadUser(data)
 
 		logout: ->
-			ajax.post
+			ajax.post {},
 				'url': '/db/logout'
 				success: (data) =>
 					@authorized = false

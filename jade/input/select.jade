@@ -3,9 +3,9 @@
 	button.btn.btn-narrow
 		span.caret
 ul.dropdown-menu(role="menu")
-	|<% _.each(selectoptions, function(option) { %>
-	li
-		a(tabindex="-1") <%= option %>
+	|<% selectoptions.each(function(option) { %>
+	li(data-id!="<%=option.id%>")
+		a(tabindex="-1") <%= option.get('value') %>
 	|<% }); %>
 
 

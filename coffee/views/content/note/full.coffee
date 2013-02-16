@@ -2,15 +2,10 @@ define (require) ->
 	# _ = require 'underscore'
 	# Markdown = require 'markdown'
 	mNote = require 'models/content/note'
-	vFullContent = require 'views/content/full'
+	ContentView = require 'views/content/full'
 	tpl = require 'text!html/content/note/full.html'
 
-	class vFullNote extends vFullContent
-
-		initialize: ->
-			@model = new mNote 'id': @options.id
-
-			super
+	class Note extends ContentView
 
 		render: ->
 			super

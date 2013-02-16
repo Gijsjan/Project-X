@@ -9,3 +9,21 @@ define (require) ->
 		'span': 6
 		'input':
 			'type': 'textarea'
+	'access':
+		'title': 'Who has access?'
+		'span': 6
+		'input':
+			'type': 'editablelist'
+			'collection': ['person', 'group']
+	# 'users':
+	# 	'title': 'Users'
+	# 	'span': 6
+	# 	'input':
+	# 		'type': 'editablelist'
+	# 		'collection': 'person'
+	# 'groups':
+	# 	'title': 'Groups'
+	# 	'span': 6
+	# 	'input':
+	# 		'type': 'editablelist'
+	# 		'collection': 'group'

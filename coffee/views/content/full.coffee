@@ -1,13 +1,13 @@
 define (require) ->
 	# _ = require 'underscore'
-	vFull = require 'views/full'
+	Full = require 'views/full'
 	# vTagList = require 'views/tag/list'
 	# vEditComment = require 'views/object/comment/edit'
 	# vCommentList = require 'views/object/comment/list.content'
 	# mComment = require 'models/object/comment'
 	tpl = require 'text!html/content/full.html'
 
-	class vFullContent extends vFull
+	class Content extends Full
 
 		render: ->
 			tplRendered = _.template tpl, @model.toJSON()

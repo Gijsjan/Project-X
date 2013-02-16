@@ -4,43 +4,57 @@ define (require) ->
 	# FullViews = require 'switchers/views.full'
 	# Collections = require 'switchers/collections'
 	# Models = require 'switchers/models'
-	mNote = require 'models/content/note'
+	ContentFull = require 'models/content.full'
 	vNoteList = require 'views/content/note/list'
 	vFullNote = require 'views/content/note/full'
 	vEditNote = require 'views/content/note/edit'
+
+	Switcher = require 'switchers/switcher'
 	# vObjectListControl = require 'views/object/list.control'
 	hlpr = require 'helper'
 
-	class NotesRouter extends BaseRouter
+	class ContentRouter extends BaseRouter
+
+		'type_ids':
+			'note': '1'
+			'document': '2'
+			'todo': '3'
 
 		'routes':		
-			"notes/new": "edit"
-			"notes/:id/edit": "edit"
+			"content/:type/new": "edit"
+			"content/:type/:id/edit": "edit"
 			# "notes/mine": "listMyNotes" # DOESNT WORK WITH TRAILING SLASH?
-			"notes/:id": "show"
-			"notes": "list" # DOESNT WORK WITH TRAILING SLASH?
+			"content/:type/:id": "show"
+			"content/:type": "list" # DOESNT WORK WITH TRAILING SLASH?
 
-		show: (id) ->
+		show: (type, id) ->
 			# console.log 'NotesRouter.show()'
-			@breadcrumbs = 'Notes': '/notes'
+			@breadcrumbs = 'Notes': '/content/note'
 			@breadcrumbs[id] = ''
 
-			@view = new vFullNote 'id': id
+			@view = new Switcher.Views.Full[type] 'model': @_getModel type, id
 
-		edit: (id) ->
-			@breadcrumbs = 'Notes': '/notes'
-			@breadcrumbs[id] = '/notes/'+id if id?
+		edit: (type, id) ->
+			@breadcrumbs = 'Notes': '/content/note'
+			@breadcrumbs[id] = '/note/'+id if id?
 			@breadcrumbs.edit = ''
 
-			model = if id? then new mNote('id': id) else new mNote()
-
-			@view = new vEditNote 'model': model
+			@view = new Switcher.Views.Edit[type] 'model': @_getModel type, id
 		
-		list: ->
+		list: (type) ->
 			# console.log 'ContentRouter -> notelist()'
 			@breadcrumbs = 'Notes': ''
 
-			@view = new vNoteList()
+			# @view = new Switcher.Views.List[type] 'model': @_getModel type
+			@view = new vNoteList 'model': @_getModel type
+
+		_getModel: (type, id) ->
+			model = if id? then new Switcher.Models[type] 'id': id else new Switcher.Models[type]()
+			model.set 'type',
+				'id': @type_ids[type]
+				'value': type
+
+			model
 
 		# listMyNotes: ->
 		# 	# console.log 'ContentRouter -> notelist()'

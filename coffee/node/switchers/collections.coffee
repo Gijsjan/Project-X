@@ -20,13 +20,13 @@ Member = require '../collections/people/member'
 CollectionSwitcher =
 	'annotations': Annotation
 	'content': Content
-	'groups': Group
-	'people': Person
+	'person': Person
 	
 	'comments': Comment
 
-	'notes': Note
+	'note': Note
 	
+	'group': Group
 	'departments': Department
 	'organisations': Organisation
 	'projects': Project

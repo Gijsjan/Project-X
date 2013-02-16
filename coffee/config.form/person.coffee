@@ -1,6 +1,6 @@
 define (require) ->
-	'title':
-		'title': 'Title'
+	'username':
+		'title': 'Username'
 		'span': 6
 		'input':
 			'type': 'textinput'
@@ -14,3 +14,9 @@ define (require) ->
 		'span': 6
 		'input':
 			'type': 'textinput'
+	'groups':
+		'title': 'Groups'
+		'span': 6
+		'input':
+			'type': 'editablelist'
+			'collection': 'group'

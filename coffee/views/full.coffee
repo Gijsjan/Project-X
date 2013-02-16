@@ -3,7 +3,7 @@ define (require) ->
 	ev = require 'EventDispatcher'
 	tpl = require 'text!html/full.html'
 	
-	class vFull extends BaseView
+	class Full extends BaseView
 
 		events:
 			"click .editevent" : "edit"
@@ -11,10 +11,10 @@ define (require) ->
 			"click .delevent" : "remove"
 
 		edit: (e) ->
-			@navigate @model.get('type') + '/' + @model.get('id') + '/edit'
+			@navigate @model.type + '/' + @model.get('id') + '/edit'
 
 		add: (e) ->
-			@navigate @model.get('type') + '/add'
+			@navigate @model.type + '/add'
 
 		remove: (e) ->
 			if confirm 'Are you sure? :)'
@@ -38,7 +38,11 @@ define (require) ->
 				error: (collection, response) => ev.trigger response.status+''
 
 		render: ->
-			tplRendered = _.template tpl, @model.toJSON()
+			data = @model.toJSON()
+			data.type = @model.type
+			data.id = @model.get('username') if data.type is 'person'
+
+			tplRendered = _.template tpl, data
 			@$el.html tplRendered
 
 			@

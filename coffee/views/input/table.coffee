@@ -10,7 +10,7 @@ define (require) ->
 	# cInputTableRow = require 'collections/input/tablerow'
 	# mInputTableRow = require 'models/input/tablerow'
 	# vInputAutocomplete = require 'views/input/autocomplete'
-	EditableList = require 'views/ui/editablelist'
+	EditableList = require 'views/input/editablelist'
 	vInputTypeahead = require 'views/input/typeahead'
 	vInputTextarea = require 'views/input/textarea'
 	vInputSelect = require 'views/input/select'
@@ -77,7 +77,7 @@ define (require) ->
 				totaltd = $('td[data-key="'+key+'"]')
 				@renderTotalPercentage totaltd, hlpr.getSumFromInputs(inputs)
 
-			@tablevalue.getByCid(cid).set(key, value)
+			@tablevalue.get(cid).set(key, value)
 
 
 		### /EVENTS ###

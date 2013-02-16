@@ -1,9 +1,9 @@
 define (require) ->
 	BaseCollection = require 'collections/base'
-	mPerson = require 'models/person'
+	mPerson = require 'models/person.min'
 
-	class cPeople extends BaseCollection
+	class People extends BaseCollection
 
 		model: mPerson
 	
-		url: '/b/db/people'
+		url: '/b/db/person'

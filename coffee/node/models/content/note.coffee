@@ -1,24 +1,26 @@
 _ = require 'underscore'
 Content = require '../content'
-# relationManager = require '../../RelationManager'
 
 class Note extends Content
 
-	# initialize: ->
-	# 	console.log Content
+	'type': 'note'
 
-	# 'defaults': console.log(Content)
+	'defaultAttributes': 
+		'body': ''
 
-	'defaults': _.extend({}, Content::defaults, 
-		'type': 'notes'
-		'body': '')
+	'defaults': -> _.extend {}, Content::defaults, @defaultAttributes
 
-		# 'owners': 'attached'
-		# 'editors': 'attached'
-		# 'readers': 'attached'
-		# 'departments': 'attached'
-		# 'organisations': 'attached'
-		# 'projects': 'attached'
-		# 'comments': 'separate'
+	beforeSave: (callback) ->
+		attributes = {}
+
+		for own attribute, value of @defaultAttributes
+			attributes[attribute] = @get attribute
+
+		attributes.id = @id if not @isNew()
+
+		callback attributes
+
+	# call NOP afterSave to prevent the afterSave from Content to fire
+	afterSave: (callback) -> callback @attributes
 
 module.exports = Note

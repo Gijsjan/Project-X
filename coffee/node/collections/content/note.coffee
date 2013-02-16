@@ -1,7 +1,7 @@
-BaseCollection = require '../base'
+Content = require '../content'
 mNote = require '../../models/content/note'
 
-class Note extends BaseCollection
+class Note extends Content
 	
 	'model': mNote
 

@@ -1,28 +1,19 @@
-# @trigger 'valuechanged'
-# 		@param 'attr' @tablekey
-#		@param 'data' @table2object()
-#
 define (require) ->
-	# _ = require 'underscore'
 	Backbone = require 'backbone'
 	jqueryui = require 'jqueryui'
 	BaseView = require 'views/base'
-	# cInputTableRow = require 'collections/input/tablerow'
-	# mInputTableRow = require 'models/input/tablerow'
-	# vInputAutocomplete = require 'views/input/autocomplete'
-	EditableList = require 'views/ui/editablelist'
+	EditableList = require 'views/input/editablelist'
 	Typeahead = require 'views/input/typeahead'
+	Select = require 'views/input/select'
 	Textinput = require 'views/input/textinput'
 	Textarea = require 'views/input/textarea'
 	vInputSelect = require 'views/input/select'
 	vWarning = require 'views/ui/warning'
-	# tpl = require 'text!html/input/table.html'
 	hlpr = require 'helper'
 
 	class Input extends BaseView
 
 		className: 'input'
-
 
 		### /EVENTS ###
 
@@ -50,17 +41,17 @@ define (require) ->
 						'value': @value
 						'span': @span
 
-				when 'typeahead'
-					input = new Typeahead
+				when 'select'
+					input = new Select
 						'value': @value
-						'dbview': @input.dbview
+						'url': @input.url
 						'span': @span
-						'selectfromlist': true
+
 
 				when 'editablelist'
 					input = new EditableList
 						'value': @value
-						'dbview': @input.dbview
+						'config': @input
 						'span': @span
 
 			input.on 'valuechanged', (value) =>

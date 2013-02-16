@@ -1,0 +1,7 @@
+h3 Members
+
+lu
+	<% members.each(function(member) { %>
+	li 
+		a(href!="/person/<%= member.id %>") <%= member.get('username') %>
+	<% }); %>

@@ -1,7 +1,15 @@
 .user(id!="object-<%= id %>")
-	h2.user-title <%= title %>
+	h2.user-title <%= username %>
 	nav.user-menu
-		a.editevent(href!="/people/<%= id %>/edit") edit
+		a.editevent(href!="/person/<%= username %>/edit") edit 
 		span.delevent delete
 	.user-info
 	.user-body
+
+		h3 Groups
+		lu
+			<% groups.each(function(group) { %>
+			li
+				a(href!="/group/<%= group.id %>") <%= group.get('title') %> 
+				<%= group.get('type').value %>
+			<% }); %>

@@ -5,8 +5,9 @@ define (require) ->
 
 		'urlRoot': '/b/db/organisations'
 		
+		'type': 'organisations'
+		
 		'defaults':
-			'type': 'organisations'
 			'title': ''
 
 		'relations':

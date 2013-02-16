@@ -10,7 +10,8 @@ define (require) ->
 		'view': {}
 
 		initialize: ->
-			@on 'all', (trigger, args) =>
-				ev.trigger 'newRoute', @breadcrumbs
+			@on 'all', (eventName) =>
+				if eventName.substr(0, 6) is "route:"				
+					ev.trigger 'newRoute', @breadcrumbs
 
-				viewManager.show @view
+					viewManager.show @view

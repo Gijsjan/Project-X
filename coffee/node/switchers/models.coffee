@@ -17,10 +17,10 @@ Comment = require '../models/annotations/comment'
 
 ModelSwitcher =
 	'content': Content
-	'groups': Group
-	'people': Person
+	'group': Group
+	'person': Person
 
-	'notes': Note
+	'note': Note
 	
 	'departments': Department
 	'organisations': Organisation

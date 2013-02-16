@@ -7,7 +7,7 @@ define (require) ->
 		
 		render: ->
 			super
-
+			
 			rtpl = _.template tpl, @model.toJSON()
 			@$('.listed-body').html rtpl
 

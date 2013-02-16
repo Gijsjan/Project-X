@@ -1,6 +1,6 @@
 define (require) ->
 	_ = require 'underscore'
-	mPerson = require 'models/person'
+	mPerson = require 'models/person.full'
 	vFull = require 'views/full'
 	tpl = require 'text!html/person/full.html'
 

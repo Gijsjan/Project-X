@@ -1,21 +1,17 @@
 define (require) ->
 	BaseRouter = require 'routers/base'
-	# vContentListControl = require 'views/object/content/list.control'
-	# vUserCommentList = require 'views/object/comment/list.user'
-	# FullViews = require 'switchers/views.full'
-	mPerson = require 'models/person'
-	# cPeople = require 'collections/object/people'
+	mPerson = require 'models/person.full'
 	vFullPerson = require 'views/person/full'
 	vEditPerson = require 'views/person/edit'
-	vPeopleList = require 'views/person/list'
+	vList = require 'views/list'
 
 
 	class PeopleRouter extends BaseRouter
 
 		'routes':
-			"people/new": "edit"
-			"people/:id/edit": "edit"
-			"people/:id": "show"
+			"person/new": "edit"
+			"person/:id/edit": "edit"
+			"person/:id": "show"
 			"people": "list"
 
 			# "user/:user_id/content": "content"
@@ -36,8 +32,12 @@ define (require) ->
 
 		edit: (id) ->
 			@breadcrumbs = 'People': '/people'
-			@breadcrumbs[id] = '/people/'+id if id?
-			@breadcrumbs.edit = ''
+			
+			if id?
+				@breadcrumbs[id] = '/people/'+id
+				@breadcrumbs.edit = ''
+			else 
+				@breadcrumbs.new = ''
 
 			model = if id? then new mPerson('id': id) else new mPerson()
 
@@ -46,7 +46,8 @@ define (require) ->
 		list: ->
 			@breadcrumbs = 'People': ''
 			# console.log 'UserRouter.list()'
-			@view = new vPeopleList()
+			@view = new vList
+				'type': 'person'
 
 		# content: (user_id) ->
 		# 	lc = new vContentListControl
