@@ -1,9 +1,0 @@
-[Desktop Entry]
-Exec=lxmed
-Icon=/opt/lxmed/lxmed.png
-Type=Application
-Terminal=false
-Name=Main Menu Editor
-GenericName=Main Menu Editor
-StartupNotify=false
-Categories=Settings;
