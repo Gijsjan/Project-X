@@ -1,36 +1,54 @@
-Content = require '../models/content'
-Group = require '../models/group'
-Person = require '../models/person'
+_ = require 'lodash'
 
-Note = require '../models/content/note'
+class Models
 
-Department = require '../models/groups/department'
-Organisation = require '../models/groups/organisation'
-Project = require '../models/groups/project'
+	@models:
+		'content': '../models/content'
+		'note': '../models/content/note'
+		'carpool': '../models/content/carpool'
+		'carpool_trip': '../models/content/carpool_trip'
+		'group': '../models/group'
+		'person': '../models/person'
 
-Owner = require '../models/people/owner'
-Editor = require '../models/people/editor'
-Reader = require '../models/people/reader'
-Member = require '../models/people/member'
+	@get: (type, id) ->
+		model = require @models[type]
+		model = if _.isObject id then new model id else new model 'id': id
 
-Comment = require '../models/annotations/comment'
+module.exports = Models
 
-ModelSwitcher =
-	'content': Content
-	'group': Group
-	'person': Person
+# Content = require '../models/content'
+# Group = require '../models/group'
+# Person = require '../models/person'
 
-	'note': Note
+# Note = require '../models/content/note'
+
+# Department = require '../models/groups/department'
+# Organisation = require '../models/groups/organisation'
+# Project = require '../models/groups/project'
+
+# Owner = require '../models/people/owner'
+# Editor = require '../models/people/editor'
+# Reader = require '../models/people/reader'
+# Member = require '../models/people/member'
+
+# Comment = require '../models/annotations/comment'
+
+# ModelSwitcher =
+# 	'content': Content
+# 	'group': Group
+# 	'person': Person
+
+# 	'note': Note
 	
-	'departments': Department
-	'organisations': Organisation
-	'projects': Project
+# 	'departments': Department
+# 	'organisations': Organisation
+# 	'projects': Project
 
-	'owners': Owner
-	'editors': Editor
-	'readers': Reader
-	'members': Member
+# 	'owners': Owner
+# 	'editors': Editor
+# 	'readers': Reader
+# 	'members': Member
 	
-	'comments': Comment
+# 	'comments': Comment
 
-module.exports = ModelSwitcher
+# module.exports = ModelSwitcher

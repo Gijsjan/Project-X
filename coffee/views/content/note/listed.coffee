@@ -1,5 +1,4 @@
 define (require) ->
-	# _ = require 'underscore'
 	vListed = require 'views/listed'
 	tpl = require 'text!html/content/note/listed.html'
 

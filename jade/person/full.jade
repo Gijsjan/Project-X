@@ -13,3 +13,11 @@
 				a(href!="/group/<%= group.id %>") <%= group.get('title') %> 
 				<%= group.get('type').value %>
 			<% }); %>
+
+		h3 Content
+		lu
+			<% content.each(function(con) { %>
+			li
+				a(href!="/content/<%= con.get('content_type').value %>/<%= con.id %>") <%= con.get('title') %> 
+				<%= con.get('content_type').value %>
+			<% }); %>

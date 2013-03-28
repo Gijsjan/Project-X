@@ -5,3 +5,10 @@ lu
 	li 
 		a(href!="/person/<%= member.id %>") <%= member.get('username') %>
 	<% }); %>
+
+h3 Content
+lu
+	<% content.each(function(con) { %>
+	li 
+		a(href!="/content/<%= con.get('content_type').value %>/<%= con.id %>") <%= con.get('title') %>
+	<% }); %>

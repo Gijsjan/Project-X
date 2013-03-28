@@ -3,7 +3,7 @@
 .listed-main
 	.listed-title
 		h4
-			a(href!="/<%= type %>/<%= id %>") <%= title %> 
+			a(href!="<%= urls.full %>") <%= title %> 
 			small
-				a(href!="/<%= type %>/<%= id %>/edit") edit
+				a(href!="<%= urls.edit %>") edit
 	.listed-body

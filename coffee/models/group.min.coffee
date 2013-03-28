@@ -6,8 +6,17 @@ define (require) ->
 
 		'type': 'group'
 
+		'type_ids':
+			'department': '1'
+			'organisation': '2'
+			'project': '3'
+			'family': '4'
+
 		'defaults':	_.extend({}, BaseModel::defaults, 
 			'title': ''
-			'type':
+			'type': 'group'
+			'group_type':
 				'id': ''
-				'value': '')
+				'value': ''
+			'created': ''
+			'updated': '')

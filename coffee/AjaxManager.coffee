@@ -1,7 +1,7 @@
 define (require) ->
 	Backbone = require 'backbone'
 	ev = require 'EventDispatcher'
-
+	
 	class AjaxManager
 
 		constructor: ->

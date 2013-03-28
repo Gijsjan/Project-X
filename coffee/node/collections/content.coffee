@@ -1,9 +1,15 @@
+_ = require 'lodash'
 BaseCollection = require './base'
 mContent = require '../models/content'
 
 class Content extends BaseCollection
 
 	'model': mContent
+
+	initialize: ->
+		@model = require('../models/content') if _.isEmpty @model
+
+		super
 
 	fetchOptions: ->
 		'tables': [@type, 'content_type', 'content']

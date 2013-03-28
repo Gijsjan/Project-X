@@ -1,44 +1,37 @@
 define (require) ->
 	BaseView = require 'views/base'
 	BaseCollection = require 'collections/base'
-	ev = require 'EventDispatcher'
 	vPagination = require 'views/ui/pagination'
-	Switcher = require 'switchers/switcher'
-	tpl = require 'text!html/content/note/list.html'
+	# Switcher = require 'switchers/switcher'
+	Collections = require 'switchers/collections'
+	Listed = require 'switchers/views.listed'
 
-	class vList extends BaseView
+	class List extends BaseView
 
 		id: 'list'
 
-		initialize: ->			
-			@filters = {}
+		initialize: ->	
+			[@type] = [@options.type]
+			
+			if not @items? # @items can be defined in parent class
+				@type = @model.type if not @type
+				@items = new Collections[@type]()
 
-			@render()
-
-			@filtereditems = new Switcher.Collections[@model.type]()
-			@filtereditems.on 'reset', @renderCollection, @
-
-			@collection = new Switcher.Collections[@model.type]() # @type is set in the child views initialize()
-			@collection.fetch (collection, response) => @filtereditems.reset collection.models
+			@items.fetch => @render()
 
 			super
 
 		render: ->
-			rtpl = _.template tpl
-			@$el.html rtpl
+			@$el.html ''
 
-			@
-
-		renderCollection: ->
-			# console.log 'vList.renderCollection()'
-			@$('#list').html ''
-
-			pagination = new vPagination 'itemCount': @filtereditems.length
+			pagination = new vPagination 'itemCount': @items.length
 			
-			@filtereditems.each (model, i) =>
-				t = new Switcher.Views.Listed[@model.type]
+			@items.each (model, i) =>
+				t = new Listed[@type]
 					'model': model
 
 				pagination.addItem t.render().$el, i
 
-			@$('#list').append pagination.render().$el
+			@$el.append pagination.render().$el
+
+			@

@@ -1,7 +1,5 @@
 define (require) ->
-	# _ = require 'underscore'
-	# Markdown = require 'markdown'
-	mNote = require 'models/content/note'
+	mNote = require 'models/content/note.full'
 	ContentView = require 'views/content/full'
 	tpl = require 'text!html/content/note/full.html'
 

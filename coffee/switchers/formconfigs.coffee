@@ -8,21 +8,25 @@ define (require) ->
 	# cVideo = require 'collections/object/content/video'
 	# cDocument = require 'collections/object/content/document'
 	content = require 'config.form/content'
-	person = require 'config.form/person'
 	note = require 'config.form/content/note'
+	carpool = require 'config.form/content/carpool'
+	
+	person = require 'config.form/person'
 	group = require 'config.form/group'
-	department = require 'config.form/group/department'
-	organisation = require 'config.form/group/organisation'
-	# cFormat = require 'config/object/content/format'
+	# department = require 'config.form/group/department'
+	# organisation = require 'config.form/group/organisation'
+	# # cFormat = require 'config/object/content/format'
 	# GROUPS
 	# cProjects = require 'config/group/projects'
 	# cOrganisations = require 'config/group/organisations'
 
 	'content': content
-	'person': person
 	'note': note
+	'carpool': carpool
+
+	'person': person
 	'group': group
-	'departments': department
-	'organisations': organisation
+	# 'departments': department
+	# 'organisations': organisation
 	# 'projects': cProjects
 	# 'organisations': cOrganisations

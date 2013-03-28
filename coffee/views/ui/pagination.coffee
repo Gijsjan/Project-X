@@ -1,5 +1,4 @@
 define (require) ->
-	# _ = require 'underscore'
 	BaseView = require 'views/base'
 	tpl = require 'text!html/ui/pagination.html'
 

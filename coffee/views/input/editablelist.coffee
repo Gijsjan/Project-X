@@ -21,7 +21,9 @@ define (require) ->
 				'collection': @config.collection
 				'span': @span
 				'selectfromlist': true
-			@typeahead.on 'valuechanged', (item) => @selecteditems.add item
+			@typeahead.on 'valuechanged', (item) => 
+				item['access'] = 'read'
+				@selecteditems.add item
 
 			@render()
 
@@ -45,7 +47,7 @@ define (require) ->
 			@$('section.selecteditems ul').html ''
 
 			@selecteditems.each (item) =>
-				@$('section.selecteditems ul').append @createElement(item)
+				@$('section.selecteditems ul.nav').append @createElement(item)
 
 		createElement: (item) ->
 			[id, title] = [item.get('id'), item.get('title')]

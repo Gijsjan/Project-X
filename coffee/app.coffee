@@ -5,15 +5,10 @@ define (require) ->
     collectionManager = require 'CollectionManager'
     viewManager = require 'ViewManager'
 
-    vMenu = require 'views/main/menu'
+    vMenu = require 'views/ui/menu'
 
-    GroupRouter = require 'routers/group'
-    DepartmentsRouter = require 'routers/departments'
-    OrganisationsRouter = require 'routers/organisations'
-    PeopleRouter = require 'routers/people'
-    NotesRouter = require 'routers/notes'
+    ContentRouter = require 'routers/content'
     MainRouter = require 'routers/main'
-    AdminRouter = require 'routers/admin'
     
     hlpr = require 'helper'
 
@@ -24,13 +19,8 @@ define (require) ->
 
         new vMenu()
 
-        adminRouter = new AdminRouter()
-        groupRouter = new GroupRouter()
-        departmentsRouter = new DepartmentsRouter()
-        organisationsRouter = new OrganisationsRouter()
-        peopleRouter = new PeopleRouter()
-        notesRouter = new NotesRouter()
         mainRouter = new MainRouter() # define mainRouter after objectRouter so mainRouter's routes are used firs
+        contentRouter = new ContentRouter()
 
         Backbone.history.start pushState: true   
 

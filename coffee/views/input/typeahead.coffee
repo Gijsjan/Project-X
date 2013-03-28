@@ -6,7 +6,6 @@ define (require) ->
 	BaseView = require 'views/base'
 	vModal = require 'views/ui/modal'
 	vInputList = require 'views/input/list'
-	cListItems = require 'collections/listitems'
 	BaseModel = require 'models/base'
 	BaseCollection = require 'collections/base'
 	Models = require 'switchers/models'
@@ -80,10 +79,6 @@ define (require) ->
 			@collectionTypes = [@collectionTypes] if _.isString @collectionTypes
 
 			@alloptions = new BaseCollection()
-			@alloptions.model.parse = (attributes) ->
-				console.log attributes
-				attributes.title = attributes.title + '('+attributes.type+')'
-				attributes
 
 			getModels = (type, callback) ->
 				new Collections[type]().fetch (response) => callback null, response.models

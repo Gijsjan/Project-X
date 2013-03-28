@@ -1,23 +1,41 @@
-_ = require 'underscore'
+_ = require 'lodash'
+async = require 'async'
 BaseModel = require './base'
-cGroup = require '../collections/group'
+Content = require './content'
+Groups = require '../collections/group'
+Notes = require '../collections/content/note'
 db = require '../MySQLConnection'
+RelationManager = require '../RelationManager'
 
 class Person extends BaseModel
 
 	'type': 'person'
 
-	'defaults':	_.extend({}, BaseModel::defaults, 
+	relations: ->
+		'groups': 
+			'key': 'group'
+			'type': 'many2many'
+		'content':
+			'key': 'content'
+			'type': 'many2many'
+
+	'defaultAttributes':
+		'type': 'person'
 		'username': ''
 		'email': ''
 		'password': ''
-		'groups': [])
+		'groups': []
+		'content': []
+	
+	defaults:	-> _.extend {}, BaseModel::defaults(), @defaultAttributes
 
 	initialize: ->
 		if @id? and isNaN(parseInt(@id))
 			console.log 'setting usernmae'+@id
 			@set 'username', @id
 			@unset 'id'
+
+	### FETCH ###
 
 	fetchOptions: ->
 		if not _.isEmpty(@get('username'))
@@ -28,30 +46,28 @@ class Person extends BaseModel
 		'tables': 'person'
 		'where': where
 
-	afterFetch: (args) ->
-		[attributes, callback] =[args.attributes, args.callback]
-		groups = new cGroup()
-		groups.fetchBy
-			'table': 'person'
-			'id': attributes.id
-			callback: (response) ->
-				attributes.groups = response.data
-				callback attributes
-
 	parse: (attributes) ->
 		attributes.title = attributes.username
 
 		attributes
 
+	afterFetch: (cb) -> RelationManager.fetch @, cb
+
+	### /FETCH ###
+
+	### SAVE ###
+	
 	beforeSave: (callback) ->
 		attributes = _.extend {}, @attributes # copy @attributes
 
-		delete attributes.groups
+		delete attributes.type
 		delete attributes.title
+		delete attributes.groups
+		delete attributes.content
 
 		callback attributes
 
-	afterSave: (callback) ->
+	afterSave: (cb) ->
 		person_id = @id
 		values = []
 		sqlq = "DELETE FROM `group__person` WHERE `person_id` = '" + person_id + "'"
@@ -64,8 +80,9 @@ class Person extends BaseModel
 				sqlq = "INSERT INTO `group__person` VALUES "
 				sqlq = sqlq + values.join()
 
-				db.run sqlq, (response) => callback @attributes
+				db.run sqlq, (response) => cb()
 			else
-				callback @attributes
+				cb()
+	### /SAVE ###
 
 module.exports = Person

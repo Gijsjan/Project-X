@@ -3,9 +3,7 @@
 #		@param 'data' @table2object()
 #
 define (require) ->
-	# _ = require 'underscore'
 	Backbone = require 'backbone'
-	jqueryui = require 'jqueryui'
 	BaseView = require 'views/base'
 	# cInputTableRow = require 'collections/input/tablerow'
 	# mInputTableRow = require 'models/input/tablerow'

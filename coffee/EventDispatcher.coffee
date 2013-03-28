@@ -1,6 +1,6 @@
 define (require) ->
 	Backbone = require 'backbone'
-	vLogin = require 'views/main/login'
+	vLogin = require 'views/ui/login'
 
 	class EventDispatcher
 
@@ -14,13 +14,20 @@ define (require) ->
 
 			@on 'modelSaved', (model) ->
 				id = model.get('id')
+				type = model.type
 				id = model.get('username') if model.type is 'person'
 
-				router.navigate model.type+'/'+id, 'trigger': true
+				url = type+'/'+id
+				url = 'content/'+url if model.isContent()
+				
+				router.navigate url, 'trigger': true
 
 			@on 'modelRemoved', (model) ->
 				# DOESNT GO TO CORRECT PAGE
 				console.log 'EventDispatcher.modelRemoved: but navigates to model.type instead of plural or removed page'
-				router.navigate model.type, 'trigger': true
+				
+				url = model.type
+				url = 'content/'+url if model.isContent()
+				router.navigate url, 'trigger': true
 
 	new EventDispatcher()

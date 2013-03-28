@@ -4,9 +4,23 @@ define (require) ->
 	class ContentMin extends BaseModel
 		
 		'type': 'content'
-		
-		'defaults':	_.extend({}, BaseModel::defaults, 
+
+		'type_ids':
+			'note': '1'
+			'document': '2'
+			'todo': '3'
+			'carpool': '4'
+
+		initialize: ->
+			@set 'content_type', 
+				'id': @type_ids[@type]
+				'value': @type
+	
+		defaults: -> _.extend({}, BaseModel::defaults, 
 			'title': ''
-			'type':
+			'type': 'content'
+			'content_type':
 				'id': ''
-				'value': '')
+				'value': ''
+			'created': ''
+			'updated': '')

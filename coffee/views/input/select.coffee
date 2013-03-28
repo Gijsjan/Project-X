@@ -48,7 +48,7 @@ define (require) ->
 
 					@open() if not @$el.hasClass 'open'
 				when 13 # Enter
-					option = @select_options.get active[0].dataset.id
+					option = @selectoptions.get active[0].dataset.id
 					@setInputValue option
 				when 27 # Escape
 					@close()
@@ -60,17 +60,21 @@ define (require) ->
 			false
 
 		optionClick: (e) ->
-			option = @select_options.get e.currentTarget.parentNode.dataset.id
+			option = @selectoptions.get e.currentTarget.parentNode.dataset.id
 			@setInputValue option
 			false
 
 		### /EVENTS ###
 
 		initialize: ->
-			[@option, @url, @span] = [@options.value, @options.url, @options.span]
+			[@option, @selectoptions, @url, @span] = [@options.value, @options.selectoptions, @options.url, @options.span]
 
-			@select_options = new BaseCollection {}, 'url': @url
-			@select_options.fetch => @render()
+			if @selectoptions.length > 0
+				@selectoptions = new BaseCollection @selectoptions
+				@render()				
+			else
+				@selectoptions = new BaseCollection {}, 'url': @url
+				@selectoptions.fetch => @render()
 
 			super
 
@@ -78,7 +82,7 @@ define (require) ->
 			renderedHTML = _.template tpl,
 				'value': @option.value
 				'span': @span
-				'selectoptions': @select_options
+				'selectoptions': @selectoptions
 			@$el.html renderedHTML
 
 			@

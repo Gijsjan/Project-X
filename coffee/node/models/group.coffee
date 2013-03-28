@@ -1,37 +1,36 @@
-_ = require 'underscore'
+_ = require 'lodash'
 BaseModel = require './base'
 cPerson = require '../collections/person'
 db = require '../MySQLConnection'
+RelationManager = require '../RelationManager'
 
 class Group extends BaseModel
 
 	'type': 'group'
 
-	'defaults':	_.extend({}, BaseModel::defaults, 
-		'title': ''
-		'type': 
+	relations: ->
+		'members': 
+			'key': 'person'
+			'type': 'many2many'
+		'content':
+			'key': 'content'
+			'type': 'many2many'
+
+	'defaultAttributes': 
+		'type': 'group'
+		'group_type': 
 			'id': ''
 			'value': ''
-		'members': [])
+		'title': ''
+		'members': []
+		'content': []
 
-	fetchOptions: ->
-		'tables': ['group', 'group_type']
-		'fields': ['`group`.*', '`group_type`.value as type_value']
-		'where': "`group`.`id` = '"+@id+"' AND `group_type`.id = `group`.type_id"
-	
-	afterFetch: (args) ->
-		[attributes, callback] =[args.attributes, args.callback]
+	defaults: -> _.extend {}, BaseModel::defaults(), @defaultAttributes
 
-		members = new cPerson()
-		members.fetchBy
-			'table': 'group'
-			'id': @id
-			callback: (response) ->
-				attributes.members = response.data
-				callback attributes
+	### FETCH ###
 
 	parse: (attributes) ->
-		attributes.type =
+		attributes.group_type =
 			'id': attributes.type_id
 			'value': attributes.type_value
 
@@ -40,19 +39,31 @@ class Group extends BaseModel
 
 		attributes
 
+	fetchOptions: ->
+		'tables': ['group', 'group_type']
+		'fields': ['`group`.*', '`group_type`.value as type_value']
+		'where': "`group`.`id` = '"+@id+"' AND `group_type`.id = `group`.type_id"
+	
+	afterFetch: (cb) -> 
+		RelationManager.fetch @, cb
+
+	### /FETCH ###
+
+	### SAVE ###
 
 	beforeSave: (callback) ->
 		attributes = _.extend {}, @attributes # copy @attributes
 
-		attributes.type_id = @get('type').id
+		attributes.type_id = @get('group_type').id
 		attributes.id = @id if not @isNew()
 		
 		delete attributes.members
 		delete attributes.type
+		delete attributes.group_type
 
 		callback attributes
 
-	afterSave: (callback) ->
+	afterSave: (cb) ->
 		group_id = @id
 		values = []
 		sqlq = "DELETE FROM `group__person` WHERE `group_id` = '" + group_id + "'"
@@ -65,8 +76,10 @@ class Group extends BaseModel
 				sqlq = "INSERT INTO `group__person` VALUES "
 				sqlq = sqlq + values.join()
 
-				db.run sqlq, (response) => callback @attributes
+				db.run sqlq, (response) => cb()
 			else
-				callback @attributes
+				cb()
+
+	### /SAVE ###
 
 module.exports = Group

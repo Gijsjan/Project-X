@@ -8,20 +8,26 @@ define (require) ->
 	# cVideo = require 'collections/object/content/video'
 	# cDocument = require 'collections/object/content/document'
 	Content = require 'collections/content'
+	Notes = require 'collections/content/notes'
+	Carpools = require 'collections/content/carpool'
+	CarpoolTrips = require 'collections/content/carpool/trip'
+	
 	cPeople = require 'collections/people'
 	
-	cNotes = require 'collections/content/notes'
+	Group = require 'collections/group'
 	# cFormat = require 'collections/object/content/format'
 	# GROUPS
-	Group = require 'collections/group'
-	cProjects = require 'collections/group/projects'
-	cDepartments = require 'collections/group/departments'
-	cOrganisations = require 'collections/group/organisations'
+	# cProjects = require 'collections/group/projects'
+	# cDepartments = require 'collections/group/departments'
+	# cOrganisations = require 'collections/group/organisations'
 
 	'content': Content
+	'note': Notes
+	'carpool': Carpools
+	'carpool_trip': CarpoolTrips
+
 	'person': cPeople
-	'note': cNotes
 	'group': Group
-	'projects': cProjects
-	'departments': cDepartments
-	'organisations': cOrganisations
+	# 'projects': cProjects
+	# 'departments': cDepartments
+	# 'organisations': cOrganisations

@@ -1,5 +1,4 @@
 define (require) ->
-	# _ = require 'underscore'
 	Backbone = require 'backbone'
 	BaseModel = require 'models/base'
 	collectionManager = require 'CollectionManager'
@@ -22,7 +21,7 @@ define (require) ->
 
 		fetch: (callback) ->
 			super
-				success: (collection, response, options) -> callback collection, response, options
+				success: (collection, response, options) -> callback collection, response, options if callback?
 				error: (collection, xhr, options) -> console.log xhr
 		
 		# sync: (method, collection, options) ->

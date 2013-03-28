@@ -1,0 +1,354 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"carp",
+				"carpool_id"
+			],
+			[
+				"render",
+				"renderCollection"
+			],
+			[
+				"ca",
+				"carpoolID"
+			],
+			[
+				"We",
+				"Weeen"
+			],
+			[
+				"Weee",
+				"WeeenModel"
+			],
+			[
+				"select",
+				"selectoptions"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"contents": "module.exports = function(grunt) {\n\n  // Project configuration.\n  grunt.initConfig({\n    pkg: grunt.file.readJSON('package.json'),\n    uglify: {\n      options: {\n        banner: '/*! <%= pkg.name %> <%= grunt.template.today(\"yyyy-mm-dd\") %> */\\n'\n      },\n      build: {\n        src: 'src/<%= pkg.name %>.js',\n        dest: 'build/<%= pkg.name %>.min.js'\n      }\n    }\n  });\n\n  // Load the plugin that provides the \"uglify\" task.\n  grunt.loadNpmTasks('grunt-contrib-uglify');\n\n  // Default task(s).\n  grunt.registerTask('default', ['uglify']);\n\n};",
+			"file": "/home/gijs/projectx-dev/Gruntfile.coffee",
+			"file_size": -1,
+			"file_write_time": -1,
+			"settings":
+			{
+				"buffer_size": 547,
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "",
+	"command_palette":
+	{
+		"height": 392.0,
+		"selected_items":
+		[
+			[
+				"install",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 449.0
+	},
+	"console":
+	{
+		"height": 139.0
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/home/gijs/projectx-src/projectx.sublime-project",
+		"/home/gijs/projectx-src/coffee/models/content/carpool/trip.coffee",
+		"/home/gijs/projectx-src/coffee/views/content/carpool/full.coffee",
+		"/home/gijs/projectx-src/coffee/models/content.min.coffee",
+		"/home/gijs/projectx-src/coffee/models/content.full.coffee",
+		"/home/gijs/projectx-src/coffee/models/content/carpool.min.coffee",
+		"/home/gijs/projectx-src/coffee/models/content/carpool.full.coffee",
+		"/home/gijs/www-src/coffee/models/content/carpool.min.coffee",
+		"/home/gijs/www-src/coffee/node/RelationManager.coffee",
+		"/home/gijs/www-src/coffee/models/content/carpool/trip.coffee",
+		"/home/gijs/www-src/coffee/routers/main.coffee",
+		"/home/gijs/www-src/coffee/views/weeen.coffee",
+		"/home/gijs/Videos/[serie] Six Feet Under/Season 5/Six Feet Under - 5x05 - Eat a Peach.en.srt",
+		"/home/gijs/www-src/coffee/views/list.coffee",
+		"/home/gijs/www-src/coffee/app.coffee",
+		"/home/gijs/www-src/coffee/routers/base.coffee",
+		"/home/gijs/www-src/coffee/routers/content.coffee",
+		"/home/gijs/www-src/coffee/switchers/collections.coffee",
+		"/home/gijs/www-src/coffee/collections/content/carpool/trip.coffee",
+		"/home/gijs/www-src/coffee/models/content/note.min.coffee",
+		"/home/gijs/www-src/coffee/models/group.min.coffee",
+		"/home/gijs/www-src/coffee/models/person.min.coffee",
+		"/home/gijs/www-src/coffee/switchers/views.edit.coffee",
+		"/home/gijs/www-src/coffee/views/content/full.coffee",
+		"/home/gijs/www-src/coffee/routers/people.coffee",
+		"/home/gijs/www-src/coffee/routers/group.coffee",
+		"/home/gijs/www-src/coffee/views/content/list.coffee",
+		"/home/gijs/www-src/coffee/switchers/views.listed.coffee",
+		"/home/gijs/www-src/coffee/views/content/carpool/full.coffee",
+		"/home/gijs/www-src/coffee/views/content/carpool/trip/list.coffee",
+		"/home/gijs/www-src/coffee/views/content/carpool/trip/listed.coffee",
+		"/home/gijs/www-src/coffee/views/content/note/full.coffee",
+		"/home/gijs/www-src/coffee/node/switchers/models.coffee",
+		"/home/gijs/www-src/coffee/node/collections/content/note.coffee",
+		"/home/gijs/www-src/coffee/models/base.coffee",
+		"/home/gijs/www-src/coffee/models/content.min.coffee",
+		"/home/gijs/www-src/coffee/config.form/content/carpool.coffee",
+		"/home/gijs/www-src/coffee/models/content/carpool.full.coffee",
+		"/home/gijs/www-src/coffee/views/content/carpool/carpool_trip/list.coffee",
+		"/home/gijs/www-src/coffee/views/content/carpool/list.coffee",
+		"/home/gijs/www-src/coffee/views/content/carpool/carpool_trip/listed.coffee",
+		"/home/gijs/www-src/coffee/views/content/carpool/edit.coffee",
+		"/home/gijs/www-src/coffee/views/content/carpool/listed.coffee",
+		"/home/gijs/www-src/coffee/collections/content/carpool.coffee",
+		"/home/gijs/www-src/coffee/views/edit.coffee",
+		"/home/gijs/www-src/coffee/views/listed.coffee",
+		"/home/gijs/www-src/coffee/views/input/accesslist.coffee",
+		"/home/gijs/www-src/coffee/models/group.full.coffee",
+		"/home/gijs/www-src/coffee/switchers/formconfigs.coffee",
+		"/home/gijs/www-src/coffee/switchers/models.coffee",
+		"/home/gijs/www-src/coffee/switchers/templates.edit.coffee",
+		"/home/gijs/www-src/coffee/switchers/views.full.coffee",
+		"/home/gijs/www-src/coffee/models/person.full.coffee",
+		"/home/gijs/www-src/coffee/views/main/menu.coffee",
+		"/home/gijs/www-src/coffee/routers/notes.coffee",
+		"/home/gijs/www-src/coffee/EventDispatcher.coffee",
+		"/home/gijs/www-src/coffee/views/input/editablelist.coffee",
+		"/home/gijs/www-src/coffee/models/content/note.full.coffee",
+		"/home/gijs/www-src/coffee/config.form/content/note.coffee",
+		"/home/gijs/www-src/coffee/models/content.full.coffee",
+		"/home/gijs/www-src/coffee/views/input/input.coffee",
+		"/home/gijs/www-src/coffee/views/input/select.coffee",
+		"/home/gijs/www-src/coffee/helper.coffee",
+		"/home/gijs/www-src/coffee/views/input/typeahead.coffee",
+		"/home/gijs/www-src/coffee/config.form/group.coffee",
+		"/home/gijs/www-src/coffee/ViewManager.coffee",
+		"/home/gijs/www-src/coffee/main.coffee",
+		"/home/gijs/www-src/coffee/views/base.coffee",
+		"/home/gijs/www-src/coffee/views/input/list.coffee",
+		"/home/gijs/www-src/coffee/node/watch.coffee"
+	],
+	"find":
+	{
+		"height": 35.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+			"",
+			"/home/gijs/www-src/coffee/views/content/note",
+			""
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			",\n		{\n			\"name\": \"[HTML]\",\n			\"path\": \"/home/gijs/projectx-src/jade\"\n		}",
+			"projectx",
+			"()\n",
+			"filters",
+			"filtereditems",
+			"Collections[",
+			"carpool_trip",
+			"carpooltrip",
+			"carpool/trip",
+			"CarpoolTrips",
+			"collections/content/carpool",
+			"collections/carpool",
+			"collection/carpool",
+			"weeen",
+			"formatTime",
+			"round",
+			"prevTime",
+			".on",
+			"newRoute",
+			"type",
+			"group",
+			"vList",
+			"eV",
+			"Ev",
+			"ev",
+			"vList",
+			"vEditGroup",
+			"vFullGroup",
+			"views/list",
+			"@model",
+			"content/full",
+			"content/edit",
+			"content/listed",
+			"content/list",
+			"models/content/note",
+			"switchers/switcher",
+			"list",
+			"List",
+			"NotesRouter",
+			"notesRouter",
+			"NotesRouter",
+			"routers/note",
+			"admin",
+			"main/",
+			"groups",
+			"FormConfig[@model.type]",
+			"select_options",
+			"'type': 'select'",
+			"helper",
+			"model.get('type')",
+			"isContent",
+			"saved",
+			"cListItems",
+			"cListItem",
+			"collections/listitems",
+			"extension",
+			"exec",
+			"out",
+			"src",
+			"extension",
+			"exec",
+			"out",
+			"src",
+			"extension",
+			"var "
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 0,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "/home/gijs/projectx-dev/Gruntfile.coffee",
+					"settings":
+					{
+						"buffer_size": 547,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								547,
+								547
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/CoffeeScript/CoffeeScript.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 34.0
+	},
+	"input":
+	{
+		"height": 33.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"replace":
+	{
+		"height": 0.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+			[
+				"access",
+				"views/input/accesslist.coffee"
+			],
+			[
+				"listed",
+				"views/listed.coffee"
+			],
+			[
+				"edit",
+				"views/edit.coffee"
+			],
+			[
+				"list",
+				"views/list.coffee"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 269.0,
+	"status_bar_visible": true
+}

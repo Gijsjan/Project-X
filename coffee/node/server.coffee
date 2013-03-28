@@ -1,15 +1,12 @@
-_ = require 'underscore'
+_ = require 'lodash'
 http = require 'http'
+async = require 'async'
 
 Models = require './switchers/models'
 Collections = require './switchers/collections'
 user = require './models/people/user'
 
 db = require('./MySQLConnection')
-
-riak = require './riak'
-relationManager = require './RelationManager'
-CallbackQueue = require './CallbackQueue'
 
 express = require('express')
 RedisStore = require('connect-redis')(express)
@@ -34,8 +31,7 @@ app.param 'table', (req, res, next, id) ->
 		'group': {}
 		'person': {}
 		'note': {}
-		'department': {}
-		'organisation': {}
+		'carpool': {}
 
 	if tables.hasOwnProperty(id)
 		next()
@@ -63,57 +59,34 @@ app.get '/db/authorize', (req, res) ->
 	_writeResponse response, res
 
 app.get '/db/:table/type', (req, res) ->
-	db.select
+	fetchOptions = 
 		'tables': req.params.table+'_type'
 		'fields': ['id', 'value']
-		callback: (response) -> _writeResponse response, res
+
+	db.select fetchOptions, (response) -> _writeResponse response, res
 
 app.get '/db/:table/:id', (req, res) ->
-	model = new Models[req.params.table] 'id': req.params.id
-	model.fetch (response) -> _writeResponse response, res
+	Models.get(req.params.table, req.params.id).attributes
+	Models.get(req.params.table, req.params.id).fetch (response) ->
+		_writeResponse response, res
 
 app.get '/db/:table', (req, res) ->
-	collection = new Collections[req.params.table]()
-	collection.fetch (response) -> _writeResponse response, res
-
-# app.get '/db/select/:table/by/group/:group_id', (req, res) ->
-# 	collection = new Collections[req.params.table]()
-# 	collection.fetch
-# 		'selector': 
-# 			'name': 'byGroup'
-# 			'id': req.params.group_id
-# 		callback: (response) -> 
-# 			if not response.code
-# 				response =
-# 					'code': 200
-# 					'data': response
-
-# 			_writeResponse response, res
-
-	# model = new Models[req.params.table]()
-	# fields = _.keys model.attributes
-	# fields.push model.title + ' as title'
-	# fields.push 'id'
-
-	# db.select
-	# 	'tables': req.params.table
-	# 	'fields': fields
-	# 	callback: (response) -> _writeResponse response, res 
-
+	Collections.get(req.params.table).fetch (response) -> 
+		_writeResponse response, res
 
 ############
 ### POST ###
 ############
 
 app.post '/db/login', (req, res) ->
-	db.select
+	fetchOptions =
 		'tables': 'person'
 		'where': "`person`.`email` = '"+req.body.email+"' AND `person`.`password` = '"+req.body.password+"'"
-		callback: (response) ->
+	
+	db.select fetchOptions, (response) ->
 			if response.data.length > 0
-				response.data = response.data[0]
-				person = new Models['person'] response.data
-				req.session.currentUser = person.attributes
+				response.data = response.data[0] # do not remove, the response is returned 4 lines later
+				req.session.currentUser = Models.get('person', response.data).attributes
 			else
 				response = 'code': 401 # Unauthorized
 			
@@ -123,26 +96,40 @@ app.post '/db/logout', (req, res) ->
 	req.session.currentUser = null
 	_writeResponse 'code': 200, res
 
-_saveOLD = (req, res) ->
-	model = new Models[req.params.table] req.body
-	model.save (value) -> _writeResponse value, res
-
-
 _save = (req, res) ->
-	content = new Models['content'] req.body
-	content.save (response) ->
-		if response.code is 200 or response.code is 201
-			model = new Models[req.params.table] req.body
-			model.id = response.data.id
-			model.save (value) -> _writeResponse value, res
-		else
-			console.log 'Server._save error'
-			console.log response
+	if Models.get(req.params.table).isContent()
+		async.waterfall [
+			(callback) ->
+				Models.get('content', req.body).save (response) -> 
+					callback null, response
+			(response, callback) ->
+				Models.get(req.params.table, response.data).save (response) -> 
+					callback null, response
+			], 
+			(err, result) -> _writeResponse result, res
+	else
+		Models.get(req.params.table, req.body).save (response) -> 
 			_writeResponse response, res
-
 
 app.post '/db/:table', _save
 app.put '/db/:table/:key', _save
+
+# _saveOLD = (req, res) ->
+# 	model = new Models[req.params.table] req.body
+# 	model.save (value) -> _writeResponse value, res
+
+
+# _saveOLD2 = (req, res) ->
+# 	content = new Models['content'] req.body
+# 	content.save (response) ->
+# 		if response.code is 200 or response.code is 201
+# 			model = new Models[req.params.table] response.data
+# 			model.save (value) -> _writeResponse value, res
+# 		else
+# 			console.log 'Server._save error'
+# 			console.log response
+# 			_writeResponse response, res
+
 
 
 ###########
@@ -156,8 +143,8 @@ app.put '/db/:table/:key', _save
 ##############
 
 app.delete '/db/:table/:id', (req, res) ->
-	model = new Models[req.params.table] 'id': req.params.id
-	model.destroy (response) -> _writeResponse response, res
+	Models.get(req.params.table, req.params.id).destroy (response) -> 
+		_writeResponse response, res
 
 app.listen 3000
 console.log 'Node server running on :3000'

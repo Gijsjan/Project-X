@@ -6,6 +6,7 @@ define (require) ->
 	# CONTENT
 	Content = require 'text!html/content/edit.html'
 	tplNote = require 'text!html/content/note/edit.html'
+	Carpool = require 'text!html/content/carpool/edit.html'
 	# tplEvent = require 'text!html/event/edit.html'
 	# tplLink = require 'text!html/link/edit.html'
 	# tplVideo = require 'text!html/video/edit.html'
@@ -14,15 +15,16 @@ define (require) ->
 
 	# GROUPS
 	Group = require 'text!html/group/edit.html'
-	tplDepartment = require 'text!html/group/department/edit.html'
-	tplOrganisation = require 'text!html/group/organisation/edit.html'
-	tplProject = require 'text!html/group/project/edit.html'
+	# tplDepartment = require 'text!html/group/department/edit.html'
+	# tplOrganisation = require 'text!html/group/organisation/edit.html'
+	# tplProject = require 'text!html/group/project/edit.html'
 
 	'conten': Content
+	'note': tplNote
+	'carpool': Carpool
 	# 'object/comment': tplComment
 	'person': tplPeople
 	
-	'note': tplNote
 	# 'content/event': tplEvent
 	# 'content/link': tplLink
 	# 'content/video': tplVideo
@@ -30,6 +32,6 @@ define (require) ->
 	# 'content/format': tplFormat
 
 	'group': Group
-	'departments': tplDepartment
-	'organisations': tplOrganisation
-	'projects': tplProject
+	# 'departments': tplDepartment
+	# 'organisations': tplOrganisation
+	# 'projects': tplProject

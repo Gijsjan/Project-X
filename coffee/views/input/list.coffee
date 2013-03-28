@@ -1,6 +1,6 @@
 define (require) ->
 	BaseView = require 'views/base'
-	cListItems = require 'collections/listitems'
+	BaseCollection = require 'collections/base'
 	tpl = require 'text!html/input/list.html'
 	hlpr = require 'helper'
 
@@ -60,12 +60,12 @@ define (require) ->
 			@on 'reset', @reset, @
 			
 			# create filtered items before fetching all items
-			@filtereditems = new cListItems()
+			@filtereditems = new BaseCollectionbase()
 			@filtereditems.on 'reset', @renderItems, @
 
 			if @items is '' and @dbview isnt ''
 				# create and fetch all items, render view and reset @filtereditems
-				@items = new cListItems [], 'dbview': @dbview
+				@items = new BaseCollection [], 'dbview': @basew
 				@items.fetch
 					success: (collection, response) =>
 						# console.log 'vInputList.initialize() @items.fetch() success'

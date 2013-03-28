@@ -1,4 +1,4 @@
-_ = require 'underscore'
+_ = require 'lodash'
 mysql = require 'mysql'
 Backbone = require 'backbone'
 
@@ -18,7 +18,7 @@ class MySQLConnection
 				'database': 'projectx'
 
 
-	select: (args) ->
+	select: (args, cb) ->
 		args.fields = ['*'] if not args.fields?
 		args.tables = [args.tables] if _.isString args.tables
 		args.fields = [args.fields] if _.isString args.fields
@@ -27,7 +27,7 @@ class MySQLConnection
 
 		sqlq = "SELECT " + args.fields.join() + " FROM " + tables
 		sqlq += ' WHERE '+args.where if args.where?
-		console.log sqlq
+		# console.log sqlq
 		@connection.query sqlq, (err, rows, fields) =>
 			response = {}
 
@@ -37,7 +37,7 @@ class MySQLConnection
 			else
 				response.code = @_getErrorCode err
 
-			args.callback response
+			cb response
 
 
 
@@ -58,11 +58,10 @@ class MySQLConnection
 		for own key, value of attributes
 			update += "`"+key+"` = '"+value+"',"
 		update = update.slice(0,-1) 
-
 		sqlq = "INSERT INTO `"+table+"` ("+fields+") 
 				VALUES ("+values+") 
 				ON DUPLICATE KEY UPDATE id=LAST_INSERT_ID(id), "+update
-
+		console.log sqlq		
 		@connection.query sqlq, (err, rows, fields) =>
 			if not err?
 				response.code = if attributes.id? then 200 else 201

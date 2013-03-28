@@ -1,8 +1,8 @@
 define (require) ->
 	Backbone = require 'backbone'
-	jqueryui = require 'jqueryui'
 	BaseView = require 'views/base'
 	EditableList = require 'views/input/editablelist'
+	AccessList = require 'views/input/accesslist'
 	Typeahead = require 'views/input/typeahead'
 	Select = require 'views/input/select'
 	Textinput = require 'views/input/textinput'
@@ -50,6 +50,12 @@ define (require) ->
 
 				when 'editablelist'
 					input = new EditableList
+						'value': @value
+						'config': @input
+						'span': @span
+
+				when 'accesslist'
+					input = new AccessList
 						'value': @value
 						'config': @input
 						'span': @span

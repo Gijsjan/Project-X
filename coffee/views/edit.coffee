@@ -22,6 +22,14 @@ define (require) ->
 		initialize: ->
 			super
 
+			@config = FormConfig[@model.type]
+
+			@listenTo @model, 'invalid', (model, options) =>
+				for own attribute, message of options
+					@inputs[attribute].$('label').addClass('text-error')
+					@inputs[attribute].$('#'+attribute).addClass('alert-error')
+
+
 			if @model.isNew()
 				@render() 
 			else
@@ -41,11 +49,16 @@ define (require) ->
 			html = _.template tpl, @model.toJSON()
 			@$el.html html
 
-			for own key, options of FormConfig[@model.type]				
+			@inputs = {}
+
+			for own key, options of @config			
 				options.key = key
 				options.value = @model.get key
 				input = new Input options
-				input.on 'valuechanged', (key, value) => @model.set key, value
+				input.on 'valuechanged', (key, value) => 
+					@removeValidation()
+					@model.set key, value
+				@inputs[key] = input
 
 				@$('section.'+key).html input.$el
 			
@@ -56,3 +69,10 @@ define (require) ->
 		adjustTextareas: ->
 			_.each @$('.tab-pane.active textarea'), (textarea) ->
 				$(textarea).height textarea.scrollHeight # set the proper heights for textarea's
+
+		removeValidation: ->
+			for own attribute, options of @config
+				if options.validation?
+					@inputs[attribute].$('label').removeClass('text-error')
+					@inputs[attribute].$('#'+attribute).removeClass('alert-error')
+

@@ -5,5 +5,5 @@ define (require) ->
 		
 		'type': 'note'
 
-		'defaults':	_.extend({}, ContentFull::defaults, 
-			'body': '')
+		defaults: -> _.extend {}, ContentFull::defaults, 
+			'body': ''

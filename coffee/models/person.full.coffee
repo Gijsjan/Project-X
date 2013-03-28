@@ -1,28 +1,34 @@
 define (require) ->
-	# _ = require 'underscore'
 	PersonMin = require 'models/person.min'
-	cGroup = require 'collections/group'
+	Groups = require 'collections/group'
+	Content = require 'collections/content'
 	# ev = require 'EventDispatcher'
 
 	class PersonFull extends PersonMin
 
 		'defaults':	_.extend({}, PersonMin::defaults, 
 			'password': ''
-			'groups': new cGroup())
+			'groups': new Groups()
+			'content': new Content())
 
 		set: (attributes, options) ->
-			if _.isObject attributes and attributes.groups?
+			if _.isObject attributes and (attributes.groups? or attributes.content?)
 				console.log 'PersonFull.set: attributes is an object and has "groups", but nothing is implemented for that! FIX'
 				console.log attributes.groups
+				console.log attributes.content
 
 			if attributes is 'groups'
 				groups = @get 'groups'
 				groups.reset options
+			if attributes is 'content'
+				content = @get 'content'
+				content.reset options
 			else
 				super
 
 		parse: (attributes) ->
-			attributes.groups = new cGroup attributes.groups, 'parse': true
+			attributes.groups = new Groups attributes.groups, 'parse': true
+			attributes.content = new Content attributes.content, 'parse': true
 
 			super
 				

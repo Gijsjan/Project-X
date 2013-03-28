@@ -1,6 +1,4 @@
 define (require) ->
-	# _ = require 'underscore'
-	# Markdown = require 'markdown'
 	mDepartment = require 'models/group/department'
 	vFull = require 'views/full'
 	tpl = require 'text!html/group/department/full.html'

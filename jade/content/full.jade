@@ -1,7 +1,7 @@
 .content-title
 	h2 <%= title %>
 nav.content-menu
-	a.editevent(href!="/content/<%= type.value %>/<%= id %>/edit") edit 
+	a.editevent(href!="/content/<%= content_type.value %>/<%= id %>/edit") edit 
 	span.delevent delete
 .content-body
 .tags-wrapper

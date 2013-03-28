@@ -1,0 +1,12 @@
+p <%= initial_mileage %>
+
+h3 Who has access?
+
+lu
+	<% access.each(function(item) { %>
+	li 
+		a(href!="/<%= item.get('type') %>/<%= item.id %>") <%= item.get('title') %> 
+		small (<%= item.get('type') %>)
+	<% }); %>
+
+section.trips

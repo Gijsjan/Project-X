@@ -7,7 +7,10 @@ define (require) ->
 
 		'defaults':	_.extend({}, BaseModel::defaults, 
 			'username': ''
-			'email': '')
+			'email': ''
+			'type': 'person'
+			'created': ''
+			'updated': '')
 
 		parse: (attributes) ->
 			attributes.title = attributes.username

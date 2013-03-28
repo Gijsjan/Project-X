@@ -5,6 +5,7 @@ define (require) ->
 	# CONTENT
 	Content = require 'views/content/full'
 	vNote = require 'views/content/note/full'
+	Carpool = require 'views/content/carpool/full'
 	# vEvent = require 'views/object/content/event/full'
 	# vLink = require 'views/object/content/link/full'
 	# vVideo = require 'views/object/content/video/full'
@@ -13,19 +14,21 @@ define (require) ->
 
 	# # GROUPS
 	vGroup = require 'views/group/full'
-	vDepartment = require 'views/group/department/full'
-	vOrganisation = require 'views/group/organisation/full'
+	# vDepartment = require 'views/group/department/full'
+	# vOrganisation = require 'views/group/organisation/full'
 	# vOrganisation = require 'views/object/group/organisation/full'
 	# vProject = require 'views/object/group/project/full'
 
 	'content': Content
+	'note': vNote
+	'carpool': Carpool
+	
 	'person': vPerson
 
-	'note': vNote
 	
 	'group': vGroup
-	'departments': vDepartment
-	'organisations': vOrganisation
+	# 'departments': vDepartment
+	# 'organisations': vOrganisation
 	# 'content/event': vEvent
 	# 'content/link': vLink
 	# 'content/video': vVideo

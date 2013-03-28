@@ -4,24 +4,24 @@
 			ul.nav
 				li.active
 					a(href="/") Home
-				li
-					a(href="/content/format") Formats
 				li.dropdown
-					a.dropdown-toggle(href="#", data-toggle="dropdown") Notes
+					a.dropdown-toggle(href="#", data-toggle="dropdown") Content
 						b.caret
 					ul.dropdown-menu
 						li
-							a(href!="/content/note") My Notes
-						li
 							a(href!="/content/note") All Notes
 						li
-							a(href!="content/note/new") New
+							a(href!="/content/note/new") New Note
+						li
+							a(href!="/content/carpool") All Carpools
+						li
+							a(href!="/content/carpool/new") New Carpool
 				li.dropdown
 					a.dropdown-toggle(href="#", data-toggle="dropdown") People
 						b.caret
 					ul.dropdown-menu
 						li
-							a(href!="/content/person") All People
+							a(href!="/people") All People
 						li
 							a(href!="/person/new") New Person				
 				li.dropdown
@@ -29,7 +29,7 @@
 						b.caret
 					ul.dropdown-menu
 						li
-							a(href!="/content/group") All Groups
+							a(href!="/groups") All Groups
 						li
 							a(href!="/group/new") New Group
 

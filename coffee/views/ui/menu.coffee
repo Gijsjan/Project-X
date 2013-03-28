@@ -4,14 +4,11 @@
 # When the page changes, the breadcrumbs and the active menu item are re-rendered
 
 define (require) ->
-	# $ = require 'jquery'
-	# _ = require 'underscore'
-	# Backbone = require 'backbone'
 	BaseView = require 'views/base'
 	currentUser = require 'models/CurrentUser'
 
-	tpl = require 'text!html/main/menu.html'
-	tplUserMenu = require 'text!html/main/menu.user.html'
+	tpl = require 'text!html/ui/menu.html'
+	tplUserMenu = require 'text!html/ui/menu.user.html'
 	ev = require 'EventDispatcher'
 	h = require 'helper'
 

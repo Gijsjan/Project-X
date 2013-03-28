@@ -3,8 +3,8 @@ define (require) ->
 	vPerson = require 'views/person/edit'
 
 	# CONTENT
-	Content = require 'views/content/edit'
 	vNote = require 'views/content/note/edit'
+	Carpool = require 'views/content/carpool/edit'
 	# vEvent = require 'views/object/content/event/edit'
 	# vLink = require 'views/object/content/link/edit'
 	# vVideo = require 'views/object/content/video/edit'
@@ -13,19 +13,15 @@ define (require) ->
 
 	# # GROUPS
 	vGroup = require 'views/group/edit'
-	vDepartment = require 'views/group/department/edit'
-	vOrganisation = require 'views/group/organisation/edit'
 	# vOrganisation = require 'views/object/group/organisation/edit'
 	# vProject = require 'views/object/group/project/edit'
 
-	'content': Content
-	'person': vPerson
-
 	'note': vNote
+	'carpool': Carpool
+
+	'person': vPerson
 	
 	'group': vGroup
-	'departments': vDepartment
-	'organisations': vOrganisation
 	# 'content/event': vEvent
 	# 'content/link': vLink
 	# 'content/video': vVideo
