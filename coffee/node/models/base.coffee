@@ -2,7 +2,7 @@ _ = require 'lodash'
 Backbone = require 'backbone'
 exec = require('child_process').exec
 db = require('../MySQLConnection')
-
+# nutteloos
 class Base extends Backbone.Model
 
 	defaults: ->
