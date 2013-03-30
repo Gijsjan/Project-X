@@ -1,0 +1,10 @@
+.row.newtrip
+	.span2
+		input(type="date", value!="<%= moment().format('YYYY-MM-DD') %>")
+	.span2
+		input(type="time", value!="<%= moment().format('hh:mm') %>")
+	.span2
+		input(type="text", name="previous_mileage")
+	.span2
+		input(type="text", name="current_mileage")
+.trips
