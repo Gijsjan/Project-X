@@ -11,7 +11,6 @@ define (require) ->
 	Models = require 'switchers/models'
 	Collections = require 'switchers/collections'
 	hlpr = require 'helper'
-	test = require 'test'
 	tpl = require 'text!html/input/typeahead.html'
 
 	# Typeahead shows an option list while typing an input
@@ -69,14 +68,12 @@ define (require) ->
 			@clear()
 			@trigger 'valuechanged', item.toJSON()
 
-		initialize: ->
-			test.that(@options.collection).exists()
-			
-			[@span, @selectfromlist, @items, @collectionTypes] = [@options.span, @options.selectfromlist, @options.items, @options.collection]
+		initialize: ->			
+			{@span, @selectfromlist, @items, @collection} = @options
 			@span = 2 if not @span?
 			@selectfromlist = true if not @selectfromlist?
 			@items = [] if not @items?
-			@collectionTypes = [@collectionTypes] if _.isString @collectionTypes
+			@collectionTypes = if _.isString @collectionTypes then [@collection] else @collection
 
 			@alloptions = new BaseCollection()
 
