@@ -5,6 +5,7 @@ define (require) ->
 	# CONTENT
 	vNote = require 'views/content/note/listed'
 	Carpool = require 'views/content/carpool/listed'
+	CarpoolTrip = require 'views/content/carpool/trip/listed'
 	# vEvent = require 'views/object/content/event/listed'
 	# vLink = require 'views/object/content/link/listed'
 	# vVideo = require 'views/object/content/video/listed'
@@ -18,6 +19,7 @@ define (require) ->
 
 	'note': vNote
 	'carpool': Carpool
+	'carpool_trip': CarpoolTrip
 	
 	'person': vPerson
 

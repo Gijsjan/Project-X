@@ -1,13 +1,16 @@
 define (require) ->
-	Listed = require 'views/listed'
+	moment = require 'moment'
+	Views =
+		Base: require 'views/base'
 	tpl = require 'text!html/content/carpool/trip/listed.html'
 
-	class ListedTrip extends Listed
-		
+	class ListedTrip extends Views.Base
 		render: ->
-			super
-			
-			tplr = _.template tpl, @model.toJSON()
-			@$('.listed-body').html tplr
+			data = @model.toJSON()
+			data.date = moment(@model.get('datetime')).format("MMM Do 'YY")
+			data.time = moment(@model.get('datetime')).format("H:mm")
+
+			tplr = _.template tpl, data
+			@$el.html tplr
 
 			@

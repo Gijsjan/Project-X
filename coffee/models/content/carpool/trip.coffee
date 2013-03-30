@@ -3,7 +3,7 @@ define (require) ->
 
 	class CarpoolTrip extends Base
 		
-		@type: 'carpool_trip'
+		'type': 'carpool_trip'
 
 		defaults: -> _.extend {}, Base::defaults,
 			'type': 'carpool_trip'
