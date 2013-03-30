@@ -4,7 +4,7 @@ require.config
         'bootstrap': '../lib/bootstrap/js/bootstrap'
         'underscore': '../lib/underscore' # TODO change to LoDash (build for Backbone and AMD)
         'backbone': '../lib/backbone'
-        'markdown': '../lib/markdown' # TODO remove?
+        # 'markdown': '../lib/markdown' # TODO remove?
         'moment': '../lib/moment' # TODO remove?
         'async': '../lib/async'
         'domready': '../lib/require/domready'
