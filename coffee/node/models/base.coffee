@@ -54,28 +54,30 @@ class Base extends Backbone.Model
 			error: (model, response, options) -> cb 'code': response.code
 	
 	sync: (method, model, options) ->
-		[fetchOptions, success, error] = [options.fetchOptions, options.success, options.error]
+		{fetchOptions, success, error} = options
 
 		save = =>
 			@beforeSave (attributes) =>
 				db.save @type, attributes, (response) =>
+					options.code = response.code
+					
 					if response.code is 200 or response.code is 201
-						options.code = response.code
 						attributes.id = response.data if response.code is 201
-						success model, attributes, options
+						success attributes
 					else
-						error model, response, options
+						error {}
 
 		switch method
 
 			when 'read'
 
 				db.select fetchOptions, (response) =>
+					options.code = response.code
+					
 					if response.code is 200
-						options.code = response.code
-						success model, response.data[0], options
+						success response.data[0]
 					else
-						error model, response, options
+						error {}
 
 			when 'create'
 
@@ -91,7 +93,7 @@ class Base extends Backbone.Model
 
 			when 'delete'
 
-				db.destroy @type, @id, (response) -> success model, response, options
+				db.destroy @type, @id, (response) -> success response
 
 
 	isContent: ->

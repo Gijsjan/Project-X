@@ -13,6 +13,9 @@ RedisStore = require('connect-redis')(express)
 sessionStore = new RedisStore()
 app = express()
 
+process.on 'uncaughtException', (err) ->
+  console.log 'Caught exception: ' + err
+
 app.use express.bodyParser()
 app.use express.cookieParser('b3SSdon4M3SSw14h')
 app.use express.cookieSession 
@@ -46,7 +49,6 @@ _writeResponse = (response, res) ->
 	res.writeHead response.code, 'Content-Type': 'application/json; charset=UTF-8'
 	res.end JSON.stringify(response.data)
 
-
 ###########
 ### GET ###
 ###########
@@ -71,7 +73,7 @@ app.get '/db/:table/:id', (req, res) ->
 		_writeResponse response, res
 
 app.get '/db/:table', (req, res) ->
-	Collections.get(req.params.table).fetch (response) -> 
+	Collections.get(req.params.table).fetch (response) ->
 		_writeResponse response, res
 
 ############

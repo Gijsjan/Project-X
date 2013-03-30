@@ -14,15 +14,15 @@ class BaseCollection extends Backbone.Collection
 	fetchOptions: ->
 		'tables': @type
 
-	fetch: (callback, options) ->
-		options = @fetchOptions() if not options?
+	fetch: (callback, fetchOptions) ->
+		fetchOptions = @fetchOptions() if not fetchOptions?
 
 		super
-			'fetchOptions': options
+			'fetchOptions': fetchOptions
 			success: (collection, response, options) =>
 				callback
 					'code': options.code
-					'data': collection.toJSON()
+					'data': collection.toJSON() # collection.toJSON() to return parsed data instead of response
 			error: (collection, xhr, options) => console.log xhr
 
 	fetchOne2Many: (args) ->
@@ -72,15 +72,16 @@ class BaseCollection extends Backbone.Collection
 		@fetch callback, fetchOptions
 
 	sync: (method, collection, options) ->
-		[fetchOptions, success, error] = [options.fetchOptions, options.success, options.error]
+		{fetchOptions, success, error} = options
 
 		if method is 'read'
 
 			db.select fetchOptions, (response) ->
+				options.code = response.code
+				
 				if response.code is 200
-					options.code = response.code
-					success collection, response.data, options
+					success response.data
 				else
-					error collection, response, options
+					error {}
 
 module.exports = BaseCollection

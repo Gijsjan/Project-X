@@ -1,14 +1,16 @@
 define (require) ->
-	ContentFull = require 'views/content/full'
-	vTrips = require 'views/content/carpool/trip/list'
-	tpl = require 'text!html/content/carpool/full.html'
+	Views =
+		ContentFull: require 'views/content/full'
+		TripList: require 'views/content/carpool/trip/list'
+	Templates =
+		tpl: require 'text!html/content/carpool/full.html'
 
-	class Carpool extends ContentFull
+	class Carpool extends Views.ContentFull
 
 		render: ->
 			super
 
-			tplr = _.template tpl, @model.toJSON()
+			tplr = _.template Templates.tl, @model.toJSON()
 			@$('.content-body').html tplr
 
 			@
