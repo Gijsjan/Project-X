@@ -10,7 +10,7 @@ define (require) ->
 		render: ->
 			super
 
-			tplr = _.template Templates.tl, @model.toJSON()
+			tplr = _.template Templates.tpl, @model.toJSON()
 			@$('.content-body').html tplr
 
 			@
